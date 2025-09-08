@@ -1,0 +1,124 @@
+@use "@/sass/helpers/variables" as *;
+@use "@/sass/helpers/mixins" as *;
+
+.statistics {
+  padding: 5rem 2rem;
+  background-color: $secondary;
+  text-align: center;
+  direction: rtl;
+
+  .statsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+    justify-content: center;
+
+    @media (max-width: 1024px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      max-width: 500px;
+      margin: 3rem auto 0;
+    }
+  }
+
+  .statItem {
+    background: $white;
+    padding: 2.5rem 1.5rem;
+    @include radius(12px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #4f46e5, #7c3aed);
+      @include scaleX(1);
+      transform-origin: right;
+      @include transition(transform, 0.5s, ease);
+    }
+
+    &:hover {
+      @include translateY(-5px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+        0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  .iconContainer {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, $secondary, $dark-white);
+    @include radius(50%);
+    color: $primary;
+    @include transition(all, 0.3s, ease);
+
+    svg {
+      @include transition(transform, 0.3s, ease);
+    }
+
+    &:hover {
+      transform: rotate(5deg) scale(1.1);
+
+      svg {
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  .statNumber {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: $dark;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(90deg, #4f46e5, #7c3aed);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .statLabel {
+    color: $dark;
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+  }
+
+  .statDescription {
+    color: rgba($dark, 0.8);
+    font-size: 1.2rem;
+    font-weight: bold;
+    line-height: 1.6;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .statistics {
+    .title {
+      font-size: 2rem;
+    }
+
+    .statsGrid {
+      grid-template-columns: 1fr;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}

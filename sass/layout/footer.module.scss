@@ -1,0 +1,313 @@
+@use "@/sass/helpers/variables" as *;
+@use "@/sass/helpers/mixins" as *;
+
+.footer {
+  background: linear-gradient(135deg, $primary 0%, $primary-light 100%);
+  color: $white;
+  padding: 4rem 2rem;
+  overflow: hidden;
+  direction: rtl;
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    @include grid-item(250px, 2rem);
+  }
+
+  .logoSection {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .logo {
+      font-size: 2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: $white;
+      text-decoration: none;
+
+      svg {
+        width: 2rem;
+        height: 2rem;
+      }
+    }
+
+    .description {
+      color: $dark-white;
+      font-size: 1.8rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .socialIcons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+
+      a {
+        @include flex-center;
+        width: 40px;
+        height: 40px;
+        @include radius(50%);
+        background: rgba(255, 255, 255, 0.1);
+        color: $white;
+        @include transition(0.1s, ease);
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.2);
+          @include translateY(-3px);
+        }
+      }
+    }
+  }
+
+  .linksSection {
+    h3 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -8px;
+        right: 0;
+        width: 50px;
+        height: 3px;
+        background-color: $accent-1;
+        border-radius: 3px;
+      }
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+
+      li {
+        a {
+          color: $secondary;
+          font-size: 1.5rem;
+          font-weight: 600;
+          text-decoration: none;
+          @include transition(0.2s, ease);
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+
+          &:hover {
+            color: $white;
+            padding-right: 8px;
+          }
+
+          svg {
+            width: 1.8rem;
+            height: 1.8rem;
+          }
+        }
+      }
+    }
+  }
+
+  .contactInfo {
+    font-size: 2rem;
+    p {
+      color: $secondary;
+      font-size: 1.5rem;
+      font-weight: 600;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+
+      svg {
+        margin-top: 3px;
+        flex-shrink: 0;
+        width: 1.8rem;
+        height: 1.8rem;
+      }
+    }
+  }
+
+  .newsletter {
+    h3 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -8px;
+        right: 0;
+        width: 50px;
+        height: 3px;
+        background-color: #f59e0b;
+        border-radius: 3px;
+      }
+    }
+
+    p {
+      color: $secondary;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .newsletterForm {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      .formGroup {
+        position: relative;
+        width: 100%;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.75rem 1rem 0.75rem 3.5rem;
+        border: 2px solid transparent;
+        @include radius(6px);
+        background: rgba(255, 255, 255, 0.1);
+        color: $white;
+        font-size: 1.3rem;
+        @include transition(0.2s, ease);
+
+        &::placeholder {
+          color: rgba(255, 255, 255, 0.6);
+        }
+
+        &:focus {
+          outline: none;
+          border-color: $accent-1;
+          background: rgba(255, 255, 255, 0.15);
+        }
+
+        &:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+
+        &.inputError {
+          border-color: #ff6b6b;
+          padding-right: 3.5rem;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ff6b6b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='8' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='16' x2='12.01' y2='16'%3E%3C/line%3E%3C/svg%3E");
+          background-repeat: no-repeat;
+          background-position: right 1rem center;
+          background-size: 1.8rem;
+        }
+      }
+
+      .errorMessage {
+        display: block;
+        color: #ff6b6b;
+        font-size: 1.1rem;
+        margin-top: 0.3rem;
+        margin-right: 0.5rem;
+      }
+
+      button {
+        color: $white;
+        font-size: 1.5rem;
+        padding: 0.75rem 1.5rem;
+        background: $accent-1;
+        border: none;
+        @include radius(6px);
+        font-weight: 500;
+        cursor: pointer;
+        @include transition(0.2s, ease);
+        @include flex-center;
+        gap: 0.5rem;
+        width: 100%;
+
+        &:hover:not(:disabled) {
+          background: rgba($accent-1, 0.9);
+          @include translateY(-1px);
+        }
+
+        &:active:not(:disabled) {
+          transform: translateY(0);
+        }
+
+        &:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+
+        .loader {
+          animation: spin 1s linear infinite;
+        }
+
+        svg {
+          width: 1.6rem;
+          height: 1.6rem;
+        }
+      }
+    }
+  }
+
+  .copyright {
+    grid-column: 1 / -1;
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba($dark, 0.1);
+    color: $white;
+    font-size: 2rem;
+  }
+}
+
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Responsive styles
+@media (max-width: 768px) {
+  .footer {
+    padding: 3rem 1.5rem;
+
+    .container {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+
+    .newsletter {
+      .newsletterForm {
+        flex-direction: column;
+
+        button {
+          width: 100%;
+          padding: 0.75rem 1rem;
+        }
+      }
+    }
+  }
+}

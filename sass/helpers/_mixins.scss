@@ -1,0 +1,232 @@
+@use "../helpers/variables" as *;
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @content;
+}
+
+@mixin flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @content;
+}
+
+@mixin transition(
+  $property: all,
+  $duration: 0.3s,
+  $timing-function: ease-in-out
+) {
+  transition: $property $duration $timing-function;
+  -webkit-transition: $property $duration $timing-function;
+  -moz-transition: $property $duration $timing-function;
+  -ms-transition: $property $duration $timing-function;
+  -o-transition: $property $duration $timing-function;
+}
+@mixin radius($radius) {
+  border-radius: $radius;
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  -o-border-radius: $radius;
+}
+@mixin translate($x, $y) {
+  transform: translate($x, $y) !important;
+  -webkit-transform: translate($x, $y) !important;
+  -moz-transform: translate($x, $y) !important;
+  -ms-transform: translate($x, $y) !important;
+  -o-transform: translate($x, $y) !important;
+}
+@mixin translateY($value) {
+  transform: translateY($value);
+  -webkit-transform: translateY($value);
+  -moz-transform: translateY($value);
+  -ms-transform: translateY($value);
+  -o-transform: translateY($value);
+}
+@mixin translateX($value) {
+  transform: translateX($value);
+  -webkit-transform: translateX($value);
+  -moz-transform: translateX($value);
+  -ms-transform: translateX($value);
+  -o-transform: translateX($value);
+}
+@mixin scale($value) {
+  transform: scale($value);
+  -webkit-transform: scale($value);
+  -moz-transform: scale($value);
+  -ms-transform: scale($value);
+  -o-transform: scale($value);
+}
+@mixin scaleX($value) {
+  transform: scaleX($value);
+  -webkit-transform: scaleX($value);
+  -moz-transform: scaleX($value);
+  -ms-transform: scaleX($value);
+  -o-transform: scaleX($value);
+}
+@mixin rotate($value) {
+  transform: rotate($value);
+  -webkit-transform: rotate($value);
+  -moz-transform: rotate($value);
+  -ms-transform: rotate($value);
+  -o-transform: rotate($value);
+}
+@mixin rotateY($value) {
+  transform: rotateY($value);
+  -webkit-transform: rotateY($value);
+  -moz-transform: rotateY($value);
+  -ms-transform: rotateY($value);
+  -o-transform: rotateY($value);
+}
+@mixin grid-item($value, $gap: 1rem) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax($value, 1fr));
+  gap: $gap;
+  @content;
+}
+
+@mixin primaryButton {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, $primary 0%, $primary 100%);
+  color: $white;
+  border: none;
+  @include radius(10px);
+  font-size: 1.3rem;
+  font-weight: 600;
+  cursor: pointer;
+  @include transition(all, 0.3s, ease);
+  margin-top: 0.5rem;
+  @include flex-center;
+  gap: 0.5rem;
+
+  &:hover:not(:disabled) {
+    @include translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+  }
+
+  &:active:not(:disabled) {
+    @include translateY(0);
+  }
+
+  &:disabled {
+    background: #bfdbfe;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+}
+
+// Authentication Mixins
+@mixin auth-container {
+  @include flex-center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, $primary 0%, $secondary 100%);
+  padding: 1.5rem;
+  direction: rtl;
+}
+
+@mixin auth-card {
+  background: rgba(255, 255, 255, 0.95);
+  @include radius(16px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 450px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+@mixin auth-logo {
+  margin-bottom: 2rem;
+
+  h1 {
+    color: $primary;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+
+  p {
+    color: $dark;
+    font-size: 1.5rem;
+    margin: 0;
+  }
+}
+
+@mixin auth-form-group {
+  margin-bottom: 1.25rem;
+  text-align: right;
+}
+
+@mixin auth-input-container {
+  position: relative;
+
+  input {
+    width: 100%;
+    padding: 0.85rem 3rem 0.85rem 1rem;
+    border: 2px solid $dark-white;
+    @include radius(10px);
+    font-size: 1.3rem;
+    @include transition(all, 0.3s, ease-in-out);
+    background-color: $secondary;
+
+    &:focus {
+      outline: none;
+      border-color: $primary;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      background-color: $white;
+    }
+
+    &::placeholder {
+      color: rgba($dark, 0.5);
+      opacity: 0.8;
+    }
+
+    &:disabled {
+      background-color: $dark-white;
+      cursor: not-allowed;
+    }
+  }
+
+  .icon {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    @include translateY(-50%);
+    color: rgba($dark, 0.5);
+    @include transition(color, 0.3s, ease);
+  }
+
+  input:focus + .icon {
+    color: $primary;
+  }
+}
+
+@mixin auth-input-label-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+@mixin auth-divider {
+  display: flex;
+  align-items: center;
+  margin: 1.75rem 0;
+  color: $dark;
+  font-size: 1.2rem;
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid $dark;
+  }
+
+  span {
+    padding: 0 1rem;
+  }
+}

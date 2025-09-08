@@ -1,0 +1,21 @@
+.realEstateSlider {
+  margin-top: 20rem;
+  padding: 10rem 0;
+  text-align: center;
+  .swiper {
+    width: 100%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+  .realEstateSliderSlide {
+    background-position: center;
+    background-size: cover;
+    width: 400px;
+    height: 400px;
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+}

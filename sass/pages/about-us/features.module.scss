@@ -1,0 +1,128 @@
+@use "@/sass/helpers/variables" as *;
+@use "@/sass/helpers/mixins" as *;
+
+.features {
+  padding: 8rem 0;
+  background-color: #f9fafb;
+  position: relative;
+  overflow: hidden;
+
+  .grid {
+    @include grid-item(280px, 3rem);
+    margin: 2rem;
+  }
+
+  .card {
+    background: $white;
+    @include radius(12px);
+    padding: 3rem 2.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    @include transition(0.2s, ease);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    text-align: center;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 4px;
+      background: $primary-light;
+      @include transition(0.2s, ease);
+      z-index: -1;
+    }
+
+    &:hover {
+      @include translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+
+      &::before {
+        height: 100%;
+        opacity: 0.03;
+      }
+
+      .iconWrapper {
+        @include rotateY(180deg);
+        background: rgba($primary-light, 0.3);
+      }
+    }
+  }
+
+  .iconWrapper {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 2.5rem;
+    background: rgba($primary, 0.1);
+    @include radius(50%);
+    @include flex-center;
+    @include transition(0.3s, ease);
+
+    .icon {
+      width: 3.2rem;
+      height: 3.2rem;
+      color: $primary-light;
+      @include transition(0.3s, ease);
+    }
+  }
+
+  .cardTitle {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: $primary;
+  }
+
+  .cardDescription {
+    font-size: 1.7rem;
+    color: $primary-light;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  @media (max-width: 1024px) {
+    padding: 6rem 0;
+
+    .header {
+      margin-bottom: 4rem;
+
+      .title {
+        font-size: 3rem;
+      }
+
+      .subtitle {
+        font-size: 1.6rem;
+      }
+    }
+
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 5rem 0;
+
+    .header {
+      .title {
+        font-size: 2.6rem;
+      }
+
+      .subtitle {
+        font-size: 1.5rem;
+      }
+    }
+
+    .grid {
+      grid-template-columns: 1fr;
+    }
+
+    .card {
+      padding: 2.5rem 2rem;
+    }
+  }
+}

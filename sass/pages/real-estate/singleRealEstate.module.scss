@@ -1,0 +1,382 @@
+@use "@/sass/helpers/variables" as *;
+@use "@/sass/helpers/mixins" as *;
+
+.container {
+  max-width: 1200px;
+  margin: 10rem auto;
+  padding: 0 1rem;
+  direction: rtl;
+  color: $dark;
+}
+
+/* ===================
+   🖼️ Gallery Section
+   =================== */
+.gallery {
+  margin-bottom: 2rem;
+
+  .slide {
+    position: relative;
+    @include radius(12px);
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 450px;
+      object-fit: cover;
+      @include radius(12px);
+      @include transition(transform, 0.2s, ease);
+
+      &:hover {
+        @include scale(1.03);
+      }
+    }
+
+    .navigation {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      @include translateY(-50%);
+
+      button {
+        background: rgba(0, 0, 0, 0.6);
+        color: $white;
+        border: none;
+        padding: 0.6rem;
+        @include radius(50%);
+        cursor: pointer;
+        @include transition(background, 0.3s, ease);
+
+        &:hover {
+          background: rgba(0, 0, 0, 0.8);
+        }
+      }
+    }
+  }
+
+  .thumbnails {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+
+    img {
+      width: 80px;
+      height: 60px;
+      object-fit: cover;
+      @include radius(8px);
+      cursor: pointer;
+      opacity: 0.7;
+      @include transition(0.2s, ease);
+
+      &:hover {
+        opacity: 1;
+        @include scale(1.05);
+      }
+    }
+
+    .active {
+      border: 2px solid $primary-light;
+      opacity: 1;
+    }
+  }
+}
+
+/* ===================
+   🏠 Property Details
+   =================== */
+.details {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mainInfo {
+  .title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    color: $primary;
+  }
+
+  .location {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: $accent-1;
+    margin-bottom: 1rem;
+  }
+
+  .price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+
+    span {
+      font-size: 2rem;
+      font-weight: bold;
+      color: $dark;
+    }
+
+    .original {
+      font-size: 1.2rem;
+      color: $accent-2;
+      text-decoration: line-through;
+    }
+  }
+
+  .features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    .feature {
+      color: $primary-light;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+
+      svg {
+        color: $accent-1;
+      }
+    }
+  }
+
+  .actions {
+    margin-bottom: 2rem;
+    .button {
+      color: $white;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      background: rgba($danger, 0.9);
+      border: 1px solid #ddd;
+      padding: 0.6rem 1.2rem;
+      @include radius(8px);
+      cursor: pointer;
+      @include transition(0.2s, ease);
+      margin-left: 0.6rem;
+      font-size: 1.3rem;
+      font-weight: 600;
+
+      &:hover {
+        @include scale(1.05);
+      }
+    }
+  }
+
+  .description {
+    margin-top: 2rem;
+
+    h3 {
+      font-size: 2rem;
+      margin-bottom: 0.8rem;
+    }
+
+    p {
+      color: rgba($dark, 0.8);
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      line-height: 1.7;
+    }
+
+    .featuresGrid {
+      @include grid-item(150px, 0.6rem);
+
+      .featureItem {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: rgba($dark, 0.8);
+      }
+    }
+  }
+}
+
+/* ===================
+   📌 Sidebar
+   =================== */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  .contactCard,
+  .safetyTips {
+    background: $white;
+    padding: 1.5rem;
+    @include radius(12px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+
+    h3 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  }
+
+  .whatsappButton {
+    @include flex-center;
+    gap: 0.6rem;
+    padding: 0.8rem 1rem;
+    @include radius(8px);
+    background: rgba($success, 0.9);
+    color: $white;
+    font-size: 1.5rem;
+    text-decoration: none;
+    font-weight: 600;
+    @include transition(0.2s, ease);
+
+    &:hover {
+      background: #1ebe5c;
+      @include scale(1.05);
+    }
+  }
+
+  .safetyTips ul {
+    li {
+      margin-bottom: 0.5rem;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+  }
+}
+
+/* ===================
+   🗺️ Map Section
+   =================== */
+.mapContainer {
+  margin-top: 3rem;
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .map {
+    @include radius(12px);
+    overflow: hidden;
+    height: 400px;
+
+    iframe,
+    div {
+      font-size: 1.3rem;
+    }
+  }
+}
+
+/* ===================
+   ⭐ Reviews Section
+   =================== */
+.reviewsSection {
+  margin-top: 3rem;
+
+  .header {
+    @include flex-between;
+    margin-bottom: 1.5rem;
+
+    h2 {
+      font-size: 2rem;
+    }
+
+    .rating {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .stars {
+        display: flex;
+        gap: 0.2rem;
+      }
+
+      .count {
+        font-size: 1.5rem;
+      }
+    }
+  }
+
+  .reviews {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .noReviews {
+    color: $dark-white;
+    font-style: italic;
+  }
+}
+
+/* ===================
+   📝 Add Review Form
+   =================== */
+.addReview {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: $secondary;
+  @include radius(12px);
+
+  h3 {
+    margin-bottom: 1rem;
+    font-size: 2rem;
+  }
+
+  .formGroup {
+    margin-bottom: 1rem;
+
+    label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 0.8rem;
+      border: 1px solid $primary;
+      background: $white;
+      @include radius(8px);
+      font-family: inherit;
+      font-size: 1.5rem;
+      resize: none;
+    }
+  }
+
+  .starRating {
+    display: flex;
+    gap: 0.4rem;
+    cursor: pointer;
+  }
+
+  .submitButton {
+    background: $primary;
+    color: $white;
+    border: none;
+    padding: 0.8rem 1.2rem;
+    @include radius(8px);
+    font-weight: 600;
+    cursor: pointer;
+    @include transition(background, 0.2s, ease);
+
+    &:hover {
+      @include scale(1.05);
+    }
+
+    &:disabled {
+      background: #bbb;
+      cursor: not-allowed;
+    }
+  }
+}

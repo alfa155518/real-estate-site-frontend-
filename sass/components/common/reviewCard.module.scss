@@ -1,0 +1,112 @@
+@use "@/sass/helpers/variables" as *;
+@use "@/sass/helpers/mixins" as *;
+
+.reviewCard {
+  background: $white;
+  @include radius(12px);
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba($dark, 0.1);
+
+  &:hover {
+    @include translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  @include radius(50%);
+  background-color: $primary;
+  color: $white;
+  @include flex-center;
+  font-weight: 800;
+  font-size: 1.5rem;
+}
+
+.userName {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: $dark;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.ratingNumber {
+  margin-right: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: $accent-2;
+}
+
+.star {
+  width: 18px;
+  height: 18px;
+  color: $gold;
+}
+
+.date {
+  font-size: 1rem;
+  color: $dark;
+}
+
+.comment {
+  margin: 1rem 0;
+  color: $dark;
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 1.6;
+  flex-grow: 1;
+}
+
+.helpful {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba($dark, 0.3);
+}
+
+.helpfulButton {
+  color: $white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  background-color: $primary-light;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  @include radius(4px);
+  @include transition(all, 0.2s, ease);
+  &:hover {
+    background-color: $primary;
+  }
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}

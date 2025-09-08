@@ -1,0 +1,75 @@
+@use "@/sass/helpers/variables" as *;
+@use "@/sass/helpers/mixins" as *;
+
+.reviewsSection {
+  padding: 5rem 0;
+  background-color: #f9f9f9;
+  direction: rtl;
+}
+
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.titleWrapper {
+  @include flex-center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.icon {
+  color: $primary;
+  width: 32px;
+  height: 32px;
+}
+
+.sectionTitle {
+  font-size: 2.5rem;
+  color: $dark;
+  margin: 0;
+  font-weight: 700;
+}
+
+.sectionSubtitle {
+  color: rgba($dark, 0.8);
+  font-size: 1.7rem;
+  max-width: 600px;
+  margin: 0.5rem auto 0;
+  line-height: 1.6;
+}
+
+.reviewsGrid {
+  @include grid-item(350px, 1.5rem);
+  margin: 3rem;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cta {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.ctaButton {
+  background-color: $primary;
+  color: $white;
+  border: none;
+  padding: 0.75rem 2rem;
+  @include radius(50px);
+  font-size: 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  @include transition(all, 0.3s, ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &:hover {
+    background-color: $primary-light;
+    @include translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}

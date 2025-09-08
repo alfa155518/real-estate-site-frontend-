@@ -1,0 +1,253 @@
+@use "@/sass/helpers/variables" as *;
+@use "@/sass/helpers/mixins" as *;
+
+.supportPage {
+  min-height: 100vh;
+  padding: 0 1rem;
+  margin: 10rem auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    background: $white;
+    @include radius(12px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 2.5rem;
+    margin-top: 3rem;
+  }
+
+  .formGrid {
+    @include grid-item(300px, 1.5rem);
+    margin-bottom: 2rem;
+  }
+
+  .formGroup {
+    margin-bottom: 1.25rem;
+
+    &.fullWidth {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      color: $primary;
+      font-size: 1.5rem;
+      font-weight: 800;
+      display: flex;
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .inputWrapper {
+    position: relative;
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid $dark-white;
+      @include radius(8px);
+      font-size: 1.3rem;
+      @include transition(0.2s, ease);
+
+      &:focus {
+        outline: none;
+        border-color: $primary;
+        box-shadow: 0 0 0 3px rgba($primary, 0.1);
+      }
+
+      &::placeholder {
+        font-size: 1.3rem;
+        color: rgba($dark, 0.5);
+      }
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    &.error {
+      input,
+      textarea {
+        border-color: $danger;
+        padding-right: 2.5rem;
+      }
+    }
+
+    .inputIcon,
+    .textareaIcon {
+      position: absolute;
+      top: 50%;
+      left: 1rem;
+      @include translateY(-50%);
+      color: $danger;
+    }
+
+    .textareaIcon {
+      top: 1.5rem;
+      transform: none;
+    }
+  }
+
+  .errorMessage {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 1.2rem;
+    color: $danger;
+  }
+
+  .radioGroup {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .radioLabel {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    position: relative;
+    padding-right: 1.75rem;
+
+    input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+
+      &:checked + .radioCustom::after {
+        @include scale(1);
+      }
+    }
+
+    .radioCustom {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      @include translateY(-50%);
+      width: 1.25rem;
+      height: 1.25rem;
+      border: 2px solid var(--radio-color, #ccc);
+      @include radius(50%);
+      @include flex-center;
+      @include transition(0.2s, ease);
+
+      &::after {
+        content: "";
+        width: 1.25rem;
+        height: 1.25rem;
+        background-color: var(--radio-color, #ccc);
+        @include radius(50%);
+        @include scale(0);
+        @include transition(0.2s, ease);
+      }
+    }
+
+    &:hover .radioCustom {
+      border-color: var(--radio-color, #999);
+    }
+  }
+
+  .fileUpload {
+    margin-top: 0.5rem;
+  }
+
+  .fileUploadLabel {
+    @include flex-center;
+    flex-direction: column;
+    padding: 2rem;
+    border: 2px dashed #ddd;
+    @include radius(8px);
+    background-color: #f9f9f9;
+    cursor: pointer;
+    @include transition(0.2s, ease);
+    text-align: center;
+    gap: 0.75rem;
+
+    &:hover {
+      border-color: $primary;
+      background-color: rgba($primary, 0.05);
+    }
+
+    span {
+      color: $primary-light;
+      font-size: 1.5rem;
+    }
+  }
+
+  .fileInput {
+    display: none;
+  }
+
+  .fileInfo {
+    color: $primary-light;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+
+  .formFooter {
+    @include flex-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba($dark, 0.3);
+  }
+
+  .requiredInfo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: $danger;
+    font-size: 1.5rem;
+
+    svg {
+      color: $accent-1;
+    }
+  }
+
+  .submitButton {
+    @include primaryButton;
+    .spinner {
+      width: 1.25rem;
+      height: 1.25rem;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+  }
+
+  @keyframes spin {
+    to {
+      @include rotate(360deg);
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 2rem 1rem;
+
+    .container {
+      padding: 1.5rem;
+    }
+
+    .formGrid {
+      grid-template-columns: 1fr;
+    }
+
+    .formFooter {
+      flex-direction: column-reverse;
+      align-items: stretch;
+    }
+
+    .submitButton {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}
