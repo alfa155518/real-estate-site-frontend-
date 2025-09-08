@@ -321,6 +321,7 @@ const Footer: React.FC = () => {
                   <div className={styles.formGroup}>
                     <input 
                       type="email" 
+                      autoComplete="email"
                       placeholder="البريد الإلكتروني" 
                       dir="rtl" 
                       {...register('email', {

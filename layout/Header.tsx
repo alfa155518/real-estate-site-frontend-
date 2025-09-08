@@ -189,6 +189,7 @@ const Header = () => {
             <form onSubmit={handleSubmit(onSubmit)} className={styles.searchForm}>
               <input
                 type="text"
+                autoComplete="search"
                 placeholder="ابحث عن عقار..."
                 {...register('search', { required: true })}
                 aria-label="Search properties"
