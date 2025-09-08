@@ -115,6 +115,7 @@
     width: 4rem;
     line-height: 1;
     @include radius(50%);
+    object-fit: cover;
     @include transition(all, 0.2s, ease);
     &:hover {
       @include scale(1.1);
@@ -184,6 +185,48 @@
 }
 
 // Search Form
+// .searchForm {
+//   position: relative;
+//   margin: 0 1rem;
+//   flex: 1;
+//   max-width: 400px;
+
+//   input {
+//     width: 100%;
+//     padding: 0.55rem 2.75rem 0.55rem 1rem;
+//     border: 1px solid $dark-white;
+//     @include radius(0.5rem);
+//     font-size: 1.3rem;
+//     @include transition(all, 0.2s, ease);
+//     background-color: $secondary;
+//     color: $dark;
+
+//     &::placeholder {
+//       color: rgba($dark, 0.5);
+//       font-size: 1.2rem;
+//     }
+
+//     &:focus {
+//       outline: none;
+//       border-color: $primary;
+//       box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+//       background-color: $white;
+//     }
+//   }
+
+//   button {
+//     position: absolute;
+//     right: -0.1rem;
+//     top: 50%;
+//     @include translateY(-50%);
+//     background: none;
+//     border: none;
+//     color: $primary;
+//     cursor: pointer;
+//     padding: 0.25rem;
+//     @include flex-center;
+//   }
+// }
 .searchForm {
   position: relative;
   margin: 0 1rem;
@@ -215,15 +258,27 @@
 
   button {
     position: absolute;
-    right: -0.1rem;
+    right: -0.8rem;
     top: 50%;
     @include translateY(-50%);
-    background: none;
     border: none;
+    background: none;
     color: $primary;
     cursor: pointer;
-    padding: 0.25rem;
     @include flex-center;
+
+    min-width: 48px;
+    min-height: 48px;
+    border-radius: 0.5rem;
+
+    // &:hover {
+    //   background-color: rgba($primary, 0.1);
+    // }
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
   }
 }
 

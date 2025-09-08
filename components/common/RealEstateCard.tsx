@@ -40,7 +40,7 @@ const RealEstateCard = ({ property, index }: RealEstateCardProps) => {
         <div className={styles.badge}>
           {property.type === 'sale' ? 'بيع' : 'إيجار'}
         </div>
-        <button className={styles.favoriteButton}>
+        <button className={styles.favoriteButton} aria-label="إضافة للمفضلة">
           <Heart className={styles.heartIcon} />
         </button>
         <Link 
@@ -48,6 +48,7 @@ const RealEstateCard = ({ property, index }: RealEstateCardProps) => {
           target="_blank"
           rel="noopener noreferrer"
           className={styles.whatsappButton}
+          aria-label="تواصل عبر واتساب"
         >
           <MessageSquareText className={styles.whatsappIcon} />
         </Link>

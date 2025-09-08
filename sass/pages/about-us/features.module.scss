@@ -6,6 +6,9 @@
   background-color: #f9fafb;
   position: relative;
   overflow: hidden;
+  .header {
+    margin: 15rem auto !important;
+  }
 
   .grid {
     @include grid-item(280px, 3rem);

@@ -35,7 +35,7 @@ const Header = () => {
   
   const navLinks: NavLink[] = [
     { name: 'الرئيسية', href: '/', icon: <Home size={20} /> },
-    { name: 'العقارات', href: '/properties', icon: <Building size={20} /> },
+    { name: 'العقارات', href: '/realstate', icon: <Building size={20} /> },
     { name: 'المفضلة', href: '/favorites', icon: <Heart size={20} /> },
     { name: 'عننا', href: '/aboutUs', icon: <Info size={20} /> },
     { name: 'تواصل معنا', href: '/support', icon: <Phone size={20} /> },
@@ -74,13 +74,14 @@ const Header = () => {
       <nav className={styles.nav}>
         {/* Logo */}
         <Link href="/" className={styles.logo}>
-          <Image 
-            src="/images/logo.webp" 
-            alt="Real Estate Logo" 
-            width={400} 
-            height={400}
-            priority
-          />
+         <Image 
+  src="/images/logo.webp" 
+  alt="Real Estate Logo" 
+  width={400} 
+  height={400}
+  priority
+/>
+
         </Link>
         
         {/* Desktop Navigation */}
@@ -118,6 +119,7 @@ const Header = () => {
           <form onSubmit={handleSubmit(onSubmit)} className={styles.searchForm}>
             <input
               type="text"
+              autoComplete='search'
               placeholder="ابحث عن عقار..."
               {...register('search', { required: true })}
               aria-label="Search properties"
