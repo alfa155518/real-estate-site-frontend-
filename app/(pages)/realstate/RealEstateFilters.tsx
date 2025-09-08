@@ -30,7 +30,7 @@ export interface RealEstateFiltersProps {
 
 const RealEstateFilters = ({ onSearch, className = '' }: RealEstateFiltersProps) => {
   const [filters, setFilters] = useState<FilterType>(initialFilters);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded] = useState(false);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
   const handleInputChange = (field: keyof FilterType, value: string | number) => {
@@ -80,10 +80,7 @@ const RealEstateFilters = ({ onSearch, className = '' }: RealEstateFiltersProps)
           animate={{ height: isExpanded ? 'auto' : 'auto' }}
         >
           {/* Property Type Tabs */}
-          <motion.div 
-            className={styles.propertyTypeTabs}
-            initial={false}
-          >
+          <motion.div className={styles.propertyTypeTabs} initial={false}>
             {[
               { value: 'all', label: 'الكل', icon: <Home size={18} /> },
               { value: 'sale', label: 'للبيع', icon: <Building size={18} /> },
@@ -109,13 +106,8 @@ const RealEstateFilters = ({ onSearch, className = '' }: RealEstateFiltersProps)
             <Search className={styles.searchIcon} />
             <input
               type="text"
-<<<<<<< HEAD
               name="location"
               autoComplete="search"
-=======
-              name='location'
-              autoComplete='search'
->>>>>>> 2555788f7c6cd2687527b06eb1055c9d230732d4
               placeholder="ابحث عن موقع..."
               className={styles.searchInput}
               value={filters.location}
@@ -124,11 +116,7 @@ const RealEstateFilters = ({ onSearch, className = '' }: RealEstateFiltersProps)
             {filters.location && (
               <button
                 type="button"
-<<<<<<< HEAD
                 aria-label="Clear location"
-=======
-                aria-label='clear location'
->>>>>>> 2555788f7c6cd2687527b06eb1055c9d230732d4
                 className={styles.clearButton}
                 onClick={() => setFilters({ ...filters, location: '' })}
               >
@@ -143,13 +131,8 @@ const RealEstateFilters = ({ onSearch, className = '' }: RealEstateFiltersProps)
               <DollarSign size={16} className={styles.rangeIcon} />
               <input
                 type="number"
-<<<<<<< HEAD
                 name="minPrice"
                 autoComplete="min-price"
-=======
-                name='min-price'
-                autoComplete='min-price'
->>>>>>> 2555788f7c6cd2687527b06eb1055c9d230732d4
                 placeholder="الحد الأدنى"
                 value={filters.minPrice}
                 onChange={(e) => handleInputChange('minPrice', e.target.value)}
@@ -160,13 +143,8 @@ const RealEstateFilters = ({ onSearch, className = '' }: RealEstateFiltersProps)
               <DollarSign size={16} className={styles.rangeIcon} />
               <input
                 type="number"
-<<<<<<< HEAD
                 name="maxPrice"
                 autoComplete="max-price"
-=======
-                name='max-price'
-                autoComplete='max-price'
->>>>>>> 2555788f7c6cd2687527b06eb1055c9d230732d4
                 placeholder="الحد الأقصى"
                 value={filters.maxPrice}
                 onChange={(e) => handleInputChange('maxPrice', e.target.value)}
@@ -180,15 +158,9 @@ const RealEstateFilters = ({ onSearch, className = '' }: RealEstateFiltersProps)
             <div className={styles.roomInput}>
               <Bed size={16} className={styles.roomIcon} />
               <select
-<<<<<<< HEAD
-                        value={filters.bedrooms}
+                value={filters.bedrooms}
                 name="bedrooms"
                 autoComplete="bedrooms"
-=======
-                value={filters.bedrooms}
-                name='bedrooms'
-                autoComplete='bedrooms'
->>>>>>> 2555788f7c6cd2687527b06eb1055c9d230732d4
                 onChange={(e) => handleInputChange('bedrooms', e.target.value)}
                 className={styles.roomSelect}
               >
@@ -205,13 +177,8 @@ const RealEstateFilters = ({ onSearch, className = '' }: RealEstateFiltersProps)
               <Bath size={16} className={styles.roomIcon} />
               <select
                 value={filters.bathrooms}
-<<<<<<< HEAD
-                autoComplete="bathrooms"
                 name="bathrooms"
-=======
-                name='bathrooms'
-                autoComplete='bathrooms'
->>>>>>> 2555788f7c6cd2687527b06eb1055c9d230732d4
+                autoComplete="bathrooms"
                 onChange={(e) => handleInputChange('bathrooms', e.target.value)}
                 className={styles.roomSelect}
               >
@@ -229,22 +196,14 @@ const RealEstateFilters = ({ onSearch, className = '' }: RealEstateFiltersProps)
           <div className={styles.actionButtons}>
             <button
               type="button"
-<<<<<<< HEAD
               aria-label="Reset filters"
-=======
-              aria-label='reset filters'
->>>>>>> 2555788f7c6cd2687527b06eb1055c9d230732d4
               className={styles.resetButton}
               onClick={resetFilters}
               disabled={!hasActiveFilters}
             >
               مسح الفلاتر
             </button>
-<<<<<<< HEAD
             <button type="submit" aria-label="Search" className={styles.searchButton}>
-=======
-            <button type="submit" aria-label='search' className={styles.searchButton}>
->>>>>>> 2555788f7c6cd2687527b06eb1055c9d230732d4
               بحث
               <Search size={18} />
             </button>
@@ -254,9 +213,8 @@ const RealEstateFilters = ({ onSearch, className = '' }: RealEstateFiltersProps)
 
       {/* Mobile Filters Toggle */}
       <button
-        aria-label='mobile filters toggle'
-        className={styles.mobileFilterToggle}
         aria-label="Toggle mobile filters"
+        className={styles.mobileFilterToggle}
         onClick={() => setIsMobileFiltersOpen(!isMobileFiltersOpen)}
       >
         <Sliders size={20} />
@@ -277,9 +235,8 @@ const RealEstateFilters = ({ onSearch, className = '' }: RealEstateFiltersProps)
               <div className={styles.mobileFiltersHeader}>
                 <h3>فلاتر البحث</h3>
                 <button
-                  aria-label='close mobile filters'
-                  className={styles.closeButton}
                   aria-label="Close mobile filters"
+                  className={styles.closeButton}
                   onClick={() => setIsMobileFiltersOpen(false)}
                 >
                   <X size={24} />
@@ -288,64 +245,39 @@ const RealEstateFilters = ({ onSearch, className = '' }: RealEstateFiltersProps)
               <div className={styles.mobileFiltersBody}>
                 {/* Price Range */}
                 <div className={styles.filterGroup}>
-<<<<<<< HEAD
                   <label htmlFor="minPrice">نطاق السعر</label>
                   <div className={styles.rangeInputs}>
                     <input
                       type="number"
                       name="minPrice"
-=======
-                  <label htmlFor='min-price'>نطاق السعر</label>
-                  <div className={styles.rangeInputs}>
-                    <input
-                      type="number"
-                      name='min-price'
-                      autoComplete='min-price'
->>>>>>> 2555788f7c6cd2687527b06eb1055c9d230732d4
                       placeholder="الحد الأدنى"
                       value={filters.minPrice}
                       onChange={(e) => handleInputChange('minPrice', e.target.value)}
                       min="0"
-<<<<<<< HEAD
                       id="minPrice"
-=======
-                      id='min-price'
->>>>>>> 2555788f7c6cd2687527b06eb1055c9d230732d4
                     />
                     <span>إلى</span>
                     <input
                       type="number"
-<<<<<<< HEAD
                       name="maxPrice"
-=======
-                      name='max-price'
-                      autoComplete='max-price'
->>>>>>> 2555788f7c6cd2687527b06eb1055c9d230732d4
                       placeholder="الحد الأقصى"
                       value={filters.maxPrice}
                       onChange={(e) => handleInputChange('maxPrice', e.target.value)}
                       min={filters.minPrice || '0'}
-                      id='max-price'
+                      id="maxPrice"
                     />
                   </div>
                 </div>
 
                 {/* Bedrooms */}
                 <div className={styles.filterGroup}>
-<<<<<<< HEAD
                   <label htmlFor="bedrooms">عدد الغرف</label>
-=======
-                  <label htmlFor='bedrooms'>عدد الغرف</label>
->>>>>>> 2555788f7c6cd2687527b06eb1055c9d230732d4
                   <select
-                    name='bedrooms'
-                      autoComplete='bedrooms'
-                    value={filters.bedrooms}
-                    autoComplete="bedrooms"
                     name="bedrooms"
+                    autoComplete="bedrooms"
+                    value={filters.bedrooms}
                     id="bedrooms"
                     onChange={(e) => handleInputChange('bedrooms', e.target.value)}
-                    id='bedrooms'
                   >
                     <option value="">الكل</option>
                     {[1, 2, 3, 4, 5, '6+'].map((num) => (
@@ -358,20 +290,13 @@ const RealEstateFilters = ({ onSearch, className = '' }: RealEstateFiltersProps)
 
                 {/* Bathrooms */}
                 <div className={styles.filterGroup}>
-<<<<<<< HEAD
                   <label htmlFor="bathrooms">عدد الحمامات</label>
-=======
-                  <label htmlFor='bathrooms'>عدد الحمامات</label>
->>>>>>> 2555788f7c6cd2687527b06eb1055c9d230732d4
                   <select
-                    name='bathrooms'
-                    autoComplete='bathrooms'
-                    value={filters.bathrooms}
-                    autoComplete="bathrooms"
                     name="bathrooms"
+                    autoComplete="bathrooms"
+                    value={filters.bathrooms}
                     id="bathrooms"
                     onChange={(e) => handleInputChange('bathrooms', e.target.value)}
-                    id='bathrooms'
                   >
                     <option value="">الكل</option>
                     {[1, 2, 3, 4, '5+'].map((num) => (
@@ -385,11 +310,7 @@ const RealEstateFilters = ({ onSearch, className = '' }: RealEstateFiltersProps)
               <div className={styles.mobileFiltersFooter}>
                 <button
                   type="button"
-<<<<<<< HEAD
                   aria-label="Reset filters"
-=======
-                  aria-label='reset filters'
->>>>>>> 2555788f7c6cd2687527b06eb1055c9d230732d4
                   className={styles.resetButton}
                   onClick={resetFilters}
                   disabled={!hasActiveFilters}
@@ -398,11 +319,7 @@ const RealEstateFilters = ({ onSearch, className = '' }: RealEstateFiltersProps)
                 </button>
                 <button
                   type="button"
-<<<<<<< HEAD
                   aria-label="Apply filters"
-=======
-                  aria-label='apply filters'  
->>>>>>> 2555788f7c6cd2687527b06eb1055c9d230732d4
                   className={styles.applyButton}
                   onClick={applyFilters}
                 >
