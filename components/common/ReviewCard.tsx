@@ -47,7 +47,7 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
             {review.name.charAt(0)}
           </div>
           <div>
-            <h4 className={styles.userName}>{review.name}</h4>
+            <strong className={styles.userName}>{review.name}</strong>
             <div className={styles.rating}>
               {renderStars(review.rating)}
               <span className={styles.ratingNumber}>{review.rating.toFixed(1)}</span>
