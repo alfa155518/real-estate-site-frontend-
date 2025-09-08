@@ -42,7 +42,13 @@ export default function Hero() {
         {
             images.map((image:string , index:number) => (
                 <SwiperSlide key={index}>
+<<<<<<< Updated upstream
                     {/* <Image src={image} alt={`slide-${index + 1}`} width={1920} height={1080} /> */}
+=======
+<<<<<<< Updated upstream
+                    <Image src={image} alt={`slide-${index + 1}`} width={1920} height={1080} />
+=======
+>>>>>>> Stashed changes
                      <Image 
     src={image} 
     alt={`slide-${index + 1}`} 
@@ -51,8 +57,14 @@ export default function Hero() {
     sizes="(max-width: 768px) 100vw, 
            (max-width: 1200px) 100vw, 
            100vw"
+<<<<<<< Updated upstream
     priority={index === 0} // أول صورة فقط priority
   />
+=======
+    priority={index === 0}
+  />
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
                 </SwiperSlide>
             ))
         }
