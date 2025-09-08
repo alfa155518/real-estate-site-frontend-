@@ -107,6 +107,7 @@ export default function Support() {
               <div className={`${styles.inputWrapper} ${errors.name ? styles.error : ''}`}>
                 <input
                   id="name"
+                  autoComplete='name'
                   type="text"
                   {...register('name', { required: 'يرجى إدخال الاسم' })}
                   placeholder="أدخل اسمك الكامل"
@@ -121,6 +122,7 @@ export default function Support() {
               <div className={`${styles.inputWrapper} ${errors.email ? styles.error : ''}`}>
                 <input
                   id="email"
+                  autoComplete='email'
                   type="email"
                   {...register('email', {
                     required: 'يرجى إدخال البريد الإلكتروني',
@@ -141,6 +143,7 @@ export default function Support() {
               <div className={styles.inputWrapper}>
                 <input
                   id="phone"
+                  autoComplete='phone'
                   type="tel"
                   {...register('phone', {
                     required: 'يرجى إدخال رقم الجوال',
@@ -167,9 +170,11 @@ export default function Support() {
                       { value: 'medium', label: 'متوسطة', color: '#FFC107' },
                       { value: 'high', label: 'عاجل', color: '#F44336' },
                     ].map((option) => (
-                      <label key={option.value} className={styles.radioLabel}>
+                      <label htmlFor={`priority-${option.value}`} key={option.value} className={styles.radioLabel}>
                         <input
                           type="radio"
+                          autoComplete='priority'
+                          id={`priority-${option.value}`}
                           {...field}
                           value={option.value}
                           checked={field.value === option.value}
@@ -188,6 +193,7 @@ export default function Support() {
               <div className={`${styles.inputWrapper} ${errors.subject ? styles.error : ''}`}>
                 <input
                   id="subject"
+                  autoComplete='subject'
                   type="text"
                   {...register('subject', { required: 'يرجى إدخال عنوان الرسالة' })}
                   placeholder="مثال: مشكلة في تسجيل الدخول"
@@ -202,6 +208,7 @@ export default function Support() {
               <div className={`${styles.textareaWrapper} ${errors.message ? styles.error : ''}`}>
                 <textarea
                   id="message"
+                  autoComplete='message'
                   rows={5}
                   {...register('message', { 
                     required: 'يرجى إدخال تفاصيل المشكلة',
@@ -220,11 +227,12 @@ export default function Support() {
             <motion.div className={`${styles.formGroup} ${styles.fullWidth}`} variants={itemVariants}>
               <label htmlFor="attachment">إرفاق ملف (اختياري)</label>
               <div className={styles.fileUpload}>
-                <label htmlFor="attachment" className={styles.fileUploadLabel}>
+                <label className={styles.fileUploadLabel}>
                   <Upload size={30}/>
                   <span>اختر ملفًا أو اسحبه هنا</span>
                   <input
                     id="attachment"
+                    autoComplete='attachment'
                     type="file"
                     {...register('attachment')}
                     className={styles.fileInput}
@@ -233,8 +241,9 @@ export default function Support() {
                 </label>
                 <p className={styles.fileInfo}>الملفات المسموح بها: PDF, DOC, DOCX, JPG, PNG (الحد الأقصى 5 ميجابايت)</p>
               </div>
-            </motion.div>
           </motion.div>
+
+ 
 
           <motion.div className={styles.formFooter} variants={itemVariants}>
             <div className={styles.requiredInfo}>
@@ -243,6 +252,7 @@ export default function Support() {
             </div>
             <button 
               type="submit" 
+              aria-label='submit'
               className={styles.submitButton}
               disabled={isSubmitting}
             >
@@ -258,6 +268,7 @@ export default function Support() {
                 </>
               )}
             </button>
+          </motion.div>
           </motion.div>
         </motion.form>
       </motion.div>
