@@ -42,6 +42,7 @@ export default function Hero() {
         {
             images.map((image:string , index:number) => (
                 <SwiperSlide key={index}>
+
                      <Image 
     src={image} 
     alt={`slide-${index + 1}`} 

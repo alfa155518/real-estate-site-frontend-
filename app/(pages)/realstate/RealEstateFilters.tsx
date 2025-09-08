@@ -175,20 +175,26 @@ const RealEstateFilters = ({ onSearch, className = '' }: RealEstateFiltersProps)
 
             <div className={styles.roomInput}>
               <Bath size={16} className={styles.roomIcon} />
-              <select
-                value={filters.bathrooms}
-                name="bathrooms"
-                autoComplete="bathrooms"
-                onChange={(e) => handleInputChange('bathrooms', e.target.value)}
-                className={styles.roomSelect}
-              >
-                <option value="">عدد الحمامات</option>
-                {[1, 2, 3, 4, '5+'].map((num) => (
-                  <option key={num} value={num}>
-                    {num} {num === '5+' ? 'أكثر' : 'حمام'}
-                  </option>
-                ))}
-              </select>
+
+            <label htmlFor="bedrooms" className={styles.roomLabel}>
+    عدد الغرف
+  </label>
+  <select
+    id="bedrooms"
+    name="bedrooms"
+    autoComplete="bedrooms"
+    value={filters.bedrooms}
+    onChange={(e) => handleInputChange('bedrooms', e.target.value)}
+    className={styles.roomSelect}
+  >
+    <option value="">اختر</option>
+    {[1, 2, 3, 4, 5, '6+'].map((num) => (
+      <option key={num} value={num}>
+        {num} {num === '6+' ? 'أكثر' : 'غرفة'}
+      </option>
+    ))}
+  </select>
+
             </div>
           </div>
 
@@ -290,21 +296,26 @@ const RealEstateFilters = ({ onSearch, className = '' }: RealEstateFiltersProps)
 
                 {/* Bathrooms */}
                 <div className={styles.filterGroup}>
-                  <label htmlFor="bathrooms">عدد الحمامات</label>
-                  <select
-                    name="bathrooms"
-                    autoComplete="bathrooms"
-                    value={filters.bathrooms}
-                    id="bathrooms"
-                    onChange={(e) => handleInputChange('bathrooms', e.target.value)}
-                  >
-                    <option value="">الكل</option>
-                    {[1, 2, 3, 4, '5+'].map((num) => (
-                      <option key={num} value={num}>
-                        {num} {num === '5+' ? 'أكثر' : 'حمام'}
-                      </option>
-                    ))}
-                  </select>
+
+<label htmlFor="bathrooms" className={styles.roomLabel}>
+    عدد الحمامات
+  </label>
+  <select
+    id="bathrooms"
+    name="bathrooms"
+    autoComplete="bathrooms"
+    value={filters.bathrooms}
+    onChange={(e) => handleInputChange('bathrooms', e.target.value)}
+    className={styles.roomSelect}
+  >
+    <option value="">اختر</option>
+    {[1, 2, 3, 4, '5+'].map((num) => (
+      <option key={num} value={num}>
+        {num} {num === '5+' ? 'أكثر' : 'حمام'}
+      </option>
+    ))}
+  </select>
+
                 </div>
               </div>
               <div className={styles.mobileFiltersFooter}>
