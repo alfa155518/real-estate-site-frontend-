@@ -83,8 +83,7 @@ const item: Variants = {
 export default function Features() {
   return (
     <section className={styles.features} dir="rtl">
-      <div>
-        <SectionName title="لماذا تختارنا؟" subtitle="نحن نقدم أفضل الحلول العقارية لعملائنا الكرام" />
+        <SectionName title="لماذا تختارنا؟" subtitle="نحن نقدم أفضل الحلول العقارية لعملائنا الكرام" className="mt-[7rem]"/>
         <motion.div 
           className={styles.grid}
           variants={container}
@@ -107,7 +106,6 @@ export default function Features() {
             </motion.div>
           ))}
         </motion.div>
-      </div>
     </section>
   );
 }

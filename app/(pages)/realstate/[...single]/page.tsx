@@ -1,15 +1,16 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
 import { useParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
-import { Star, MapPin, Bed, Bath, Ruler, Heart, Share2, ArrowLeft, ArrowRight, MessageSquareText } from 'lucide-react';
-import styles from '@/sass/pages/real-estate/singleRealEstate.module.scss';
+import { Star, MapPin, Bed, Bath, Ruler, Heart, ArrowLeft, ArrowRight, MessageSquareText } from 'lucide-react';
+import styles from '@/sass/pages/single-realestate/singleRealEstate.module.scss';
 import { realEstateData } from '@/data/real-estate';
 import { reviews as allReviews } from '@/data/reviews';
 import ReviewCard from '@/components/common/ReviewCard';
-import { Review } from '@/types/reviews';
+import type { Review } from '@/types/reviews';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -20,7 +21,7 @@ const MapWithNoSSR = dynamic(
 );
 
 // Types
-interface ReviewState {
+interface ReviewFormData {
   rating: number;
   comment: string;
 }
@@ -30,6 +31,19 @@ interface PropertyImage {
   image_url: string;
   is_primary: boolean;
 }
+
+// Using the imported Review type from types/reviews.ts
+// It has the following structure:
+// interface Review {
+//   review_id: number;
+//   property_id: number;
+//   user_id: number;
+//   name: string;
+//   rating: number;
+//   comment: string;
+//   reviewed_at: string;
+//   helpful_votes: number;
+// }
 
 interface RealEstate {
   id: number;
@@ -61,11 +75,16 @@ export default function SingleRealEstatePage() {
   const [property, setProperty] = useState<RealEstate | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isLoadingReviews, setIsLoadingReviews] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [newReview, setNewReview] = useState<ReviewState>({
-    rating: 0,
-    comment: ''
+  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
+  const { register, handleSubmit, setValue, watch, reset, formState: { errors } } = useForm<ReviewFormData>({
+    defaultValues: {
+      rating: 0,
+      comment: ''
+    }
   });
+  
+  // Watch the rating value to update the UI
+  const ratingValue = watch('rating', 0);
 
   // Calculate average rating
   const averageRating = useMemo(() => {
@@ -173,29 +192,33 @@ export default function SingleRealEstatePage() {
     return stars;
   };
 
-  const handleReviewSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newReview.rating || !newReview.comment.trim() || !property) return;
+  const handleReviewSubmit = async (formData: ReviewFormData) => {
+    if (!property) return;
     
-    setIsSubmitting(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      const review: Review = {
-        review_id: Math.max(0, ...reviews.map(r => r.review_id)) + 1,
+    try {
+      setIsFormSubmitting(true);
+      
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const newReview: Review = {
+        review_id: Date.now(),
         property_id: property.id,
-        user_id: 0, // This would come from auth in a real app
+        user_id: 0, // Default user ID, replace with actual user ID
         name: 'مستخدم جديد',
-        rating: newReview.rating,
-        comment: newReview.comment,
+        rating: formData.rating,
+        comment: formData.comment,
         reviewed_at: new Date().toISOString(),
         helpful_votes: 0
       };
       
-      setReviews([review, ...reviews]);
-      setNewReview({ rating: 0, comment: '' });
-      setIsSubmitting(false);
-    }, 1000);
+      setReviews([newReview, ...reviews]);
+      reset();
+    } catch (error) {
+      console.error('Error submitting review:', error);
+    } finally {
+      setIsFormSubmitting(false);
+    }
   };
 
   return (
@@ -433,7 +456,7 @@ export default function SingleRealEstatePage() {
           transition={{ delay: 0.6 }}
         >
           <h3>أضف تقييمك</h3>
-          <form onSubmit={handleReviewSubmit}>
+          <form onSubmit={handleSubmit(handleReviewSubmit)}>
             <div className={styles.formGroup}>
               <label>التقييم</label>
               <div className={styles.starRating}>
@@ -441,29 +464,45 @@ export default function SingleRealEstatePage() {
                   <Star 
                     key={star}
                     size={28}
-                    fill={star <= newReview.rating ? '#FFD700' : 'none'}
-                    color={star <= newReview.rating ? '#FFD700' : '#ddd'}
-                    onClick={() => setNewReview({...newReview, rating: star})}
+                    fill={star <= ratingValue ? '#FFD700' : 'none'}
+                    color={star <= ratingValue ? '#FFD700' : '#ddd'}
+                    onClick={() => setValue('rating', star, { shouldValidate: true })}
+                    style={{ cursor: 'pointer' }}
                   />
                 ))}
+                <input
+                  type="hidden"
+                  {...register('rating', { required: 'الرجاء تحديد التقييم' })}
+                />
               </div>
+              {errors.rating && (
+                <p className={styles.error}>{errors.rating.message}</p>
+              )}
             </div>
             <div className={styles.formGroup}>
               <label htmlFor="comment">تعليقك</label>
               <textarea
                 id="comment"
-                value={newReview.comment}
-                onChange={(e) => setNewReview({...newReview, comment: e.target.value})}
+                {...register('comment', { 
+                  required: 'الرجاء إدخال تعليقك',
+                  minLength: {
+                    value: 10,
+                    message: 'يجب أن يكون التعليق 10 أحرف على الأقل'
+                  }
+                })}
                 placeholder="اكتب تعليقك هنا..."
-                required
+                className={errors.comment ? styles.inputError : ''}
               />
+              {errors.comment && (
+                <p className={styles.error}>{errors.comment.message}</p>
+              )}
             </div>
             <button 
               type="submit" 
               className={styles.submitButton}
-              disabled={isSubmitting}
+              disabled={isFormSubmitting}
             >
-              {isSubmitting ? 'جاري الإرسال...' : 'إرسال التقييم'}
+              {isFormSubmitting ? 'جاري الإرسال...' : 'إرسال التقييم'}
             </button>
           </form>
         </motion.div>
