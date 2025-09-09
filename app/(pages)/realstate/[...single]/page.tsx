@@ -353,10 +353,10 @@ export default function SingleRealEstatePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
           >
-            <h3>تفاصيل العقار</h3>
+            <h2>تفاصيل العقار</h2>
             <p>{description}</p>
             
-            <h3>المميزات</h3>
+            <h2>المميزات</h2>
             <div className={styles.featuresGrid}>
               {features.map((feature, index) => (
                 <div key={index} className={styles.featureItem}>

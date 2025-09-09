@@ -1,0 +1,296 @@
+@use "@/sass/helpers/variables" as *;
+@use "@/sass/helpers/mixins" as *;
+
+.profileContainer {
+  max-width: 800px;
+  margin: 15rem auto;
+  padding: 2rem 1rem;
+  direction: rtl;
+}
+
+.profileHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: linear-gradient(
+    135deg,
+    rgba($primary, 0.1) 0%,
+    rgba($primary, 0.05) 100%
+  );
+  @include radius(16px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.avatarContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    justify-content: center;
+    text-align: right;
+  }
+}
+
+.avatar {
+  width: 100px;
+  height: 100px;
+  @include radius(50%);
+  background: $white;
+  padding: 0.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  color: $primary;
+  stroke-width: 1.3;
+}
+
+.userInfo {
+  h2 {
+    font-size: 2rem;
+    color: $dark;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: rgba($dark, 0.8);
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+}
+
+.tabsContainer {
+  background: $white;
+  @include radius(16px);
+  border: 1px solid rgba($dark, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid rgba($dark, 0.3);
+  padding: 0 1.5rem;
+
+  @media (min-width: 768px) {
+    padding: 0 2rem;
+  }
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: $dark;
+  cursor: pointer;
+  position: relative;
+  @include transition(0.3s, ease);
+
+  &:hover {
+    color: $primary;
+  }
+
+  &.active {
+    color: $primary;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      right: 0;
+      left: 0;
+      height: 3px;
+      background: $primary;
+      @include full-radius(3px, 3px, 0, 0);
+    }
+  }
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+.tabContent {
+  padding: 2rem 1.5rem;
+
+  @media (min-width: 768px) {
+    padding: 2.5rem;
+  }
+}
+
+.formContainer {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+  position: relative;
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: rgba($dark, 0.8);
+    margin-bottom: 0.5rem;
+
+    svg {
+      color: $primary;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+}
+
+.input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1px solid $dark-white;
+  @include radius(8px);
+  font-size: 1.3rem;
+  @include transition(0.2s, ease);
+  background-color: $secondary;
+
+  &:focus {
+    outline: none;
+    border-color: $primary;
+    box-shadow: 0 0 0 3px rgba($primary, 0.1);
+  }
+
+  &:disabled {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+  }
+
+  &.error {
+    border-color: $danger;
+
+    &:focus {
+      box-shadow: 0 0 0 3px rgba($danger, 0.1);
+    }
+  }
+}
+
+.errorMessage {
+  display: block;
+  color: $danger;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  @include radius(8px);
+  font-size: 1.3rem;
+  font-weight: 700;
+  cursor: pointer;
+  @include transition(0.2s, ease);
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  svg {
+    width: 1.3rem;
+    height: 1.3rem;
+  }
+}
+
+.editButton {
+  background-color: $primary;
+  color: white;
+
+  &:hover:not(:disabled) {
+    @include translateY(-2px);
+  }
+}
+
+.saveButton {
+  background-color: $success;
+  color: white;
+
+  &:hover:not(:disabled) {
+    @include translateY(-2px);
+  }
+}
+
+.cancelButton {
+  background-color: $primary-light;
+  color: $white;
+  border: 1px solid rgba($primary-light, 0.8);
+
+  &:hover:not(:disabled) {
+    @include translateY(-2px);
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    @include translateY(10px);
+  }
+  to {
+    opacity: 1;
+    @include translateY(0);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .profileHeader {
+    padding: 1.5rem 1rem;
+  }
+
+  .tabs {
+    justify-content: space-between;
+    padding: 0 1rem;
+  }
+
+  .tab {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.9rem;
+    flex: 1;
+    justify-content: center;
+
+    span {
+      display: none;
+    }
+  }
+
+  .tabContent {
+    padding: 1.5rem 1rem;
+  }
+
+  .formActions {
+    flex-direction: column;
+    gap: 0.75rem;
+
+    button {
+      width: 100%;
+    }
+  }
+}

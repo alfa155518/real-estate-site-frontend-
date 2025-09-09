@@ -27,31 +27,30 @@
   .loginButton {
     border: 1px solid $primary;
     color: $primary;
-    background: transparent;
+    background-color: rgba($primary, 0.1);
 
     &:hover {
-      background-color: rgba($primary, 0.1);
+      @include scale(1.05);
     }
   }
 
   .profileButton {
-    color: $dark;
-    background: transparent;
+    background-color: $dark-white !important;
+    color: $primary !important;
     border: 1px solid $dark-white;
 
     &:hover {
-      background-color: $dark-white;
-      color: $primary;
+      @include scale(1.05);
     }
   }
 
   .logoutButton {
     border: 1px solid #f87171;
     color: $danger;
-    background: transparent;
+    background-color: rgba(239, 68, 68, 0.1) !important;
 
     &:hover {
-      background-color: rgba(239, 68, 68, 0.1);
+      @include scale(1.05);
     }
   }
 
@@ -183,102 +182,184 @@
     display: none;
   }
 }
-
-// Search Form
-// .searchForm {
-//   position: relative;
-//   margin: 0 1rem;
-//   flex: 1;
-//   max-width: 400px;
-
-//   input {
-//     width: 100%;
-//     padding: 0.55rem 2.75rem 0.55rem 1rem;
-//     border: 1px solid $dark-white;
-//     @include radius(0.5rem);
-//     font-size: 1.3rem;
-//     @include transition(all, 0.2s, ease);
-//     background-color: $secondary;
-//     color: $dark;
-
-//     &::placeholder {
-//       color: rgba($dark, 0.5);
-//       font-size: 1.2rem;
-//     }
-
-//     &:focus {
-//       outline: none;
-//       border-color: $primary;
-//       box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-//       background-color: $white;
-//     }
-//   }
-
-//   button {
-//     position: absolute;
-//     right: -0.1rem;
-//     top: 50%;
-//     @include translateY(-50%);
-//     background: none;
-//     border: none;
-//     color: $primary;
-//     cursor: pointer;
-//     padding: 0.25rem;
-//     @include flex-center;
-//   }
-// }
-.searchForm {
+.searchContainer {
   position: relative;
   margin: 0 1rem;
   flex: 1;
   max-width: 400px;
+}
+
+.searchForm {
+  position: relative;
+  width: 100%;
 
   input {
     width: 100%;
-    padding: 0.55rem 2.75rem 0.55rem 1rem;
+    padding: 0.75rem 3rem 0.75rem 1rem;
     border: 1px solid $dark-white;
-    @include radius(0.5rem);
+    @include radius(5px);
     font-size: 1.3rem;
-    @include transition(all, 0.2s, ease);
-    background-color: $secondary;
+    @include transition(border-color, 0.2s, ease);
+    background-color: $white;
     color: $dark;
-
-    &::placeholder {
-      color: rgba($dark, 0.5);
-      font-size: 1.2rem;
-    }
 
     &:focus {
       outline: none;
       border-color: $primary;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-      background-color: $white;
+      box-shadow: 0 0 0 2px rgba($primary, 0.2);
+    }
+
+    &::placeholder {
+      color: $dark;
     }
   }
 
   button {
     position: absolute;
-    right: -0.8rem;
+    right: 0.75rem;
     top: 50%;
     @include translateY(-50%);
-    border: none;
     background: none;
-    color: $primary;
+    border: none;
+    color: $dark;
     cursor: pointer;
+    padding: 0.25rem;
     @include flex-center;
+    @include radius(50%);
+    @include transition(background-color, 0.2s, ease);
 
-    min-width: 48px;
-    min-height: 48px;
-    border-radius: 0.5rem;
-
-    // &:hover {
-    //   background-color: rgba($primary, 0.1);
-    // }
-
-    svg {
-      width: 20px;
-      height: 20px;
+    &:hover {
+      color: $primary;
+      background-color: rgba($primary, 0.1);
     }
+  }
+}
+
+// Search results dropdown
+.searchResults {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 400px;
+  overflow-y: auto;
+  background: $white;
+  border: 1px solid $dark-white;
+  @include radius(5px);
+  margin-top: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  z-index: 50;
+  animation: fadeIn 0.2s ease-in-out;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $dark-white;
+    @include full-radius(0, 0.5rem, 0.5rem, 0);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $dark;
+    @include radius(3px);
+  }
+}
+
+.resultItem {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  gap: 1rem;
+  border-bottom: 1px solid $dark-white;
+  cursor: pointer;
+  @include transition(background-color, 0.2s, ease);
+  text-align: right;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: rgba($primary, 0.05);
+  }
+}
+
+.resultImage {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  @include radius(0.375rem);
+  overflow: hidden;
+  background-color: $dark-white;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.resultInfo {
+  flex: 1;
+  min-width: 0;
+
+  h4 {
+    margin: 0 0 0.25rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: $dark;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  p {
+    margin: 0 0 0.25rem;
+    font-size: 1.1rem;
+    color: $dark;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  span {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: $primary;
+  }
+}
+
+.viewAll {
+  padding: 0.75rem 1rem;
+  text-align: center;
+  border-top: 1px solid $dark-white;
+  background-color: $white;
+  @include full-radius(0, 0, 0.5rem, 0.5rem);
+
+  a {
+    color: $primary;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1.2rem;
+    @include transition(color, 0.2s, ease);
+
+    &:hover {
+      color: rgba($primary, 0.8);
+      text-decoration: underline;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    @include translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    @include translateY(0);
   }
 }
 
@@ -301,30 +382,23 @@
   z-index: 60; // Above mobile menu
 
   @media (max-width: 1024px) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include flex-center;
   }
 
   &:hover {
     background: rgba($primary, 0.5);
     color: $white;
   }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-  }
 }
 
 // Mobile Menu
 .mobileMenu {
   position: fixed;
-  top: 4.5rem;
+  top: 5.5rem;
   left: 0;
   right: 0;
   bottom: 0;
-  background: white;
+  background: $white;
   padding: 1.5rem;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   border-top: 1px solid $dark-white;

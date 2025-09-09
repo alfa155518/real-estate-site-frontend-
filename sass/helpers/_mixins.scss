@@ -32,6 +32,13 @@
   -ms-border-radius: $radius;
   -o-border-radius: $radius;
 }
+@mixin full-radius($tl, $tr, $br, $bl) {
+  border-radius: $tl $tr $br $bl;
+  -webkit-border-radius: $tl $tr $br $bl;
+  -moz-border-radius: $tl $tr $br $bl;
+  -ms-border-radius: $tl $tr $br $bl;
+  -o-border-radius: $tl $tr $br $bl;
+}
 @mixin translate($x, $y) {
   transform: translate($x, $y) !important;
   -webkit-transform: translate($x, $y) !important;
@@ -130,6 +137,7 @@
 
 @mixin auth-card {
   background: rgba(255, 255, 255, 0.95);
+  margin: 10rem auto;
   @include radius(16px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   padding: 2.5rem;
@@ -163,7 +171,6 @@
 
 @mixin auth-input-container {
   position: relative;
-
   input {
     width: 100%;
     padding: 0.85rem 3rem 0.85rem 1rem;

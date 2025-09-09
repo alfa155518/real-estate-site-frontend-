@@ -41,17 +41,17 @@ export default function Hero() {
       >
         {
             images.map((image:string , index:number) => (
-                <SwiperSlide key={index}>
+                <SwiperSlide key={index} className={styles.swiperSlide}>
 
-                     <Image 
-    src={image} 
-    alt={`slide-${index + 1}`} 
-    width={1920}
-    height={1080}
-    sizes="(max-width: 768px) 100vw, 
-           (max-width: 1200px) 100vw, 
-           100vw"
-    priority={index === 0} 
+                      <Image 
+      src={image} 
+      alt={`slide-${index + 1}`} 
+      width={1920}
+      height={1080}
+      sizes="(max-width: 768px) 100vw, 
+            (max-width: 1200px) 100vw, 
+            100vw"
+      priority={index === 0} 
   />
                 </SwiperSlide>
             ))
