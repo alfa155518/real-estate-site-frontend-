@@ -1,16 +1,22 @@
 'use client';
 
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
-import { motion } from 'framer-motion';
-import { AlertCircle, Send, AlertTriangle, CheckCircle, Upload, X } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { SupportFormData } from '@/types/support';
 import styles from '@/sass/pages/support.module.scss';
 import SectionName from '@/components/common/SectionName';
 
+// Dynamically import icons
+const AlertCircle = dynamic(() => import('lucide-react').then((mod) => mod.AlertCircle));
+const Send = dynamic(() => import('lucide-react').then((mod) => mod.Send));
+const AlertTriangle = dynamic(() => import('lucide-react').then((mod) => mod.AlertTriangle));
+const Upload = dynamic(() => import('lucide-react').then((mod) => mod.Upload));
+
 export default function Support() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' });
+  // Commented out unused state
+  // const [submitStatus, setSubmitStatus] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' });
   
   const { register, handleSubmit, control, formState: { errors }, reset } = useForm<SupportFormData>({
     defaultValues: {
@@ -20,7 +26,6 @@ export default function Support() {
 
   const onSubmit: SubmitHandler<SupportFormData> = async (data) => {
     setIsSubmitting(true);
-    setSubmitStatus({ type: null, message: '' });
     
     try {
       // Simulate API call
@@ -33,57 +38,26 @@ export default function Support() {
         // Handle file upload here
       }
       
-      setSubmitStatus({
-        type: 'success',
-        message: 'تم استلام طلبك بنجاح! سنقوم بالرد عليك في أقرب وقت ممكن.'
-      });
+      alert('تم استلام طلبك بنجاح! سنقوم بالرد عليك في أقرب وقت ممكن.');
       reset();
-    } catch (error) {
-      setSubmitStatus({
-        type: 'error',
-        message: 'حدث خطأ أثناء إرسال النموذج. يرجى المحاولة مرة أخرى لاحقًا.'
-      });
+    } catch {
+      // Show error message (you can implement a toast or alert here)
+      alert('حدث خطأ أثناء إرسال النموذج. يرجى المحاولة مرة أخرى لاحقًا.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5
-      }
-    }
-  };
-
   return (
-    <>
-   
     <div className={styles.supportPage} dir="rtl">
-   <SectionName title="تواصل مع الدعم الفني" subtitle="نحن هنا لمساعدتك! يرجى ملء النموذج أدناه وسنقوم بالرد عليك في أقرب وقت ممكن." />
-      <motion.div 
-        className={styles.container}
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
+      <SectionName 
+        title="تواصل مع الدعم الفني" 
+        subtitle="نحن هنا لمساعدتك! يرجى ملء النموذج أدناه وسنقوم بالرد عليك في أقرب وقت ممكن." 
+      />
+      <div className={styles.container}>
 
         {/* {submitStatus.type && (
-          <motion.div 
+          <MotionDiv 
             className={`${styles.alert} ${submitStatus.type === 'success' ? styles.success : styles.error}`}
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -97,12 +71,11 @@ export default function Support() {
             <button onClick={() => setSubmitStatus({ type: null, message: '' })}>
               <X size={18} />
             </button>
-          </motion.div>
+            </div>
         )} */}
 
-        <motion.form onSubmit={handleSubmit(onSubmit)} variants={containerVariants}>
-          <motion.div className={styles.formGrid} variants={containerVariants}>
-            <motion.div className={styles.formGroup} variants={itemVariants}>
+        <form onSubmit={handleSubmit(onSubmit)} className={styles.formGrid}>
+          <div className={styles.formGroup}>
               <label htmlFor="name">الاسم الكامل *</label>
               <div className={`${styles.inputWrapper} ${errors.name ? styles.error : ''}`}>
                 <input
@@ -113,11 +86,11 @@ export default function Support() {
                   placeholder="أدخل اسمك الكامل"
                 />
                 {errors.name && <AlertCircle className={styles.inputIcon} />}
-              </div>
+                </div>
               {errors.name && <span className={styles.errorMessage}>{errors.name.message}</span>}
-            </motion.div>
+              </div>
 
-            <motion.div className={styles.formGroup} variants={itemVariants}>
+            <div className={styles.formGroup}>
               <label htmlFor="email">البريد الإلكتروني *</label>
               <div className={`${styles.inputWrapper} ${errors.email ? styles.error : ''}`}>
                 <input
@@ -134,11 +107,11 @@ export default function Support() {
                   placeholder="example@example.com"
                 />
                 {errors.email && <AlertCircle className={styles.inputIcon} />}
-              </div>
+                </div>
               {errors.email && <span className={styles.errorMessage}>{errors.email.message}</span>}
-            </motion.div>
+              </div>
 
-            <motion.div className={styles.formGroup} variants={itemVariants}>
+            <div className={styles.formGroup}>
               <label htmlFor="phone">رقم الجوال *</label>
               <div className={styles.inputWrapper}>
                 <input
@@ -154,11 +127,11 @@ export default function Support() {
                   })}
                   placeholder="+20 5X XXX XXXX"
                 />
-              </div>
+                </div>
               {errors.phone && <span className={styles.errorMessage}>{errors.phone.message}</span>}
-            </motion.div>
+              </div>
 
-            <motion.div className={styles.formGroup} variants={itemVariants}>
+            <div className={styles.formGroup}>
               <label htmlFor="priority">أولوية الطلب *</label>
               <Controller
                 name="priority"
@@ -183,12 +156,12 @@ export default function Support() {
                         {option.label}
                       </label>
                     ))}
-                  </div>
+                    </div>
                 )}
               />
-            </motion.div>
+              </div>
 
-            <motion.div className={styles.formGroup} variants={itemVariants}>
+            <div className={styles.formGroup}>
               <label htmlFor="subject">عنوان الرسالة *</label>
               <div className={`${styles.inputWrapper} ${errors.subject ? styles.error : ''}`}>
                 <input
@@ -199,11 +172,11 @@ export default function Support() {
                   placeholder="مثال: مشكلة في تسجيل الدخول"
                 />
                 {errors.subject && <AlertCircle className={styles.inputIcon} />}
-              </div>
+                </div>
               {errors.subject && <span className={styles.errorMessage}>{errors.subject.message}</span>}
-            </motion.div>
+              </div>
 
-            <motion.div className={`${styles.formGroup} ${styles.fullWidth}`} variants={itemVariants}>
+            <div className={`${styles.formGroup} ${styles.fullWidth}`}>
               <label htmlFor="message">تفاصيل المشكلة أو الاستفسار *</label>
               <div className={`${styles.textareaWrapper} ${errors.message ? styles.error : ''}`}>
                 <textarea
@@ -220,11 +193,11 @@ export default function Support() {
                   placeholder="يرجى وصف مشكلتك أو استفسارك بالتفصيل..."
                 ></textarea>
                 {errors.message && <AlertCircle className={styles.textareaIcon} />}
-              </div>
+                </div>
               {errors.message && <span className={styles.errorMessage}>{errors.message.message}</span>}
-            </motion.div>
+              </div>
 
-            <motion.div className={`${styles.formGroup} ${styles.fullWidth}`} variants={itemVariants}>
+            <div className={`${styles.formGroup} ${styles.fullWidth}`}>
               <label htmlFor="attachment">إرفاق ملف (اختياري)</label>
               <div className={styles.fileUpload}>
                 <label className={styles.fileUploadLabel}>
@@ -240,16 +213,16 @@ export default function Support() {
                   />
                 </label>
                 <p className={styles.fileInfo}>الملفات المسموح بها: PDF, DOC, DOCX, JPG, PNG (الحد الأقصى 5 ميجابايت)</p>
-              </div>
-          </motion.div>
+                </div>
+            </div>
 
  
 
-          <motion.div className={styles.formFooter} variants={itemVariants}>
+          <div className={styles.formFooter}>
             <div className={styles.requiredInfo}>
               <AlertTriangle size={25} />
               <span>الحقول المميزة بعلامة (*) إلزامية</span>
-            </div>
+              </div>
             <button 
               type="submit" 
               aria-label='submit'
@@ -268,11 +241,9 @@ export default function Support() {
                 </>
               )}
             </button>
-          </motion.div>
-          </motion.div>
-        </motion.form>
-      </motion.div>
+            </div>
+        </form>
+      </div>
     </div>
-     </>
   );
 }
