@@ -233,9 +233,10 @@ export default function SingleRealEstatePage() {
           <Image 
             src={images[currentImageIndex]?.image_url || '/images/placeholder.jpg'} 
             alt={title} 
-            priority
             width={450}
             height={450}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
+            priority={true}
           />
           <div className={styles.navigation}>
             <button onClick={prevImage} aria-label="Previous image">
@@ -257,6 +258,8 @@ export default function SingleRealEstatePage() {
               alt={`${title} - ${index + 1}`}
               className={index === currentImageIndex ? styles.active : ''}
               onClick={() => goToImage(index)}
+              priority={true}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
             />
           ))}
         </div>
@@ -483,6 +486,7 @@ export default function SingleRealEstatePage() {
               <label htmlFor="comment">تعليقك</label>
               <textarea
                 id="comment"
+                autoComplete='comment'
                 {...register('comment', { 
                   required: 'الرجاء إدخال تعليقك',
                   minLength: {
@@ -499,6 +503,7 @@ export default function SingleRealEstatePage() {
             </div>
             <button 
               type="submit" 
+              aria-label="Send review"
               className={styles.submitButton}
               disabled={isFormSubmitting}
             >
