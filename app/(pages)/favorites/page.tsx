@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Search, ArrowLeft, ArrowRight, HeartOff } from 'lucide-react';
+import { Heart, Search, ArrowLeft, HeartOff } from 'lucide-react';
 import Link from 'next/link';
 import RealEstateCard from '@/components/common/RealEstateCard';
 import { RealEstate } from '@/types/real-estate';

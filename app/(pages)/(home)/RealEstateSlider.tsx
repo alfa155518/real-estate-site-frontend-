@@ -1,9 +1,12 @@
 
 "use client";
+
+
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 
+import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 
 import styles from '@/sass/pages/home/realestate-slider.module.scss';
