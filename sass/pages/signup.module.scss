@@ -1,7 +1,6 @@
 @use "@/sass/helpers/variables" as *;
 @use "@/sass/helpers/mixins" as *;
 
-// Apply auth mixins to the actual classes
 .container {
   @include auth-container;
 }
@@ -30,11 +29,7 @@
   }
 
   .error {
-    color: #ef4444;
-    font-size: 0.8rem;
-    margin-top: 0.35rem;
-    text-align: right;
-    animation: fadeIn 0.3s ease;
+    @include form-error;
   }
 }
 
@@ -72,95 +67,6 @@
       text-decoration: underline;
       text-underline-offset: 2px;
     }
-  }
-}
-
-// Animations
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    @include translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    @include translateY(0);
-  }
-}
-
-.logo {
-  @include auth-logo;
-}
-
-.formGroup {
-  @include auth-form-group;
-
-  label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: $dark;
-    font-weight: 500;
-    font-size: 1.3rem;
-  }
-
-  .inputContainer {
-    @include auth-input-container;
-  }
-
-  .error {
-    color: #ef4444;
-    font-size: 0.8rem;
-    margin-top: 0.35rem;
-    text-align: right;
-    animation: fadeIn 0.3s ease;
-  }
-}
-
-.inputLabelContainer {
-  @include auth-input-label-container;
-}
-
-.divider {
-  @include auth-divider;
-}
-
-.submitBtn {
-  @include primaryButton;
-}
-
-.googleBtn {
-  @include primaryButton;
-}
-
-// Signup specific styles
-.loginLink {
-  margin-top: 1.75rem;
-  font-size: 1.2rem;
-  color: $dark;
-  text-align: center;
-
-  a {
-    color: $primary;
-    text-decoration: none;
-    font-weight: 600;
-    margin-right: 0.35rem;
-    @include transition(all, 0.3s, ease);
-
-    &:hover {
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
-  }
-}
-
-// Animations
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    @include translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    @include translateY(0);
   }
 }
 

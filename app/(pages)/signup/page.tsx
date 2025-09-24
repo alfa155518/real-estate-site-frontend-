@@ -1,49 +1,23 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { useForm } from 'react-hook-form';
-import { User, Mail, Phone, Lock, Loader2, ArrowRight } from 'lucide-react';
-import { FcGoogle } from 'react-icons/fc';
-import Link from 'next/link';
-import styles from '@/sass/pages/signup.module.scss';
-
-type FormData = {
-  name: string;
-  email: string;
-  phone: string;
-  password: string;
-  confirmPassword: string;
-};
+import { motion } from "framer-motion";
+import { User, Mail, Phone, Lock, Loader2, ArrowRight } from "lucide-react";
+import { FcGoogle } from "react-icons/fc";
+import Link from "next/link";
+import styles from "@/sass/pages/signup.module.scss";
+import useSignup from "@/hooks/useSignup";
 
 const Signup = () => {
+  // Signup custom hook
   const {
     register,
     handleSubmit,
-    watch,
-    formState: { errors, isSubmitting },
-  } = useForm<FormData>({
-    defaultValues: {
-      name: '',
-      email: '',
-      phone: '',
-      password: '',
-      confirmPassword: '',
-    },
-  });
-
-  const password = watch('password', '');
-
-  const onSubmit = async (data: FormData) => {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    console.log('Form submitted:', data);
-    // Here you would typically send the data to your API
-  };
-
-  const handleGoogleSignIn = () => {
-    // Implement Google Sign In
-    console.log('Sign in with Google');
-  };
+    handleGoogleSignIn,
+    errors,
+    isSubmitting,
+    onSubmit,
+    googleSubmitting,
+  } = useSignup();
 
   // Animation variants
   const container = {
@@ -63,13 +37,13 @@ const Signup = () => {
 
   return (
     <div className={styles.container}>
-      <motion.div 
+      <motion.div
         className={styles.card}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <motion.div 
+        <motion.div
           className={styles.logo}
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -79,7 +53,7 @@ const Signup = () => {
           <p>سجل معنا لاستكشاف عالم العقارات </p>
         </motion.div>
 
-        <motion.form 
+        <motion.form
           onSubmit={handleSubmit(onSubmit)}
           variants={container}
           initial="hidden"
@@ -91,24 +65,26 @@ const Signup = () => {
               <input
                 id="name"
                 type="text"
-                autoComplete='name'
+                autoComplete="name"
                 placeholder="أدخل اسمك الكامل"
-                {...register('name', {
-                  required: 'الاسم مطلوب',
+                {...register("name", {
+                  required: "الاسم مطلوب",
                   minLength: {
                     value: 2,
-                    message: 'يجب أن يكون الاسم مكون من حرفين على الأقل'
+                    message: "يجب أن يكون الاسم مكون من حرفين على الأقل",
                   },
                   maxLength: {
                     value: 50,
-                    message: 'يجب ألا يزيد الاسم عن 50 حرفًا'
-                  }
+                    message: "يجب ألا يزيد الاسم عن 50 حرفًا",
+                  },
                 })}
                 disabled={isSubmitting}
               />
               <User className={styles.icon} size={20} />
             </div>
-            {errors.name && <p className={styles.error}>{errors.name.message}</p>}
+            {errors.name && (
+              <p className={styles.error}>{errors.name.message}</p>
+            )}
           </motion.div>
 
           <motion.div className={styles.formGroup} variants={item}>
@@ -117,20 +93,22 @@ const Signup = () => {
               <input
                 id="email"
                 type="email"
-                autoComplete='email'
+                autoComplete="email"
                 placeholder="example@example.com"
-                {...register('email', {
-                  required: 'البريد الإلكتروني مطلوب',
+                {...register("email", {
+                  required: "البريد الإلكتروني مطلوب",
                   pattern: {
                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: 'البريد الإلكتروني غير صالح'
-                  }
+                    message: "البريد الإلكتروني غير صالح",
+                  },
                 })}
                 disabled={isSubmitting}
               />
               <Mail className={styles.icon} size={20} />
             </div>
-            {errors.email && <p className={styles.error}>{errors.email.message}</p>}
+            {errors.email && (
+              <p className={styles.error}>{errors.email.message}</p>
+            )}
           </motion.div>
 
           <motion.div className={styles.formGroup} variants={item}>
@@ -139,24 +117,26 @@ const Signup = () => {
               <input
                 id="phone"
                 type="tel"
-                autoComplete='tel'
-                placeholder="+20XXXXXXXXX"
-                {...register('phone', {
-                  required: 'رقم الهاتف مطلوب',
+                autoComplete="tel"
+                placeholder="011XXXXXXXX"
+                {...register("phone", {
+                  required: "رقم الهاتف مطلوب",
                   minLength: {
-                    value: 10,
-                    message: 'يجب أن يتكون رقم الهاتف من 10 أرقام على الأقل'
+                    value: 11,
+                    message: "يجب أن يتكون رقم الهاتف من 11 أرقام على الأقل",
                   },
                   pattern: {
                     value: /^[0-9]+$/,
-                    message: 'يجب أن يحتوي رقم الهاتف على أرقام فقط'
-                  }
+                    message: "يجب أن يحتوي رقم الهاتف على أرقام فقط",
+                  },
                 })}
                 disabled={isSubmitting}
               />
               <Phone className={styles.icon} size={20} />
             </div>
-            {errors.phone && <p className={styles.error}>{errors.phone.message}</p>}
+            {errors.phone && (
+              <p className={styles.error}>{errors.phone.message}</p>
+            )}
           </motion.div>
 
           <motion.div className={styles.formGroup} variants={item}>
@@ -165,63 +145,62 @@ const Signup = () => {
               <input
                 id="password"
                 type="password"
-                autoComplete='current-password'
+                autoComplete="current-password"
                 placeholder="••••••••"
-                {...register('password', {
-                  required: 'كلمة المرور مطلوبة',
+                {...register("password", {
+                  required: "كلمة المرور مطلوبة",
                   minLength: {
                     value: 8,
-                    message: 'يجب أن تتكون كلمة المرور من 8 أحرف على الأقل'
+                    message: "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
                   },
-                  validate: {
-                    hasUppercase: value => /[A-Z]/.test(value) || 'يجب أن تحتوي على حرف كبير واحد على الأقل',
-                    hasNumber: value => /[0-9]/.test(value) || 'يجب أن تحتوي على رقم واحد على الأقل'
-                  }
                 })}
                 disabled={isSubmitting}
               />
               <Lock className={styles.icon} size={20} />
             </div>
-            {errors.password && <p className={styles.error}>{errors.password.message}</p>}
+            {errors.password && (
+              <p className={styles.error}>{errors.password.message}</p>
+            )}
           </motion.div>
 
           <motion.div className={styles.formGroup} variants={item}>
-            <label htmlFor="confirmPassword">تأكيد كلمة المرور</label>
+            <label htmlFor="confirm_password">تأكيد كلمة المرور</label>
             <div className={styles.inputContainer}>
               <input
-                id="confirmPassword"
+                id="confirm_password"
                 type="password"
-                autoComplete='current-password'
+                autoComplete="current-password"
                 placeholder="••••••••"
-                {...register('confirmPassword', {
-                  required: 'تأكيد كلمة المرور مطلوب',
-                  validate: value => value === password || 'كلمات المرور غير متطابقة'
+                {...register("confirm_password", {
+                  required: "تأكيد كلمة المرور مطلوب",
                 })}
                 disabled={isSubmitting}
               />
               <Lock className={styles.icon} size={20} />
             </div>
-            {errors.confirmPassword && (
-              <p className={styles.error}>{errors.confirmPassword.message}</p>
+            {errors.confirm_password && (
+              <p className={styles.error}>{errors.confirm_password.message}</p>
             )}
           </motion.div>
 
           <motion.div variants={item}>
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className={styles.submitBtn}
               disabled={isSubmitting}
             >
               {isSubmitting ? (
                 <Loader2 className="animate-spin mx-auto" size={24} />
               ) : (
-                <span>إنشاء حساب <ArrowRight className="inline mr-1" size={18} /></span>
+                <span>
+                  إنشاء حساب <ArrowRight className="inline mr-1" size={18} />
+                </span>
               )}
             </button>
           </motion.div>
         </motion.form>
 
-        <motion.div 
+        <motion.div
           className={styles.divider}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -235,18 +214,24 @@ const Signup = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
         >
-          <button 
-            type="button" 
+          <button
+            type="button"
             className={styles.googleBtn}
             onClick={handleGoogleSignIn}
-            disabled={isSubmitting}
+            disabled={googleSubmitting || isSubmitting}
           >
-            <FcGoogle className={styles.googleIcon} />
-            <span>التسجيل بحساب جوجل</span>
+            {googleSubmitting ? (
+              <Loader2 className="animate-spin mx-auto" size={24} />
+            ) : (
+              <>
+                <FcGoogle className={styles.googleIcon} />
+                <span>التسجيل بحساب جوجل</span>
+              </>
+            )}
           </button>
         </motion.div>
 
-        <motion.p 
+        <motion.p
           className={styles.loginLink}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import "./globals.css";
 import { Noto_Sans_Arabic, Cairo } from "next/font/google";
 import Header from "@/layout/Header";
 import ScrollToTopBtn from "@/components/ui/ScrollToTopBtn";
 import Footer from "@/layout/Footer";
+import "./globals.css";
+import { Toaster } from "react-hot-toast";
 
 const noto = Noto_Sans_Arabic({
   subsets: ["arabic"],
@@ -49,6 +50,15 @@ export default function RootLayout({
         {children}
         <ScrollToTopBtn />
         <Footer />
+        <Toaster
+  toastOptions={{
+    duration: 5000,
+    style: {
+     fontSize: '18px',
+     fontWeight: '500',
+    },
+  }}
+  />
       </body>
     </html>
   );

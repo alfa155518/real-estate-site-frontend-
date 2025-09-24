@@ -1,42 +1,19 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { useForm } from 'react-hook-form';
-import { Mail, Lock, Loader2, LogIn } from 'lucide-react';
-import { FcGoogle } from 'react-icons/fc';
-import Link from 'next/link';
-import styles from '@/sass/pages/login.module.scss';
-
-type FormData = {
-  email: string;
-  password: string;
-  rememberMe: boolean;
-};
+import { motion } from "framer-motion";
+import { Mail, Lock, Loader2, LogIn } from "lucide-react";
+import { FcGoogle } from "react-icons/fc";
+import Link from "next/link";
+import styles from "@/sass/pages/login.module.scss";
+import useSignup from "@/hooks/useSignup";
+import useLogin from "@/hooks/useLogin";
 
 const Login = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<FormData>({
-    defaultValues: {
-      email: '',
-      password: '',
-      rememberMe: false,
-    },
-  });
+  // Login custom hook
+  const { register, handleSubmit, errors, isSubmitting, onSubmit } = useLogin();
 
-  const onSubmit = async (data: FormData) => {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    console.log('Form submitted:', data);
-    // Here you would typically send the data to your API
-  };
-
-  const handleGoogleSignIn = () => {
-    // Implement Google Sign In
-    console.log('Sign in with Google');
-  };
+  // Signup custom hook
+  const { handleGoogleSignIn, googleSubmitting } = useSignup();
 
   // Animation variants
   const container = {
@@ -56,13 +33,13 @@ const Login = () => {
 
   return (
     <div className={styles.container}>
-      <motion.div 
+      <motion.div
         className={styles.card}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <motion.div 
+        <motion.div
           className={styles.logo}
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -72,7 +49,7 @@ const Login = () => {
           <p>مرحباً بعودتك! يرجى تسجيل الدخول إلى حسابك</p>
         </motion.div>
 
-        <motion.form 
+        <motion.form
           onSubmit={handleSubmit(onSubmit)}
           variants={container}
           initial="hidden"
@@ -84,14 +61,14 @@ const Login = () => {
               <input
                 id="email"
                 type="email"
-                autoComplete='email'
+                autoComplete="email"
                 placeholder="example@example.com"
-                {...register('email', {
-                  required: 'البريد الإلكتروني مطلوب',
+                {...register("email", {
+                  required: "البريد الإلكتروني مطلوب",
                   pattern: {
                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: 'البريد الإلكتروني غير صالح'
-                  }
+                    message: "البريد الإلكتروني غير صالح",
+                  },
                 })}
                 disabled={isSubmitting}
               />
@@ -113,14 +90,14 @@ const Login = () => {
               <input
                 id="password"
                 type="password"
-                autoComplete='current-password'
+                autoComplete="current-password"
                 placeholder="••••••••"
-                {...register('password', {
-                  required: 'كلمة المرور مطلوبة',
+                {...register("password", {
+                  required: "كلمة المرور مطلوبة",
                   minLength: {
                     value: 8,
-                    message: 'يجب أن تتكون كلمة المرور من 8 أحرف على الأقل'
-                  }
+                    message: "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
+                  },
                 })}
                 disabled={isSubmitting}
               />
@@ -130,29 +107,16 @@ const Login = () => {
               <span className={styles.error}>{errors.password.message}</span>
             )}
           </motion.div>
-
-          <motion.div className={styles.rememberMe} variants={item}>
-            <label className={styles.checkboxContainer}>
-              <input
-                type="checkbox"
-                {...register('rememberMe')}
-                disabled={isSubmitting}
-              />
-              <span className={styles.checkmark}></span>
-              تذكرني
-            </label>
-          </motion.div>
-
           <motion.div variants={item}>
             <button
               type="submit"
               className={styles.submitBtn}
-              disabled={isSubmitting}
+              disabled={isSubmitting || googleSubmitting}
             >
               {isSubmitting ? (
                 <>
                   <Loader2 className="animate-spin" />
-                    جاري تسجيل الدخول...
+                  جاري تسجيل الدخول...
                 </>
               ) : (
                 <>
@@ -164,7 +128,7 @@ const Login = () => {
           </motion.div>
         </motion.form>
 
-        <motion.div 
+        <motion.div
           className={styles.divider}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -182,23 +146,26 @@ const Login = () => {
             type="button"
             className={styles.googleBtn}
             onClick={handleGoogleSignIn}
-            disabled={isSubmitting}
+            disabled={googleSubmitting || isSubmitting}
           >
-            <FcGoogle size={20} />
-            تسجيل الدخول بحساب جوجل
+            {googleSubmitting ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              <>
+                <FcGoogle size={20} />
+                تسجيل الدخول بحساب جوجل
+              </>
+            )}
           </button>
         </motion.div>
 
-        <motion.p 
+        <motion.p
           className={styles.signupLink}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
-          ليس لديك حساب؟{' '}
-          <Link href="/signup">
-            إنشاء حساب جديد
-          </Link>
+          ليس لديك حساب؟ <Link href="/signup">إنشاء حساب جديد</Link>
         </motion.p>
       </motion.div>
     </div>

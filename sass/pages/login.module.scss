@@ -1,7 +1,6 @@
 @use "@/sass/helpers/variables" as *;
 @use "@/sass/helpers/mixins" as *;
 
-// Apply auth mixins to the actual classes
 .container {
   @include auth-container;
 }
@@ -30,11 +29,7 @@
   }
 
   .error {
-    color: #ef4444;
-    font-size: 0.8rem;
-    margin-top: 0.35rem;
-    text-align: right;
-    animation: fadeIn 0.3s ease;
+    @include form-error;
   }
 }
 
@@ -52,62 +47,6 @@
 
 .googleBtn {
   @include primaryButton;
-}
-
-// Login specific styles
-.rememberMe {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 1rem 0 1.5rem;
-
-  .checkboxContainer {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    font-size: 1.3rem;
-    color: $dark;
-    user-select: none;
-    position: relative;
-    padding-right: 2rem;
-
-    input[type="checkbox"] {
-      position: absolute;
-      opacity: 0;
-      width: 1.5rem;
-      height: 1.5rem;
-      cursor: pointer;
-
-      & + .customCheckbox {
-        position: absolute;
-        right: 0;
-        width: 1.5rem;
-        height: 1.5rem;
-        border: 2px solid $dark-white;
-        @include radius(4px);
-        @include transition(all, 0.2s, ease);
-      }
-
-      &:checked + .customCheckbox {
-        background-color: $primary;
-        border-color: $primary;
-      }
-    }
-  }
-
-  .forgotPassword {
-    color: $primary;
-    text-decoration: none;
-    font-size: 1.2rem;
-    font-weight: 500;
-    @include transition(all, 0.2s, ease);
-
-    &:hover {
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
-  }
 }
 
 .signupLink {
@@ -130,18 +69,6 @@
   }
 }
 
-// Animations
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    @include translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    @include translateY(0);
-  }
-}
-
 .signupLink {
   text-align: center;
   margin-top: 2rem;
@@ -160,27 +87,8 @@
     }
   }
 }
-
-// Animation
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 // Responsive adjustments
 @media (max-width: 480px) {
-  .rememberMe {
-    .checkboxContainer {
-      font-size: 1.2rem;
-    }
-  }
-
   .forgotPassword {
     font-size: 1.1rem;
   }
