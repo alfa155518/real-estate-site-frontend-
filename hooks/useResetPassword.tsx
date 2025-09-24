@@ -2,17 +2,12 @@ import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ResetPasswordFormData } from "@/types/auth";
 import toast from "react-hot-toast";
-import { useSearchParams } from "next/navigation";
 import { resetPassword } from "@/action/auth";
-export default function useResetPassword() {
+import { ResetParams } from "@/types/auth";
+export default function useResetPassword({ token, email }: ResetParams) {
   // states
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  // get token and email from url
-  const params = useSearchParams();
-  const token = params.get("token");
-  const email = params.get("email");
 
   // reset password form
   const {

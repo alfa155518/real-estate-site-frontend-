@@ -30,7 +30,7 @@ const itemVariants: Variants = {
   },
 };
 
-export default function RestorationPassword() {
+export default function ForgetPassword() {
   // forget password custom hook
   const { register, handleSubmit, isSubmitting, onSubmit, emailError } =
     useForgetPassword();

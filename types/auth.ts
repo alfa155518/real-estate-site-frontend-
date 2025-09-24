@@ -8,9 +8,11 @@ export interface ForgetPasswordFormData {
     email: string;
 }
 
-export interface ResetPasswordFormData {
+export interface ResetParams {
     token: string | null;
     email: string | null;
+}
+export interface ResetPasswordFormData extends ResetParams {
     password: string;
     confirm_password: string;
 }
