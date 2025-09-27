@@ -1,15 +1,29 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useForm } from 'react-hook-form';
-import { Search, Menu, X, Home, Building, Heart, LogIn, LogOut, User, Info, Phone } from 'lucide-react';
-import Image from 'next/image';
-import styles from '@/sass/layout/header.module.scss';
-import { realEstateData } from '@/data/real-estate';
-import { RealEstate } from '@/types/real-estate';
+import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import { useForm } from "react-hook-form";
+import {
+  Search,
+  Menu,
+  X,
+  Home,
+  Building,
+  Heart,
+  LogIn,
+  LogOut,
+  User,
+  Info,
+  Phone,
+  Loader2,
+} from "lucide-react";
+import Image from "next/image";
+import styles from "@/sass/layout/header.module.scss";
+import { realEstateData } from "@/data/real-estate";
+import { RealEstate } from "@/types/real-estate";
+import useProfileStore from "@/store/ProfileStore";
 
 type FormData = {
   search: string;
@@ -30,20 +44,16 @@ const Header = () => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const user = true;
-
-  const logout = () => {
-    console.log('logout');
-  };
+  const { token, handleLogout, isLoading } = useProfileStore();
 
   const { register, handleSubmit, reset } = useForm<FormData>();
 
   const navLinks: NavLink[] = [
-    { name: 'الرئيسية', href: '/', icon: <Home size={20} /> },
-    { name: 'العقارات', href: '/realstate', icon: <Building size={20} /> },
-    { name: 'المفضلة', href: '/favorites', icon: <Heart size={20} /> },
-    { name: 'عننا', href: '/aboutUs', icon: <Info size={20} /> },
-    { name: 'تواصل معنا', href: '/support', icon: <Phone size={20} /> },
+    { name: "الرئيسية", href: "/", icon: <Home size={20} /> },
+    { name: "العقارات", href: "/realstate", icon: <Building size={20} /> },
+    { name: "المفضلة", href: "/favorites", icon: <Heart size={20} /> },
+    { name: "عننا", href: "/aboutUs", icon: <Info size={20} /> },
+    { name: "تواصل معنا", href: "/support", icon: <Phone size={20} /> },
   ];
 
   useEffect(() => {
@@ -51,8 +61,9 @@ const Header = () => {
       setIsScrolled(window.scrollY > 10);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    useProfileStore.getState().initialize();
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const handleSearch = (query: string) => {
@@ -61,9 +72,9 @@ const Header = () => {
       setShowResults(false);
       return;
     }
-    
+
     const searchTerm = query.toLowerCase();
-    const results = realEstateData.filter(property => {
+    const results = realEstateData.filter((property) => {
       const typedProperty = property as unknown as RealEstate;
       return (
         typedProperty.title.toLowerCase().includes(searchTerm) ||
@@ -71,7 +82,7 @@ const Header = () => {
         typedProperty.location.toLowerCase().includes(searchTerm)
       );
     });
-    
+
     setSearchResults(results as unknown as RealEstate[]);
     setShowResults(true);
   };
@@ -92,14 +103,17 @@ const Header = () => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
         setShowResults(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -111,17 +125,8 @@ const Header = () => {
     setIsMobileMenuOpen(false);
   };
 
-  const handleLogout = async () => {
-    try {
-      logout();
-      router.push('/login');
-    } catch (error) {
-      console.error('Failed to log out:', error);
-    }
-  };
-
   return (
-    <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
+    <header className={`${styles.header} ${isScrolled ? styles.scrolled : ""}`}>
       <nav className={styles.nav}>
         {/* Logo */}
         <Link href="/" className={styles.logo}>
@@ -148,14 +153,16 @@ const Header = () => {
                   y: 0,
                   transition: {
                     delay: 0.1 * index,
-                    duration: 0.3
-                  }
-                }
+                    duration: 0.3,
+                  },
+                },
               }}
             >
               <Link
                 href={link.href}
-                className={`${styles.navLink} ${pathname === link.href ? styles.active : ''}`}
+                className={`${styles.navLink} ${
+                  pathname === link.href ? styles.active : ""
+                }`}
                 onClick={handleLinkClick}
               >
                 {link.icon}
@@ -168,12 +175,15 @@ const Header = () => {
         {/* Search and Auth Buttons */}
         <div className={styles.actions}>
           <div className={styles.searchContainer} ref={searchRef}>
-            <form onSubmit={handleSubmit(handleSearchSubmit)} className={styles.searchForm}>
+            <form
+              onSubmit={handleSubmit(handleSearchSubmit)}
+              className={styles.searchForm}
+            >
               <input
                 type="text"
                 autoComplete="off"
                 placeholder="ابحث عن شقة او فيلا ..."
-                {...register('search')}
+                {...register("search")}
                 aria-label="Search properties"
                 onChange={(e) => handleSearch(e.target.value)}
                 onFocus={() => searchResults.length > 0 && setShowResults(true)}
@@ -192,11 +202,14 @@ const Header = () => {
                   >
                     <div className={styles.resultImage}>
                       <Image
-                        src={property.images[0]?.image_url || '/images/placeholder.jpg'}
+                        src={
+                          property.images[0]?.image_url ||
+                          "/images/placeholder.jpg"
+                        }
                         alt={property.title}
                         width={50}
                         height={50}
-                        style={{ objectFit: 'cover' }}
+                        style={{ objectFit: "cover" }}
                       />
                     </div>
                     <div className={styles.resultInfo}>
@@ -208,7 +221,11 @@ const Header = () => {
                 ))}
                 {searchResults.length > 5 && (
                   <div className={styles.viewAll}>
-                    <Link href={`/search?q=${encodeURIComponent(searchResults[0].title.split(' ')[0])}`}>
+                    <Link
+                      href={`/search?q=${encodeURIComponent(
+                        searchResults[0].title.split(" ")[0]
+                      )}`}
+                    >
                       عرض جميع النتائج ({searchResults.length})
                     </Link>
                   </div>
@@ -218,32 +235,50 @@ const Header = () => {
           </div>
 
           <div className={styles.authButtons}>
-            {user ? (
+            {token ? (
               <>
-                <Link href="/profile" className={styles.profileButton} onClick={handleLinkClick}>
+                <Link
+                  href="/profile"
+                  className={styles.profileButton}
+                  onClick={handleLinkClick}
+                >
                   <User size={16} />
                   <span>الملف الشخصي</span>
                 </Link>
-                <button 
-                //   onClick={handleLogout} 
+                <button
+                  onClick={() => handleLogout()}
                   className={styles.logoutButton}
                   aria-label="تسجيل الخروج"
+                  disabled={isLoading}
                 >
-                  <LogOut size={18} />
-                  <span>تسجيل الخروج</span>
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="animate-spin" size={18} />
+                      <span>تسجيل الخروج جاري</span>
+                    </>
+                  ) : (
+                    <>
+                      <LogOut size={18} />
+                      <span>تسجيل الخروج</span>
+                    </>
+                  )}
                 </button>
               </>
             ) : (
-              <Link href="/login" className={styles.loginButton} onClick={handleLinkClick}>
+              <Link
+                href="/login"
+                className={styles.loginButton}
+                onClick={handleLinkClick}
+              >
                 <LogIn size={18} />
                 <span>تسجيل الدخول</span>
               </Link>
             )}
           </div>
         </div>
-        
+
         {/* Mobile Menu Button */}
-        <button 
+        <button
           className={styles.mobileMenuButton}
           onClick={toggleMobileMenu}
           aria-label="Toggle menu"
@@ -251,7 +286,7 @@ const Header = () => {
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </nav>
-      
+
       {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
@@ -268,7 +303,7 @@ const Header = () => {
                   key={link.href}
                   href={link.href}
                   className={`${styles.navLink} ${
-                    pathname === link.href ? styles.active : ''
+                    pathname === link.href ? styles.active : ""
                   }`}
                   onClick={handleLinkClick}
                 >
@@ -277,36 +312,39 @@ const Header = () => {
                 </Link>
               ))}
             </div>
-            
-            <form onSubmit={handleSubmit(handleSearchSubmit)} className={styles.searchForm}>
+
+            <form
+              onSubmit={handleSubmit(handleSearchSubmit)}
+              className={styles.searchForm}
+            >
               <input
                 type="text"
                 autoComplete="search"
                 placeholder="ابحث عن عقار..."
-                {...register('search', { required: true })}
+                {...register("search", { required: true })}
                 aria-label="Search properties"
               />
               <button type="submit" aria-label="Search">
                 <Search size={18} />
               </button>
             </form>
-            
+
             <div className={styles.mobileAuthButtons}>
-              {user ? (
+              {token ? (
                 <>
-                  <Link 
-                    href="/profile" 
+                  <Link
+                    href="/profile"
                     className={`${styles.profileButton} ${styles.mobileButton}`}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    >
+                  >
                     <User size={18} />
                     <span>الملف الشخصي</span>
                   </Link>
-                  <button 
+                  <button
                     onClick={() => {
                       handleLogout();
                       setIsMobileMenuOpen(false);
-                    }} 
+                    }}
                     className={`${styles.logoutButton} ${styles.mobileButton}`}
                     aria-label="تسجيل الخروج"
                   >
@@ -315,8 +353,8 @@ const Header = () => {
                   </button>
                 </>
               ) : (
-                <Link 
-                  href="/login" 
+                <Link
+                  href="/login"
                   className={`${styles.loginButton} ${styles.mobileButton}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >

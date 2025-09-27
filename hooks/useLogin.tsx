@@ -2,6 +2,7 @@ import toast from "react-hot-toast";
 import { login } from "@/action/register";
 import { loginFormData } from "@/types/register";
 import { useForm } from "react-hook-form";
+import { setCookie } from "cookies-next";
 export default function useLogin() {
   // Form state
   const {
@@ -23,6 +24,7 @@ export default function useLogin() {
       if (response.status === "success") {
         toast.success(response.message);
         reset();
+        setCookie("userToken", response.access_token);
         window.location.href = "/";
       } else {
         toast.error(response.message);
