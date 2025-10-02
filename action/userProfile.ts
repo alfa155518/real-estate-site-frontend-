@@ -8,6 +8,8 @@ import { getCookie } from "@/utils/getCookie";
 import { revalidateTag } from "next/cache";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+// Get User Profile Data
 export const getUserProfile = async () => {
   const token = await getCookie("userToken");
   const response = await fetch(`${API_URL}/v1/user/profile`, {
@@ -25,10 +27,11 @@ export const getUserProfile = async () => {
   return data;
 };
 
+// update user profile
 export const updateUserProfile = async (formData: PersonalInfoFormData) => {
   const token = await getCookie("userToken");
   const response = await fetch(`${API_URL}/v1/user/profile`, {
-    method: "PUT",
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
@@ -40,10 +43,11 @@ export const updateUserProfile = async (formData: PersonalInfoFormData) => {
   return data;
 };
 
+// update user password
 export const updatePassword = async (formData: PasswordProfileFormData) => {
   const token = await getCookie("userToken");
   const response = await fetch(`${API_URL}/v1/user/profile/password`, {
-    method: "PUT",
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
@@ -55,9 +59,9 @@ export const updatePassword = async (formData: PasswordProfileFormData) => {
   return data;
 };
 
+// user logout
 export const userLogout = async () => {
   const token = await getCookie("userToken");
-  console.log(token);
   const response = await fetch(`${API_URL}/v1/user/logout`, {
     method: "DELETE",
     headers: {

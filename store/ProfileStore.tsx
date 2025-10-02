@@ -1,23 +1,19 @@
-"use client"
-
-
-
+"use client";
 
 import { userLogout } from "@/action/userProfile";
+import { ProfileStoreState } from "@/types/userStoreProfile";
 import { deleteCookie, getCookie } from "cookies-next";
 import toast from "react-hot-toast";
 import { create } from "zustand";
 
-
-
-const useProfileStore = create((set) => ({
+const useProfileStore = create<ProfileStoreState>((set) => ({
   user: {},
   token: null,
   isLoading: false,
 
   initialize: () => {
-    if (typeof window !== 'undefined') {
-      const token = getCookie("userToken");
+    if (typeof window !== "undefined") {
+      const token = getCookie("userToken") as string | null;
       set({ token });
       return token;
     }

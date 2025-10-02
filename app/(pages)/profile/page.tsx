@@ -22,8 +22,8 @@ export default function ProfilePage() {
         <div className={styles.avatarContainer}>
           <UserCircle className={styles.avatar} />
           <div className={styles.userInfo}>
-            <h2>{user.name}</h2>
-            <p>{user.email}</p>
+            <h2>{user?.name}</h2>
+            <p>{user?.email}</p>
           </div>
         </div>
       </motion.div>

@@ -126,6 +126,12 @@
   }
 }
 
+@mixin disabled {
+  background: #bfdbfe;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
 // Authentication Mixins
 @mixin auth-container {
   @include flex-center;

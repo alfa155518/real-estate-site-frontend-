@@ -1,32 +1,23 @@
-'use client';
+"use client";
 
-import { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare } from 'lucide-react';
-import ReviewCard from '@/components/common/ReviewCard';
-import { reviews } from '@/data/reviews';
-import styles from '@/sass/pages/home/reviews.module.scss';
-
-const ITEMS_PER_PAGE = 8;
+import { useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { MessageSquare } from "lucide-react";
+import ReviewCard from "@/components/common/ReviewCard";
+import styles from "@/sass/pages/home/reviews.module.scss";
+import useReviewStore from "@/store/ReviewStore";
+import { Review } from "@/types/reviews";
+import SkeletonReviewCard from "@/components/common/SkeletonReviewCard";
 
 const Reviews = () => {
-  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
-  
-  // Sort reviews by helpful votes (highest first)
-  const sortedReviews = useMemo(() => {
-    return [...reviews].sort((a, b) => b.helpful_votes - a.helpful_votes);
-  }, []);
+  // Use ReviewStore for reviews
+  const { reviews, isLoading, hasMore, handleGetReviews, loadMoreReviews } =
+    useReviewStore();
 
-  // Get visible reviews based on current count
-  const visibleReviews = useMemo(() => {
-    return sortedReviews.slice(0, visibleCount);
-  }, [sortedReviews, visibleCount]);
-
-  const hasMore = visibleCount < sortedReviews.length;
-
-  const loadMore = () => {
-    setVisibleCount(prev => Math.min(prev + ITEMS_PER_PAGE, sortedReviews.length));
-  };
+  // Load reviews
+  useEffect(() => {
+    handleGetReviews(1);
+  }, [handleGetReviews]);
 
   return (
     <section className={styles.reviewsSection} dir="rtl">
@@ -49,9 +40,9 @@ const Reviews = () => {
 
         <div className={styles.reviewsGrid}>
           <AnimatePresence>
-            {visibleReviews.map((review) => (
+            {reviews.map((review: Review, index: number) => (
               <motion.div
-                key={review.review_id}
+                key={`${review.id}-${index}`}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -63,7 +54,13 @@ const Reviews = () => {
           </AnimatePresence>
         </div>
 
-        {hasMore && (
+        {isLoading && (
+          <>
+            <SkeletonReviewCard count={6} />
+          </>
+        )}
+
+        {hasMore && !isLoading && (
           <motion.div
             className={styles.cta}
             initial={{ opacity: 0, y: 20 }}
@@ -71,9 +68,10 @@ const Reviews = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.2, duration: 0.5 }}
           >
-            <button 
-              onClick={loadMore} 
+            <button
+              onClick={loadMoreReviews}
               className={styles.ctaButton}
+              disabled={isLoading}
               aria-label="تحميل المزيد من الآراء"
             >
               عرض المزيد من الآراء

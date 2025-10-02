@@ -309,11 +309,13 @@
   .reviews {
     display: grid;
     gap: 1rem;
-  }
-
-  .noReviews {
-    color: $dark-white;
-    font-style: italic;
+    .loading,
+    .noReviews {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: $dark;
+      font-style: italic;
+    }
   }
 }
 
@@ -352,6 +354,9 @@
       font-size: 1.5rem;
       resize: none;
     }
+    .error {
+      @include form-error;
+    }
   }
 
   .starRating {
@@ -360,6 +365,12 @@
     cursor: pointer;
   }
 
+  input {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: $accent-1;
+    display: none;
+  }
   .submitButton {
     background: $primary;
     color: $white;
