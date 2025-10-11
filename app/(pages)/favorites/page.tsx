@@ -1,27 +1,29 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Search, ArrowLeft, HeartOff } from 'lucide-react';
-import Link from 'next/link';
-import RealEstateCard from '@/components/common/RealEstateCard';
-import { RealEstate } from '@/types/real-estate';
-import styles from '@/sass/pages/favorites/favorites.module.scss';
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Heart, Search, ArrowLeft, HeartOff } from "lucide-react";
+import Link from "next/link";
+import RealEstateCard from "@/components/common/RealEstateCard";
+import { RealEstate } from "@/types/real-estate";
+import styles from "@/sass/pages/favorites/favorites.module.scss";
 
 // Import real estate data
-import { realEstateData } from '@/data/real-estate';
-import SectionName from '@/components/common/SectionName';
+import { realEstateData } from "@/data/real-estate";
+import SectionName from "@/components/common/SectionName";
 
 // Use first 4 items as favorites for demonstration
-const mockFavorites: RealEstate[] = realEstateData.slice(0, 5).map(property => ({
-  ...property,
-  type: property.type as 'sale' | 'rent' // Ensure type is correctly typed
-}));
+const mockFavorites: RealEstate[] = realEstateData
+  .slice(0, 5)
+  .map((property) => ({
+    ...property,
+    type: property.type as "sale" | "rent", // Ensure type is correctly typed
+  }));
 
 export default function FavoritesPage() {
   const [favorites, setFavorites] = useState<RealEstate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
@@ -36,15 +38,19 @@ export default function FavoritesPage() {
   }, []);
 
   // Filter favorites based on search query
-  const filteredFavorites = favorites.filter(property => 
-    property.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    property.location.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredFavorites = favorites.filter(
+    (property) =>
+      // property?.title?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
+      property?.title?.toLowerCase()?.includes(searchQuery.toLowerCase())
+    // property?.location?.toLowerCase()?.includes(searchQuery.toLowerCase())
   );
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
     if (selectedValue) {
-      const filtered = favorites.filter(property => property.type === selectedValue);
+      const filtered = favorites.filter(
+        (property) => property.type === selectedValue
+      );
       setFavorites(filtered);
     } else {
       setFavorites(mockFavorites);
@@ -57,13 +63,17 @@ export default function FavoritesPage() {
   );
 
   const handleRemoveFavorite = (id: number) => {
-    setFavorites(prev => prev.filter(property => property.id !== id));
+    setFavorites((prev) => prev.filter((property) => property.id !== id));
   };
 
   if (isLoading) {
     return (
       <div className={styles.container}>
-        <SectionName title="قائمة المفضلة" subtitle="تصفح العقارات المفضلة لديك بسهولة" className='mt-[8rem]'/>
+        <SectionName
+          title="قائمة المفضلة"
+          subtitle="تصفح العقارات المفضلة لديك بسهولة"
+          className="mt-[8rem]"
+        />
         <div className={styles.grid}>
           {[...Array(3)].map((_, index) => (
             <motion.div
@@ -88,10 +98,14 @@ export default function FavoritesPage() {
 
   return (
     <div className={styles.container}>
-      <SectionName title="قائمة المفضلة" subtitle="تصفح العقارات المفضلة لديك بسهولة" className='mt-[8rem]'/>
+      <SectionName
+        title="قائمة المفضلة"
+        subtitle="تصفح العقارات المفضلة لديك بسهولة"
+        className="mt-[8rem]"
+      />
 
       {favorites.length === 0 ? (
-        <motion.div 
+        <motion.div
           className={styles.noFavorites}
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -99,7 +113,10 @@ export default function FavoritesPage() {
         >
           <HeartOff size={64} className={styles.icon} />
           <h2>لا توجد عقارات في المفضلة</h2>
-          <p>يمكنك إضافة العقارات إلى المفضلة بالنقر على زر القلب في صفحة تفاصيل العقار</p>
+          <p>
+            يمكنك إضافة العقارات إلى المفضلة بالنقر على زر القلب في صفحة تفاصيل
+            العقار
+          </p>
           <Link href="/realstate" className={styles.browseButton}>
             <span>تصفح العقارات</span>
             <ArrowLeft size={18} />
@@ -107,7 +124,7 @@ export default function FavoritesPage() {
         </motion.div>
       ) : (
         <>
-          <motion.div 
+          <motion.div
             className={styles.filters}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -126,12 +143,20 @@ export default function FavoritesPage() {
               />
             </div>
             <div className={styles.filterGroup}>
-              <select className={styles.filterSelect} name='type' onChange={(e) => handleFilterChange(e)}>
+              <select
+                className={styles.filterSelect}
+                name="type"
+                onChange={(e) => handleFilterChange(e)}
+              >
                 <option value="">الكل</option>
                 <option value="sale">للبيع</option>
                 <option value="rent">للإيجار</option>
               </select>
-              <select className={styles.filterSelect} name='bedrooms' onChange={(e) => handleFilterChange(e)}>
+              <select
+                className={styles.filterSelect}
+                name="bedrooms"
+                onChange={(e) => handleFilterChange(e)}
+              >
                 <option value="">الكل</option>
                 <option value="1">1+ غرف</option>
                 <option value="2">2+ غرف</option>
@@ -142,7 +167,7 @@ export default function FavoritesPage() {
 
           <AnimatePresence>
             {filteredFavorites.length === 0 ? (
-              <motion.div 
+              <motion.div
                 className={styles.noResults}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

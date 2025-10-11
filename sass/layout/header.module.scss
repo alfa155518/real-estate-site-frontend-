@@ -312,7 +312,7 @@
 
   h4 {
     margin: 0 0 0.25rem;
-    font-size: 0.95rem;
+    font-size: 1.2rem;
     font-weight: 600;
     color: $dark;
     white-space: nowrap;
@@ -322,17 +322,18 @@
 
   p {
     margin: 0 0 0.25rem;
-    font-size: 1.1rem;
-    color: $dark;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: $accent-1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
   span {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     font-weight: 600;
-    color: $primary;
+    color: $primary-light;
   }
 }
 
@@ -465,7 +466,6 @@
     input {
       width: 100%;
       padding: 0.75rem 1rem 0.75rem 3rem;
-      font-size: 1rem;
       background-color: $dark-white;
     }
 

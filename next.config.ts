@@ -14,13 +14,19 @@ const nextConfig: NextConfig = {
         hostname: 'example.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: '127.0.0.1',
+        port: '8000',
+        pathname: '/**',
       }
     ],
   },
-   experimental: {
+  experimental: {
     optimizePackageImports: ['lucide-react']
   },
-  devIndicators:false,
+  devIndicators: false,
 };
 
 export default nextConfig;

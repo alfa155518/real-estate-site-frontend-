@@ -14,29 +14,6 @@
   }
 }
 
-.loadingContainer {
-  @include flex-center;
-  flex-direction: column;
-  gap: 16px;
-  padding: 64px 0;
-  min-height: 300px;
-
-  p {
-    color: $accent-2;
-    font-size: 1.6rem;
-    margin-top: 16px;
-  }
-}
-
-.loadingSpinner {
-  width: 50px;
-  height: 50px;
-  border: 10px solid $primary;
-  @include radius(50%);
-  border-top-color: $primary-light;
-  animation: spin 1s ease-in-out infinite;
-}
-
 .emptyState {
   @include flex-center;
   min-height: 300px;
@@ -46,18 +23,5 @@
     color: $accent-2;
     font-size: 1.8rem;
     font-weight: 500;
-  }
-}
-
-@keyframes spin {
-  to {
-    @include rotate(360deg);
-  }
-}
-
-// RTL Support
-[dir="rtl"] {
-  .loadingSpinner {
-    animation-direction: reverse;
   }
 }

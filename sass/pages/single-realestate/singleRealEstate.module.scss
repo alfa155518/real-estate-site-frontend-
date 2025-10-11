@@ -1,91 +1,123 @@
 @use "@/sass/helpers/variables" as *;
 @use "@/sass/helpers/mixins" as *;
 
-.container {
-  max-width: 1200px;
-  margin: 10rem auto;
-  padding: 0 1rem;
-  direction: rtl;
-  color: $dark;
+%discountBadge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: $accent-1;
+  color: $white;
+  font-weight: bold;
+  padding: 0.4rem 0.8rem;
+  @include radius(5px);
+  font-size: 1.3rem;
+  box-shadow: 0 2px 6px rgba($dark, 0.2);
 }
 
-/* ===================
-   🖼️ Gallery Section
-   =================== */
-.gallery {
+%sidebarHeading {
+  color: $dark;
+  margin-bottom: 1.5rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+  border-bottom: 1px solid $primary-light;
+  padding-bottom: 0.8rem;
+}
+
+%sectionTitle {
+  color: $primary;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  color: $dark;
+  background: $secondary;
+}
+
+/* ========== GALLERY ========== */
+.galleryContainer {
   margin-bottom: 2rem;
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba($dark, 0.15);
 
-  .slide {
+  .gallery {
     position: relative;
-    @include radius(12px);
-    overflow: hidden;
 
-    img {
-      width: 100%;
-      height: 450px;
-      object-fit: cover;
-      @include radius(12px);
-      @include transition(transform, 0.2s, ease);
+    .slide {
+      top: 4rem;
+      position: relative;
+      .mainImage {
+        width: 100%;
+        height: 500px;
+        object-fit: cover;
+        @include radius(10px);
+      }
 
-      &:hover {
-        @include scale(1.03);
+      .navigation {
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        @include translateY(-50%);
+
+        .navButton {
+          background: $primary-light;
+          border: none;
+          color: $white;
+          padding: 0.8rem;
+          line-height: 1;
+          @include radius(50%);
+          cursor: pointer;
+          @include transition(background, 0.3s);
+
+          &:hover {
+            background: $primary;
+          }
+        }
+      }
+
+      .discountBadge {
+        @extend %discountBadge;
       }
     }
 
-    .navigation {
-      position: absolute;
-      top: 50%;
-      width: 100%;
+    .thumbnails {
       display: flex;
-      justify-content: space-between;
-      @include translateY(-50%);
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      justify-content: center;
 
-      button {
-        background: rgba(0, 0, 0, 0.6);
-        color: $white;
-        border: none;
-        padding: 0.6rem;
-        @include radius(50%);
+      .thumbnail {
+        width: 80px;
+        height: 80px;
+        position: relative;
+        @include radius(5px);
+        overflow: hidden;
         cursor: pointer;
-        @include transition(background, 0.3s, ease);
+        border: 2px solid transparent;
+        @include transition(all, 0.3s ease);
 
-        &:hover {
-          background: rgba(0, 0, 0, 0.8);
+        &.active {
+          border-color: $primary;
+          @include scale(1.05);
+        }
+
+        .thumbnailImage {
+          object-fit: cover;
         }
       }
     }
   }
-
-  .thumbnails {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 1rem;
-
-    img {
-      width: 80px;
-      height: 60px;
-      object-fit: cover;
-      @include radius(8px);
-      cursor: pointer;
-      opacity: 0.7;
-      @include transition(0.2s, ease);
-
-      &:hover {
-        opacity: 1;
-        @include scale(1.05);
-      }
-    }
-
-    .active {
-      border: 2px solid $primary-light;
-      opacity: 1;
-    }
-  }
 }
 
-/* ===================
-   🏠 Property Details
-   =================== */
+/* ========== MAIN DETAILS SECTION ========== */
 .details {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -94,186 +126,519 @@
   @media (max-width: 992px) {
     grid-template-columns: 1fr;
   }
-}
 
-.mainInfo {
-  .title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 0.8rem;
-    color: $primary;
+  .mainInfo {
+    background: $white;
+    @include radius(10px);
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba($dark, 0.1);
+  }
+
+  .headerRow {
+    @include flex-between;
+    margin-bottom: 1rem;
+
+    .title {
+      font-size: 3rem;
+      color: $primary;
+      font-weight: 700;
+    }
+
+    .status {
+      color: $white;
+      font-size: 1.2rem;
+      padding: 0.3rem 0.8rem;
+      font-weight: 600;
+      @include radius(5px);
+      &.available {
+        background: $success;
+      }
+    }
   }
 
   .location {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: $accent-1;
-    margin-bottom: 1rem;
+    color: $accent-2;
+    font-size: 1.5rem;
+    font-weight: 700;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    .locationIcon {
+      color: $primary-light;
+      font-weight: 800;
+    }
   }
 
-  .price {
-    display: flex;
-    align-items: baseline;
-    gap: 0.6rem;
+  .priceSection {
     margin-bottom: 1.5rem;
 
-    span {
+    .price {
       font-size: 2rem;
       font-weight: bold;
+      color: $primary;
+    }
+
+    .pricePeriod {
+      font-size: 1.5rem;
       color: $dark;
     }
 
-    .original {
-      font-size: 1.2rem;
+    .priceWithDiscount {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+
+      .originalPrice {
+        font-size: 1.8rem;
+        text-decoration: line-through;
+        color: rgba($dark, 0.5);
+      }
+
+      .discountBadgeInline {
+        background: $accent-1;
+        color: $white;
+        padding: 0.2rem 0.6rem;
+        font-size: 1rem;
+        font-weight: bold;
+        @include radius(5px);
+      }
+
+      .discountedPrice {
+        color: $primary-light;
+        font-weight: bold;
+        font-size: 1.8rem;
+      }
+    }
+
+    .propertyType {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
       color: $accent-2;
-      text-decoration: line-through;
+      margin-top: 0.5rem;
+      svg {
+        color: $accent-1;
+      }
+      span {
+        font-weight: 700;
+        font-size: 1.5rem;
+      }
+      .purpose {
+        background: $primary-light;
+        color: $white;
+        padding: 0.2rem 0.6rem;
+        @include radius(3px);
+        font-weight: 700;
+        font-size: 1.2rem;
+      }
     }
   }
 
   .features {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 1.5rem;
     margin-bottom: 2rem;
+    font-size: 1.5rem;
 
     .feature {
-      color: $primary-light;
       display: flex;
       align-items: center;
-      gap: 0.3rem;
-      font-size: 1.5rem;
-      font-weight: 600;
+      gap: 0.6rem;
+      background: $secondary;
+      padding: 0.8rem 1.2rem;
+      @include radius(10px);
+      box-shadow: 0 2px 4px rgba($dark, 0.1);
 
-      svg {
-        color: $accent-1;
+      .featureIcon {
+        color: $primary;
+      }
+
+      .featureValue {
+        font-weight: 600;
+        font-size: 1.8rem;
+        color: $primary-light;
+      }
+
+      .featureLabel {
+        color: $accent-2;
+        font-size: 1.8rem;
+        margin: 1rem;
       }
     }
   }
 
   .actions {
-    margin-bottom: 2rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+
     .button {
-      color: $white;
       display: flex;
-      flex-wrap: wrap;
-      gap: 0.6rem;
-      background: rgba($danger, 0.9);
-      border: 1px solid #ddd;
-      padding: 0.6rem 1.2rem;
+      align-items: center;
+      gap: 0.5rem;
+      background: $primary-light;
+      color: $white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      font-size: 1.5rem;
+      font-weight: 600;
       @include radius(8px);
       cursor: pointer;
-      @include transition(0.2s, ease);
-      margin-left: 0.6rem;
-      font-size: 1.3rem;
-      font-weight: 600;
+      @include transition(all, 0.3s);
 
       &:hover {
         @include scale(1.05);
       }
+
+      &.shareButton {
+        background: $accent-1;
+      }
     }
   }
 
-  .description {
+  /* Tabs */
+  .tabs {
     margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    border-bottom: 2px solid $dark-white;
 
-    h3 {
-      font-size: 2rem;
-      margin-bottom: 0.8rem;
+    .tab {
+      color: $accent-2;
+      font-size: 1.8rem;
+      font-weight: bold;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      @include transition(color, 0.3s);
+
+      &:hover {
+        color: $primary;
+      }
+
+      &.active {
+        color: $primary;
+        border-bottom: 3px solid $primary;
+      }
     }
+  }
 
-    p {
-      color: rgba($dark, 0.8);
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 1.2rem;
-      line-height: 1.7;
-    }
+  .tabContent {
+    margin-top: 1.5rem;
 
-    .featuresGrid {
-      @include grid-item(150px, 0.6rem);
-
-      .featureItem {
+    .description {
+      h2 {
         font-size: 1.5rem;
-        font-weight: 600;
-        color: rgba($dark, 0.8);
+        font-weight: 900;
+        color: $primary;
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        color: $dark;
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        line-height: 1.6;
+      }
+
+      .detailsGrid {
+        @include grid-item(200px, 1rem);
+        margin-top: 1rem;
+
+        .detailItem {
+          background: $secondary;
+          padding: 0.8rem;
+          @include radius(6px);
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+
+          .detailLabel {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: $dark;
+          }
+
+          .detailValue {
+            color: $primary-light;
+            font-size: 1.7rem;
+          }
+        }
+      }
+    }
+
+    .featuresSection {
+      h2 {
+        font-size: 2rem;
+        font-weight: 900;
+        color: $primary;
+        margin-bottom: 1rem;
+      }
+      .featuresGrid {
+        @include grid-item(220px, 1rem);
+        margin-top: 1rem;
+
+        .featureItem {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          color: $primary;
+          font-size: 1.8rem;
+          font-weight: 800;
+          background: $white;
+          border: 1px solid $dark-white;
+          @include radius(6px);
+          padding: 0.8rem 1rem;
+          box-shadow: 0 2px 4px rgba($dark, 0.05);
+
+          .featureCheck {
+            color: $success;
+          }
+        }
+      }
+
+      .noFeatures {
+        @include flex-center;
+        gap: 1rem;
+        font-size: 2rem;
+        font-weight: 700;
+        color: $accent-1;
+      }
+    }
+
+    .videoSection {
+      .videoContainer {
+        @include grid-item(250px, 2rem);
+        margin-top: 1rem;
+
+        .videoPlayer {
+          border: none;
+
+          @include radius(6px);
+        }
       }
     }
   }
 }
 
-/* ===================
-   📌 Sidebar
-   =================== */
+/* SIDEBAR */
 .sidebar {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 
-  .contactCard,
+  .contactCard {
+    background: $white;
+    padding: 1.5rem;
+    @include radius(10px);
+    box-shadow: 0 4px 12px rgba($dark, 0.1);
+
+    .ownerHeader {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      align-items: center;
+
+      .ownerAvatar {
+        background: $primary-light;
+        color: $white;
+        @include radius(50%);
+        padding: 0.8rem;
+      }
+
+      h3 {
+        color: $primary;
+        font-size: 1.8rem;
+      }
+
+      .ownerType {
+        font-size: 1.5rem;
+        color: $accent-2;
+      }
+    }
+
+    .contactButtons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+
+      h4 {
+        @extend %sidebarHeading;
+      }
+      .contactButton {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: $primary-light;
+        color: $white;
+        font-size: 1.3rem;
+        font-weight: 700;
+        padding: 0.8rem 1rem;
+        @include radius(6px);
+        text-decoration: none;
+        @include transition(all, 0.3s);
+
+        &:hover {
+          @include scale(1.05);
+        }
+
+        &.whatsappButton {
+          background: $success;
+        }
+      }
+    }
+  }
+
+  .agencySection {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: $white;
+    @include radius(12px);
+    box-shadow: 0 4px 12px rgba($dark, 0.1);
+
+    h4 {
+      @extend %sidebarHeading;
+    }
+
+    .agencyInfo {
+      .agencyHeader {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+
+        .agencyIcon {
+          margin-left: 1rem;
+          color: $accent-1;
+        }
+
+        h5 {
+          margin: 0;
+          font-size: 1.5rem;
+          color: $dark;
+          font-weight: 600;
+        }
+      }
+
+      .agencyDetails {
+        .detailItem {
+          display: flex;
+          align-items: center;
+          margin-bottom: 1rem;
+          font-size: 1.5rem;
+          color: $dark;
+
+          .detailIcon {
+            margin-left: 0.8rem;
+            color: $primary-light;
+            width: 18px;
+            height: 18px;
+          }
+
+          a {
+            color: $primary-light;
+            text-decoration: none;
+            @include transition(color, 0.2s, ease);
+            font-weight: 700;
+            &:hover {
+              color: rgba($primary, 0.8);
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+    }
+  }
+
   .safetyTips {
     background: $white;
     padding: 1.5rem;
-    @include radius(12px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    @include radius(10px);
+    box-shadow: 0 4px 12px rgba($dark, 0.05);
 
-    h3 {
-      margin-bottom: 1rem;
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-  }
-
-  .whatsappButton {
-    @include flex-center;
-    gap: 0.6rem;
-    padding: 0.8rem 1rem;
-    @include radius(8px);
-    background: rgba($success, 0.9);
-    color: $white;
-    font-size: 1.5rem;
-    text-decoration: none;
-    font-weight: 600;
-    @include transition(0.2s, ease);
-
-    &:hover {
-      background: #1ebe5c;
-      @include scale(1.05);
-    }
-  }
-
-  .safetyTips ul {
-    li {
-      margin-bottom: 0.5rem;
-      font-size: 1.3rem;
+    h6 {
+      font-size: 1.8rem;
       font-weight: 600;
+      color: $accent-2;
+      margin-bottom: 1rem;
+    }
+
+    ul {
+      padding: 0;
+
+      li {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+        color: $dark;
+        font-size: 1.5rem;
+        text-wrap: balance;
+
+        .tipIcon {
+          color: $accent-1;
+        }
+      }
+    }
+
+    .reportLink {
+      margin-top: 1rem;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      .reportIcon {
+        color: $danger;
+      }
+      a {
+        font-size: 1.5rem;
+        color: $danger;
+        font-weight: 600;
+        text-decoration: underline;
+      }
     }
   }
 }
 
-/* ===================
-   🗺️ Map Section
-   =================== */
-.mapContainer {
-  margin-top: 3rem;
+/* MAP + SIMILAR + REVIEWS */
+.mapSection,
+.similarProperties,
+.reviewsSection {
+  margin-top: 4rem;
 
-  h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
+  .sectionTitle {
+    @extend %sectionTitle;
   }
+}
 
-  .map {
-    @include radius(12px);
-    overflow: hidden;
-    height: 400px;
-
-    iframe,
-    div {
-      font-size: 1.3rem;
+.mapContainer {
+  background: $white;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba($dark, 0.1);
+  .landmark {
+    @include flex-center;
+    gap: 0.5rem;
+    font-size: 2rem;
+    color: $accent-1;
+  }
+  .noMap {
+    @include flex-center;
+    flex-direction: column;
+    gap: 1rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: $dark;
+    font-style: italic;
+    .noMapIcon {
+      color: $danger;
     }
   }
+}
+
+.similarList {
+  @include grid-item(300px, 1.5rem);
 }
 
 /* ===================
@@ -287,7 +652,7 @@
     margin-bottom: 1.5rem;
 
     h2 {
-      font-size: 2rem;
+      @extend %sectionTitle;
     }
 
     .rating {
@@ -309,7 +674,6 @@
   .reviews {
     display: grid;
     gap: 1rem;
-    .loading,
     .noReviews {
       font-size: 1.5rem;
       font-weight: 600;
