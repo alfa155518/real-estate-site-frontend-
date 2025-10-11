@@ -15,7 +15,6 @@ export default function UserHeaderMobileMenu({
     register,
     handleSubmit,
     handleSearchSubmit,
-    handleLinkClick,
     handleLogout,
   } = useUserHeader();
 
@@ -35,7 +34,7 @@ export default function UserHeaderMobileMenu({
             className={`${styles.navLink} ${
               pathname === link.href ? styles.active : ""
             }`}
-            onClick={handleLinkClick}
+            onClick={() => setIsMobileMenuOpen(false)}
           >
             {link.icon}
             <span>{link.name}</span>

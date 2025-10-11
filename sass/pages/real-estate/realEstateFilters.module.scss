@@ -312,19 +312,28 @@
 .mobileFiltersFooter {
   display: flex;
   justify-content: space-between;
+  gap: 1rem;
   padding: 1rem;
   border-top: 1px solid #dee2e6;
 
-  .applyButton {
-    background: $primary;
-    color: $white;
-    border: none;
+  .mobileButton {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
     padding: 0.6rem 1.5rem;
     @include radius(10px);
     font-size: 1.2rem;
     font-weight: 800;
     cursor: pointer;
-    @include transition(background, 0.2s, ease);
+    @include transition(0.2s, ease);
+  }
+
+  .applyButton {
+    background: $primary;
+    color: $white;
+    border: none;
 
     &:hover {
       background: $primary-light;

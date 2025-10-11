@@ -5,7 +5,7 @@ import styles from "@/sass/layout/header.module.scss";
 
 export default function UserHeaderLinks() {
   // use user header custom hook
-  const { pathname, navLinks, handleLinkClick } = useUserHeader();
+  const { pathname, navLinks, setIsMobileMenuOpen } = useUserHeader();
 
   return navLinks.map((link, index) => (
     <motion.div
@@ -29,7 +29,7 @@ export default function UserHeaderLinks() {
         className={`${styles.navLink} ${
           pathname === link.href ? styles.active : ""
         }`}
-        onClick={handleLinkClick}
+        onClick={() => setIsMobileMenuOpen(false)}
       >
         {link.icon}
         <span>{link.name}</span>

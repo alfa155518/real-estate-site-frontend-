@@ -3,10 +3,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Home, Building, Heart, Info, Phone } from "lucide-react";
 
-import { realEstateData } from "@/data/real-estate";
 import { RealEstate } from "@/types/real-estate";
 import useProfileStore from "@/store/ProfileStore";
 import { UserHeaderFormData, NavLink } from "@/types/userHeader";
+import useRealEstateStore from "@/store/RealestateStore";
 
 export default function useUserHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -18,6 +18,8 @@ export default function useUserHeader() {
   const router = useRouter();
 
   const { register, handleSubmit, reset } = useForm<UserHeaderFormData>();
+
+  const { handleFilters } = useRealEstateStore();
 
   // user profile store
   const { token, handleLogout, isLoading } = useProfileStore();
@@ -41,7 +43,7 @@ export default function useUserHeader() {
   }, []);
 
   //   handle search
-  const handleSearch = (query: string) => {
+  const handleSearch = async (query: string) => {
     if (!query.trim()) {
       setSearchResults([]);
       setShowResults(false);
@@ -50,16 +52,24 @@ export default function useUserHeader() {
 
     //   handle search results
     const searchTerm = query.toLowerCase();
-    const results = realEstateData.filter((property) => {
-      const typedProperty = property as unknown as RealEstate;
-      return (
-        typedProperty.title.toLowerCase().includes(searchTerm) ||
-        typedProperty.description.toLowerCase().includes(searchTerm) ||
-        typedProperty.location.toLowerCase().includes(searchTerm)
-      );
+
+    // Call handleFilters to update the store with filtered results
+    const response = await handleFilters({
+      search: searchTerm,
     });
 
-    setSearchResults(results as unknown as RealEstate[]);
+    // Get the filtered properties from the response
+    const filteredProperties = response?.data?.properties || [];
+
+    // Filter the properties based on the search term
+    const results = filteredProperties.filter(
+      (property) =>
+        property.title.toLowerCase().includes(searchTerm) ||
+        property.description.toLowerCase().includes(searchTerm) ||
+        property.location.city.toLowerCase().includes(searchTerm)
+    );
+
+    setSearchResults(results);
     setShowResults(true);
   };
 
@@ -74,8 +84,8 @@ export default function useUserHeader() {
   };
 
   //   handle search result click
-  const handleResultClick = (id: number) => {
-    router.push(`/realstate/${id}`);
+  const handleResultClick = (id: number, slug: string) => {
+    router.push(`/realstate/${id}/${slug}`);
     setShowResults(false);
     reset();
   };
@@ -101,11 +111,6 @@ export default function useUserHeader() {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  //   handle link click
-  const handleLinkClick = () => {
-    setIsMobileMenuOpen(false);
-  };
-
   return {
     isScrolled,
     isMobileMenuOpen,
@@ -124,7 +129,6 @@ export default function useUserHeader() {
     handleSearchSubmit,
     handleResultClick,
     toggleMobileMenu,
-    handleLinkClick,
     handleLogout,
   };
 }

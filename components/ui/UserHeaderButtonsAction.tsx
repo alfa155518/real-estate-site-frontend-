@@ -17,7 +17,7 @@ export default function UserHeaderButtonsAction() {
     handleSearch,
     handleSearchSubmit,
     handleResultClick,
-    handleLinkClick,
+    setIsMobileMenuOpen,
     handleLogout,
   } = useUserHeader();
 
@@ -35,19 +35,19 @@ export default function UserHeaderButtonsAction() {
             {...register("search")}
             aria-label="Search properties"
             onChange={(e) => handleSearch(e.target.value)}
-            onFocus={() => searchResults.length > 0 && setShowResults(true)}
+            onFocus={() => searchResults?.length > 0 && setShowResults(true)}
           />
           <button type="submit" aria-label="Search">
             <Search size={18} />
           </button>
         </form>
-        {showResults && searchResults.length > 0 && (
+        {showResults && searchResults?.length > 0 && (
           <div className={styles.searchResults}>
             {searchResults.slice(0, 5).map((property) => (
               <div
                 key={property.id}
                 className={styles.resultItem}
-                onClick={() => handleResultClick(property.id)}
+                onClick={() => handleResultClick(property.id, property.slug)}
               >
                 <div className={styles.resultImage}>
                   <Image
@@ -62,19 +62,19 @@ export default function UserHeaderButtonsAction() {
                 </div>
                 <div className={styles.resultInfo}>
                   <h4>{property.title}</h4>
-                  <p>{property.location}</p>
+                  <p>{property.location.city}</p>
                   <span>{property.price.toLocaleString()} ج.م</span>
                 </div>
               </div>
             ))}
-            {searchResults.length > 5 && (
+            {searchResults?.length > 5 && (
               <div className={styles.viewAll}>
                 <Link
                   href={`/search?q=${encodeURIComponent(
                     searchResults[0].title.split(" ")[0]
                   )}`}
                 >
-                  عرض جميع النتائج ({searchResults.length})
+                  عرض جميع النتائج ({searchResults?.length})
                 </Link>
               </div>
             )}
@@ -89,7 +89,7 @@ export default function UserHeaderButtonsAction() {
             <Link
               href="/profile"
               className={styles.profileButton}
-              onClick={handleLinkClick}
+              onClick={() => setIsMobileMenuOpen(false)}
             >
               <User size={16} />
               <span>الملف الشخصي</span>
@@ -117,7 +117,7 @@ export default function UserHeaderButtonsAction() {
           <Link
             href="/login"
             className={styles.loginButton}
-            onClick={handleLinkClick}
+            onClick={() => setIsMobileMenuOpen(false)}
           >
             <LogIn size={18} />
             <span>تسجيل الدخول</span>

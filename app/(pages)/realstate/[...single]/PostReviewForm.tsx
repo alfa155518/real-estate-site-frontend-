@@ -22,7 +22,7 @@ export default function PostReviewForm({ propertyId }: PropertyIdProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.6 }}
     >
-      <h3>أضف تقييمك</h3>
+      <h3 className={styles.sectionTitle}>أضف تقييمك</h3>
       <form onSubmit={handleSubmit(handleReviewSubmit)}>
         <div className={styles.formGroup}>
           <label htmlFor="rating">التقييم</label>

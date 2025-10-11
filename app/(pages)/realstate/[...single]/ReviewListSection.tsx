@@ -11,7 +11,7 @@ export default function ReviewListSection({ propertyId }: PropertyIdProps) {
   return (
     <>
       <div className={styles.header}>
-        <h2>التقييمات والآراء</h2>
+        <h2 className={styles.sectionTitle}>التقييمات والآراء</h2>
         {!isLoadingReviews && (
           <div className={styles.rating}>
             <div className={styles.stars}>
