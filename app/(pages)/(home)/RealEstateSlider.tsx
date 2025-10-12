@@ -1,42 +1,38 @@
-
 "use client";
-
+import { useEffect } from "react";
+import Image from "next/image";
 
 // Import Swiper React components
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper, SwiperSlide } from "swiper/react";
 
-
-import 'swiper/css';
-import 'swiper/css/effect-coverflow';
-
-import styles from '@/sass/pages/home/realestate-slider.module.scss';
+import "swiper/css";
+import "swiper/css/effect-coverflow";
 
 // import required modules
-import { Autoplay,EffectCoverflow } from 'swiper/modules';
-import Image from 'next/image';
-import SectionName from '@/components/common/SectionName';
-
-
-const images:string[] = [
-    "/images/home/realEstateSlides/slide-1.webp",
-    "/images/home/realEstateSlides/slide-2.webp",
-    "/images/home/realEstateSlides/slide-3.webp",
-    "/images/home/realEstateSlides/slide-4.webp",
-    "/images/home/realEstateSlides/slide-5.webp",
-    "/images/home/realEstateSlides/slide-6.webp",
-    "/images/home/realEstateSlides/slide-7.webp",
-    "/images/home/realEstateSlides/slide-8.webp",
-]
+import { Autoplay, EffectCoverflow } from "swiper/modules";
+import SectionName from "@/components/common/SectionName";
+import useSlidersStore from "@/store/SlidersStore";
+import styles from "@/sass/pages/home/realestate-slider.module.scss";
 
 export default function RealEstateSlider() {
+  const { handleGetSlider, sliders, isLoading, defaultSlide } =
+    useSlidersStore();
+
+  useEffect(() => {
+    async function fetchData() {
+      await handleGetSlider(2);
+    }
+    fetchData();
+  }, [handleGetSlider]);
+
   return (
     <section className={styles.realEstateSlider}>
-        <SectionName title="العقارات المميزة في عالم العقارات"/>
+      <SectionName title="العقارات المميزة في عالم العقارات" />
       <Swiper
-        effect={'coverflow'}
+        effect={"coverflow"}
         grabCursor={true}
         centeredSlides={true}
-        slidesPerView={'auto'}
+        slidesPerView={"auto"}
         coverflowEffect={{
           rotate: 50,
           stretch: 0,
@@ -49,15 +45,35 @@ export default function RealEstateSlider() {
           disableOnInteraction: false,
         }}
         loop={true}
-        modules={[Autoplay,EffectCoverflow]}
+        modules={[Autoplay, EffectCoverflow]}
       >
-       {
-        images.map((image:string , index:number) => (
+        {isLoading || sliders.id === 0 ? (
+          <SwiperSlide className={styles.swiperSlide}>
+            <Image
+              src={defaultSlide}
+              alt={`default_slide`}
+              className="m-auto"
+              width={1920}
+              height={200}
+              sizes="(max-width: 768px) 100vw, 
+                  (max-width: 1200px) 100vw, 
+                  100vw"
+              priority={true}
+            />
+          </SwiperSlide>
+        ) : (
+          sliders.images.map((image: string, index: number) => (
             <SwiperSlide key={index} className={styles.realEstateSliderSlide}>
-                <Image src={image} alt={`slide-${index + 1}`} width={300} height={300} priority={true}/>
+              <Image
+                src={image}
+                alt={`slide-${index + 1}`}
+                width={300}
+                height={300}
+                priority={true}
+              />
             </SwiperSlide>
-        ))
-       }
+          ))
+        )}
       </Swiper>
     </section>
   );

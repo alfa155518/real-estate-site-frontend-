@@ -3,6 +3,7 @@ import { Search, LogIn, LogOut, User, Loader2 } from "lucide-react";
 import Image from "next/image";
 import useUserHeader from "@/hooks/useUserHeader";
 import styles from "@/sass/layout/header.module.scss";
+
 export default function UserHeaderButtonsAction() {
   // use user header custom hook
   const {
@@ -20,7 +21,7 @@ export default function UserHeaderButtonsAction() {
     setIsMobileMenuOpen,
     handleLogout,
   } = useUserHeader();
-
+  const defaultImage = "/images/default-property.webp";
   return (
     <>
       <div className={styles.searchContainer} ref={searchRef}>
@@ -51,9 +52,7 @@ export default function UserHeaderButtonsAction() {
               >
                 <div className={styles.resultImage}>
                   <Image
-                    src={
-                      property.images[0]?.image_url || "/images/placeholder.jpg"
-                    }
+                    src={property.images[0]?.image_url || defaultImage}
                     alt={property.title}
                     width={50}
                     height={50}
