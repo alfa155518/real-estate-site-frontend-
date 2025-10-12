@@ -15,6 +15,7 @@ interface RealEstateState {
     meta: PaginationMeta;
     filters: Partial<RealEstateFilterParams>;
     isLoading: boolean;
+    featuredProperties: RealEstateList;
 }
 
 export interface RealEstateFilterResponse {
@@ -31,6 +32,7 @@ interface RealEstateActions {
     handlePageChange: (page: number) => Promise<void>;
     handleFilters: (filters: Partial<RealEstateFilterParams>) => Promise<RealEstateFilterResponse>;
     handleResetFilters: () => Promise<void>;
+    handleFeaturedProperties: () => Promise<void>;
 }
 
 export type RealEstateStore = RealEstateState & RealEstateActions;
