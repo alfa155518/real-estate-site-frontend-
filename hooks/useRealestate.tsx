@@ -33,6 +33,8 @@ export default function useRealestate() {
     bedrooms: "",
     bathrooms: "",
     search: "",
+    is_featured: true,
+    status: "available",
   };
 
   const { register, handleSubmit, watch, setValue, control, getValues, reset } =

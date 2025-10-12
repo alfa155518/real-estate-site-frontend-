@@ -8,6 +8,7 @@ import { RealEstateStore } from "@/types/realestateStore";
 
 const useRealEstateStore = create<RealEstateStore>((set, get) => ({
   properties: [],
+  featuredProperties: [],
   meta: {
     current_page: 1,
     last_page: 1,
@@ -115,6 +116,19 @@ const useRealEstateStore = create<RealEstateStore>((set, get) => ({
       set({ isLoading: false });
     }
   },
+
+  handleFeaturedProperties: async () => {
+    try {
+      const response = await filtersProperties(
+        { is_featured: true, status: "available" },
+        1
+      );
+      set({ featuredProperties: response.data.properties });
+    } catch {
+      toast.error("حدث خطأ ما");
+    }
+  },
+
   //   Handle reset filters
   handleResetFilters: async () => {
     const state = get();

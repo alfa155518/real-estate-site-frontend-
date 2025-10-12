@@ -81,6 +81,8 @@ export interface RealEstateFilterParams {
   bedrooms?: number | "" | "6+";
   bathrooms?: number | "" | "5+";
   search?: string;
+  is_featured?: boolean;
+  status?: "available";
 }
 
 export interface RealEstateListProps {

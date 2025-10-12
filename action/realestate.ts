@@ -19,8 +19,6 @@ export const getProperties = async (page?: number) => {
 
 // Filters Properties Depends on Filters params
 export const filtersProperties = async (filters: RealEstateFilterParams, page: number) => {
-    // const params = `page=${page}&type=${filters.type}&location=${filters.location}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&bedrooms=${filters.bedrooms}&bathrooms=${filters.bathrooms}`;
-
     const params = new URLSearchParams();
 
     // Add page parameter
@@ -34,6 +32,8 @@ export const filtersProperties = async (filters: RealEstateFilterParams, page: n
     if (filters.maxPrice) params.append('maxPrice', filters.maxPrice.toString());
     if (filters.bedrooms) params.append('bedrooms', filters.bedrooms.toString());
     if (filters.bathrooms) params.append('bathrooms', filters.bathrooms.toString());
+    if (filters.is_featured) params.append('is_featured', filters.is_featured.toString());
+    if (filters.status) params.append('status', filters.status);
 
     const queryString = params.toString();
     const response = await fetch(`${API_URL}/v1/properties/filter?${queryString}`, {
