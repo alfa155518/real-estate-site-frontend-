@@ -29,7 +29,7 @@ export default function useUserHeader() {
     { name: "العقارات", href: "/realstate", icon: <Building size={20} /> },
     { name: "المفضلة", href: "/favorites", icon: <Heart size={20} /> },
     { name: "عننا", href: "/aboutUs", icon: <Info size={20} /> },
-    { name: "تواصل معنا", href: "/support", icon: <Phone size={20} /> },
+    { name: "الدعم", href: "/support", icon: <Phone size={20} /> },
   ];
 
   //handle scroll
