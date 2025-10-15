@@ -5,5 +5,5 @@ export type SupportFormData = {
   subject: string;
   message: string;
   priority: 'low' | 'medium' | 'high';
-  attachment?: FileList;
+  images?: File[];
 };
