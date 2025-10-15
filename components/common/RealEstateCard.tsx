@@ -16,8 +16,13 @@ import {
 import { RealEstateCardProps } from "@/types/real-estate";
 import styles from "@/sass/components/common/RealEstateCard.module.scss";
 import Link from "next/link";
+import useFavoritePropertiesStore from "@/store/FavoritePropertiesStore";
 
 const RealEstateCard = ({ property, index }: RealEstateCardProps) => {
+  // user favorite properties store
+  const { handleToggleFavorite, loadingIds } = useFavoritePropertiesStore();
+  const isLoading = loadingIds.includes(property.id);
+
   const primaryImage =
     property.images.find((img) => img.is_primary) || property.images[0];
 
@@ -48,8 +53,19 @@ const RealEstateCard = ({ property, index }: RealEstateCardProps) => {
         <div className={styles.badge}>
           {property.type === "sale" ? "بيع" : "إيجار"}
         </div>
-        <button className={styles.favoriteButton} aria-label="إضافة للمفضلة">
-          <Heart className={styles.heartIcon} />
+        <button
+          className={styles.favoriteButton}
+          aria-label="إضافة للمفضلة"
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            "..."
+          ) : (
+            <Heart
+              className={styles.heartIcon}
+              onClick={() => handleToggleFavorite(property.id)}
+            />
+          )}
         </button>
         <Link
           href={`https://wa.me/201555187474?text=مرحباً، أنا مهتم بالعقار: ${encodeURIComponent(
