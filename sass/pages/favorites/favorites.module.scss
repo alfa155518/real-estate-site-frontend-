@@ -7,72 +7,6 @@
   direction: rtl;
 }
 
-.filters {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-bottom: 2.5rem;
-
-  @media (min-width: 768px) {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-}
-
-.searchContainer {
-  position: relative;
-  max-width: 400px;
-  width: 100%;
-
-  .searchIcon {
-    color: $dark;
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    @include translateY(-50%);
-    cursor: pointer;
-  }
-}
-
-.searchInput {
-  width: 100%;
-  padding: 0.75rem 1rem 0.75rem 3rem;
-  border: 1px solid rgba($dark, 0.3);
-  @include radius(8px);
-  font-size: 1.3rem;
-  font-weight: 800;
-  @include transition(border-color, 0.2s, ease);
-
-  &:focus {
-    outline: none;
-    border-color: $primary;
-    box-shadow: 0 0 0 3px rgba($primary, 0.1);
-  }
-}
-
-.filterGroup {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.filterSelect {
-  padding: 0.75rem 1rem;
-  border: 1px solid rgba($dark, 0.3);
-  @include radius(8px);
-  background-color: white;
-  font-size: 1.2rem;
-  font-weight: 800;
-  cursor: pointer;
-  @include transition(0.2s, ease-in-out);
-
-  &:focus {
-    outline: none;
-    border-color: $primary;
-  }
-}
-
 .grid {
   @include grid-item(300px, 7rem);
   margin-bottom: 3rem;
@@ -134,9 +68,9 @@
 .removeButton {
   @include flex-center;
   gap: 0.5rem;
-  width: 100%;
+  width: 80%;
   padding: 0.75rem;
-  margin-top: 1rem;
+  margin: 1rem auto;
   background-color: #fff5f5;
   color: $danger;
   border: 1px solid $danger;
@@ -147,53 +81,6 @@
 
   &:hover {
     background-color: #fee2e2;
-  }
-}
-
-.skeletonCard {
-  background: white;
-  @include radius(8px);
-  overflow: hidden;
-  box-shadow: rgba($primary, 0.1);
-}
-
-.skeletonImage {
-  height: 200px;
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-}
-
-.skeletonContent {
-  padding: 1.25rem;
-}
-
-.skeletonTitle {
-  height: 1.5rem;
-  background: $dark-white;
-  @include radius(4px);
-  margin-bottom: 1rem;
-  width: 80%;
-}
-
-.skeletonText {
-  height: 0.875rem;
-  background: $dark-white;
-  @include radius(4px);
-  margin-bottom: 0.75rem;
-
-  &:last-child {
-    width: 60%;
-    margin-bottom: 0;
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
   }
 }
 
