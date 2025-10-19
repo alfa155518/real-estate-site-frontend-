@@ -113,10 +113,10 @@ const useRealEstateStore = create<RealEstateStore>((set, get) => ({
       return response;
     } catch {
       toast.error("حدث خطأ ما");
+    } finally {
       set({ isLoading: false });
     }
   },
-
   handleFeaturedProperties: async () => {
     try {
       const response = await filtersProperties(
