@@ -1,3 +1,4 @@
+"use client";
 import Hero from "./Hero";
 import RealEstateSlider from "./RealEstateSlider";
 import Reviews from "./Reviews";

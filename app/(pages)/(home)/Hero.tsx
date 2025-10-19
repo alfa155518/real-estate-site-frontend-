@@ -1,4 +1,3 @@
-"use client";
 import { useEffect } from "react";
 import Image from "next/image";
 
@@ -9,9 +8,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import styles from "@/sass/pages/home/hero.module.scss";
-
 import useSlidersStore from "@/store/SlidersStore";
+import styles from "@/sass/pages/home/hero.module.scss";
 
 export default function Hero() {
   const { handleGetSlider, sliders, isLoading, defaultSlide } =
