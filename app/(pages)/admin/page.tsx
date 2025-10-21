@@ -412,7 +412,7 @@ export default function AdminDashboard() {
       >
         <div className={styles.chartCard}>
           <div className={styles.chartHeader}>
-            <h3>إحصائيات المبيعات</h3>
+            <h2 className={styles.chartTitle}>إحصائيات المبيعات</h2>
             <div className={styles.chartActions}>
               <button
                 className={chartFilter === "monthly" ? styles.active : ""}
@@ -441,7 +441,7 @@ export default function AdminDashboard() {
 
         <div className={styles.chartCard}>
           <div className={styles.chartHeader}>
-            <h3>توزيع العقارات</h3>
+            <h2 className={styles.chartTitle}>توزيع العقارات</h2>
           </div>
           <div className={styles.chartContent}>
             <Doughnut data={propertyTypesData} options={doughnutOptions} />
