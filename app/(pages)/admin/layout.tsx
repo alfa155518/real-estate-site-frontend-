@@ -187,6 +187,7 @@ export default function AdminLayout({
           </div>
           <motion.button
             className={styles.sidebarCloseBtn}
+            aria-label="Close Sidebar"
             onClick={toggleSidebar}
             whileHover={{ scale: 1.1, rotate: 90 }}
             whileTap={{ scale: 0.9 }}
@@ -254,6 +255,7 @@ export default function AdminLayout({
             </div>
             <motion.button
               className={styles.logoutBtn}
+              aria-label="Logout"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >
@@ -264,7 +266,7 @@ export default function AdminLayout({
       </motion.aside>
 
       {/* Main Content */}
-      <div className={styles.mainContent}>
+      <main className={styles.mainContent}>
         {/* Header */}
         <motion.header
           className={styles.header}
@@ -275,6 +277,7 @@ export default function AdminLayout({
           <div className={styles.headerLeft}>
             <motion.button
               className={styles.menuToggle}
+              aria-label="Toggle Sidebar"
               onClick={toggleSidebar}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
@@ -397,7 +400,7 @@ export default function AdminLayout({
         >
           {children}
         </motion.div>
-      </div>
+      </main>
 
       {/* Overlay for mobile */}
       <AnimatePresence>

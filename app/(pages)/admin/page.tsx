@@ -459,7 +459,7 @@ export default function AdminDashboard() {
         {/* Latest Added Properties */}
         <div className={styles.tableCard}>
           <div className={styles.tableHeader}>
-            <h3>أحدث العقارات المضافة</h3>
+            <h2>أحدث العقارات المضافة</h2>
             <a href="/admin/properties">
               عرض الكل <ArrowRight size={16} />
             </a>
@@ -502,7 +502,7 @@ export default function AdminDashboard() {
         {/* Top Properties */}
         <div className={styles.tableCard}>
           <div className={styles.tableHeader}>
-            <h3>العقارات الأكثر مشاهدة</h3>
+            <h2>العقارات الأكثر مشاهدة</h2>
             <a href="/admin/properties">
               عرض الكل <ArrowRight size={16} />
             </a>
