@@ -1,0 +1,285 @@
+@use "@/sass/helpers/variables" as *;
+@use "@/sass/helpers/mixins" as *;
+
+%chartCard {
+  @include flex-between;
+  margin-bottom: 1.5rem;
+  h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: $primary;
+    margin: 0;
+  }
+}
+
+.dashboard {
+  .statsGrid {
+    @include grid-item(250px, 1.5rem);
+    margin-bottom: 2rem;
+
+    .statCard {
+      background: $white;
+      @include radius(16px);
+      padding: 1.75rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      position: relative;
+      overflow: hidden;
+      @include transition(all, 0.3s, ease);
+
+      &:hover {
+        @include translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(
+          90deg,
+          var(--gradient-start),
+          var(--gradient-end)
+        );
+      }
+
+      &.blue {
+        --gradient-start: #667eea;
+        --gradient-end: #764ba2;
+      }
+
+      &.green {
+        --gradient-start: #10b981;
+        --gradient-end: #059669;
+      }
+
+      &.orange {
+        --gradient-start: #f59e0b;
+        --gradient-end: #d97706;
+      }
+
+      &.red {
+        --gradient-start: #ef4444;
+        --gradient-end: #dc2626;
+      }
+
+      .statHeader {
+        @extend %chartCard;
+
+        .statIcon {
+          width: 50px;
+          height: 50px;
+          @include radius(12px);
+          @include flex-center;
+          background: linear-gradient(
+            135deg,
+            var(--gradient-start),
+            var(--gradient-end)
+          );
+          color: $white;
+          font-size: 1.5rem;
+        }
+
+        .statChange {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+          font-size: 1.5rem;
+          font-weight: 600;
+          padding: 0.375rem 0.75rem;
+          @include radius(20px);
+
+          &.positive {
+            background: rgba(16, 185, 129, 0.1);
+            color: $success;
+          }
+
+          &.negative {
+            background: rgba(239, 68, 68, 0.1);
+            color: $danger;
+          }
+        }
+      }
+
+      .statContent {
+        .statValue {
+          font-size: 2rem;
+          font-weight: 700;
+          color: $primary;
+          margin-bottom: 0.25rem;
+        }
+
+        .statLabel {
+          color: $dark;
+          font-size: 1.2rem;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  .chartsSection {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+
+    .chartCard {
+      background: $white;
+      @include radius(16px);
+      padding: 1.75rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+      .chartHeader {
+        @extend %chartCard;
+
+        .chartActions {
+          display: flex;
+          gap: 0.5rem;
+
+          button {
+            padding: 0.5rem 1rem;
+            background: $white;
+            @include radius(8px);
+            font-size: 1.2rem;
+            font-weight: 500;
+            cursor: pointer;
+            @include transition(all, 0.3s, ease);
+
+            &:hover {
+              border-color: #667eea;
+              color: #667eea;
+            }
+
+            &.active {
+              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+              color: $white;
+              border-color: transparent;
+            }
+          }
+        }
+      }
+
+      .chartContent {
+        height: 400px;
+        @include flex-center;
+        color: $primary;
+      }
+    }
+  }
+
+  .tablesSection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+
+    .tableCard {
+      background: $white;
+      @include radius(16px);
+      padding: 1.75rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+      .tableHeader {
+        @extend %chartCard;
+
+        a {
+          color: $primary-light;
+          font-size: 1rem;
+          font-weight: 600;
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+          @include transition(all, 0.3s, ease);
+
+          &:hover {
+            gap: 0.5rem;
+          }
+        }
+      }
+
+      .propertyList {
+        .propertyItem {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          padding: 1rem;
+          @include radius(10px);
+          margin-bottom: 0.75rem;
+          @include transition(all, 0.2s, ease);
+
+          &:hover {
+            background: $dark-white;
+          }
+
+          .propertyImage {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            flex-shrink: 0;
+            img {
+              width: 100%;
+              height: 100%;
+              @include radius(10px);
+              object-fit: cover;
+            }
+          }
+
+          .propertyInfo {
+            flex: 1;
+
+            .propertyTitle {
+              font-size: 1.5rem;
+              font-weight: 600;
+              color: $primary;
+              margin-bottom: 0.25rem;
+            }
+
+            .propertyMeta {
+              color: $primary-light;
+              font-size: 1.3rem;
+              font-weight: 600;
+              display: flex;
+              align-items: center;
+              gap: 1rem;
+
+              span {
+                display: flex;
+                align-items: center;
+                gap: 0.25rem;
+              }
+            }
+          }
+
+          .propertyPrice {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: $accent-1;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .dashboard {
+    .chartsSection {
+      grid-template-columns: 1fr;
+    }
+
+    .tablesSection {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    .statsGrid {
+      grid-template-columns: 1fr;
+    }
+  }
+}

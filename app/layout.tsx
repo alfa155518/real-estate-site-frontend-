@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Noto_Sans_Arabic, Cairo } from "next/font/google";
-import Header from "@/layout/Header";
-import ScrollToTopBtn from "@/components/ui/ScrollToTopBtn";
-import Footer from "@/layout/Footer";
+import ConditionalLayout from "@/components/layout/ConditionalLayout";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 
@@ -46,19 +44,18 @@ export default function RootLayout({
         className={`${noto.variable} ${cairo.variable} antialiased`}
         suppressHydrationWarning={true}
       >
-        <Header />
-        {children}
-        <ScrollToTopBtn />
-        <Footer />
+        <ConditionalLayout>
+          {children}
+        </ConditionalLayout>
         <Toaster
-  toastOptions={{
-    duration: 5000,
-    style: {
-     fontSize: '18px',
-     fontWeight: '500',
-    },
-  }}
-  />
+          toastOptions={{
+            duration: 5000,
+            style: {
+              fontSize: '18px',
+              fontWeight: '500',
+            },
+          }}
+        />
       </body>
     </html>
   );

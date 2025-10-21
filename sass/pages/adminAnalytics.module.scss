@@ -1,0 +1,385 @@
+@import '../helpers/variables';
+
+.analyticsPage {
+  .pageHeader {
+    margin-bottom: 2rem;
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a1f36;
+      margin: 0 0 0.5rem 0;
+    }
+
+    p {
+      color: #6b7280;
+      margin: 0;
+    }
+  }
+
+  .metricsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+
+    .metricCard {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+      }
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--gradient);
+      }
+
+      &.revenue {
+        --gradient: linear-gradient(90deg, #10b981, #059669);
+      }
+
+      &.views {
+        --gradient: linear-gradient(90deg, #3b82f6, #2563eb);
+      }
+
+      &.conversion {
+        --gradient: linear-gradient(90deg, #f59e0b, #d97706);
+      }
+
+      &.engagement {
+        --gradient: linear-gradient(90deg, #8b5cf6, #7c3aed);
+      }
+
+      .metricHeader {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+
+        .metricLabel {
+          font-size: 0.9rem;
+          color: #6b7280;
+          font-weight: 500;
+        }
+
+        .metricIcon {
+          width: 45px;
+          height: 45px;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--gradient);
+          color: white;
+        }
+      }
+
+      .metricValue {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #1a1f36;
+        margin-bottom: 0.5rem;
+      }
+
+      .metricChange {
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+        font-size: 0.875rem;
+
+        &.positive {
+          color: #10b981;
+        }
+
+        &.negative {
+          color: #ef4444;
+        }
+
+        .changeIcon {
+          font-size: 1rem;
+        }
+      }
+
+      .metricChart {
+        margin-top: 1rem;
+        height: 60px;
+        background: linear-gradient(180deg, rgba(102, 126, 234, 0.1) 0%, transparent 100%);
+        border-radius: 8px;
+        display: flex;
+        align-items: flex-end;
+        padding: 0.5rem;
+        gap: 0.25rem;
+
+        .chartBar {
+          flex: 1;
+          background: var(--gradient);
+          border-radius: 4px 4px 0 0;
+          transition: all 0.3s ease;
+
+          &:hover {
+            opacity: 0.8;
+          }
+        }
+      }
+    }
+  }
+
+  .chartsSection {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+
+    .chartCard {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+      .chartHeader {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+
+        h3 {
+          font-size: 1.25rem;
+          font-weight: 700;
+          color: #1a1f36;
+          margin: 0;
+        }
+
+        .periodSelector {
+          display: flex;
+          gap: 0.5rem;
+
+          button {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e5e7eb;
+            background: white;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+            &:hover {
+              border-color: #667eea;
+              color: #667eea;
+            }
+
+            &.active {
+              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+              color: white;
+              border-color: transparent;
+            }
+          }
+        }
+      }
+
+      .chartContent {
+        height: 350px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+        border-radius: 12px;
+        color: #9ca3af;
+        font-size: 0.9rem;
+      }
+    }
+
+    .pieChartCard {
+      .chartContent {
+        height: 350px;
+      }
+    }
+  }
+
+  .dataTable {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+    .tableHeader {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+
+      h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1a1f36;
+        margin: 0;
+      }
+
+      .exportBtn {
+        padding: 0.75rem 1.25rem;
+        border: 2px solid #e5e7eb;
+        background: white;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+
+        &:hover {
+          border-color: #667eea;
+          color: #667eea;
+        }
+      }
+    }
+
+    .tableContent {
+      overflow-x: auto;
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+
+        thead {
+          background: #f9fafb;
+
+          th {
+            padding: 1rem 1.5rem;
+            text-align: right;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #4b5563;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+        }
+
+        tbody {
+          tr {
+            border-bottom: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+
+            &:hover {
+              background: #f9fafb;
+            }
+
+            td {
+              padding: 1.25rem 1.5rem;
+              font-size: 0.9rem;
+              color: #1a1f36;
+
+              .propertyName {
+                font-weight: 600;
+                color: #1a1f36;
+              }
+
+              .propertyLocation {
+                font-size: 0.8rem;
+                color: #6b7280;
+                margin-top: 0.25rem;
+              }
+
+              .progressBar {
+                width: 100%;
+                height: 8px;
+                background: #e5e7eb;
+                border-radius: 4px;
+                overflow: hidden;
+
+                .progressFill {
+                  height: 100%;
+                  background: linear-gradient(90deg, #667eea, #764ba2);
+                  border-radius: 4px;
+                  transition: width 0.3s ease;
+                }
+              }
+
+              .metric {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                font-weight: 600;
+
+                &.positive {
+                  color: #10b981;
+                }
+
+                &.negative {
+                  color: #ef4444;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .analyticsPage {
+    .chartsSection {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .analyticsPage {
+    .metricsGrid {
+      grid-template-columns: 1fr;
+    }
+
+    .dataTable {
+      .tableContent {
+        table {
+          thead {
+            display: none;
+          }
+
+          tbody {
+            tr {
+              display: block;
+              margin-bottom: 1rem;
+              border: 1px solid #e5e7eb;
+              border-radius: 10px;
+
+              td {
+                display: block;
+                padding: 0.75rem 1rem;
+                border-bottom: 1px solid #e5e7eb;
+
+                &:last-child {
+                  border-bottom: none;
+                }
+
+                &::before {
+                  content: attr(data-label);
+                  font-weight: 600;
+                  display: block;
+                  margin-bottom: 0.5rem;
+                  color: #6b7280;
+                  font-size: 0.8rem;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
