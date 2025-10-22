@@ -5,7 +5,8 @@
   @include flex-between;
   margin-bottom: 2rem;
 
-  h3 {
+  h3,
+  h2 {
     font-size: 1.8rem;
     font-weight: 700;
     color: $primary;

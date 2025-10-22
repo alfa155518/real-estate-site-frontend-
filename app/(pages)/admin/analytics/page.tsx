@@ -455,7 +455,7 @@ export default function AnalyticsPage() {
       >
         <div className={styles.chartCard}>
           <div className={styles.chartHeader}>
-            <h3>نمو الإيرادات</h3>
+            <h2>نمو الإيرادات</h2>
             <div className={styles.chartActions}>
               <button
                 className={chartFilter === "monthly" ? styles.active : ""}
