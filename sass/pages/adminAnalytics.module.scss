@@ -1,39 +1,38 @@
-@import '../helpers/variables';
+@use "@/sass/helpers/variables" as *;
+@use "@/sass/helpers/mixins" as *;
+
+%chartCard {
+  @include flex-between;
+  margin-bottom: 2rem;
+
+  h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: $primary;
+    margin: 0;
+  }
+}
 
 .analyticsPage {
   .pageHeader {
-    margin-bottom: 2rem;
-
-    h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #1a1f36;
-      margin: 0 0 0.5rem 0;
-    }
-
-    p {
-      color: #6b7280;
-      margin: 0;
-    }
+    @include adminPageHeader;
   }
 
   .metricsGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
+    @include grid-item(280px, 1.5rem);
     margin-bottom: 2rem;
 
     .metricCard {
-      background: white;
-      border-radius: 16px;
+      background: $white;
+      @include radius(16px);
       padding: 2rem;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
       position: relative;
       overflow: hidden;
-      transition: all 0.3s ease;
+      @include transition(all, 0.2s, ease);
 
       &:hover {
-        transform: translateY(-5px);
+        @include translateY(-5px);
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
       }
 
@@ -64,33 +63,29 @@
       }
 
       .metricHeader {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        @include flex-between;
         margin-bottom: 1.5rem;
 
         .metricLabel {
-          font-size: 0.9rem;
-          color: #6b7280;
-          font-weight: 500;
+          font-size: 1.5rem;
+          color: $primary;
+          font-weight: 600;
         }
 
         .metricIcon {
           width: 45px;
           height: 45px;
-          border-radius: 12px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          @include radius(12px);
+          @include flex-center;
           background: var(--gradient);
-          color: white;
+          color: $white;
         }
       }
 
       .metricValue {
         font-size: 2.5rem;
         font-weight: 700;
-        color: #1a1f36;
+        color: $primary;
         margin-bottom: 0.5rem;
       }
 
@@ -98,18 +93,19 @@
         display: flex;
         align-items: center;
         gap: 0.375rem;
-        font-size: 0.875rem;
+        font-size: 1.2rem;
 
         &.positive {
-          color: #10b981;
+          color: $success;
         }
 
         &.negative {
-          color: #ef4444;
+          color: $danger;
         }
 
         .changeIcon {
-          font-size: 1rem;
+          font-size: 2rem;
+          font-weight: bold;
         }
       }
 
@@ -117,7 +113,7 @@
         margin-top: 1rem;
         height: 60px;
         background: linear-gradient(180deg, rgba(102, 126, 234, 0.1) 0%, transparent 100%);
-        border-radius: 8px;
+        @include radius(8px);
         display: flex;
         align-items: flex-end;
         padding: 0.5rem;
@@ -126,8 +122,8 @@
         .chartBar {
           flex: 1;
           background: var(--gradient);
-          border-radius: 4px 4px 0 0;
-          transition: all 0.3s ease;
+          @include full-radius(4px, 4px, 0, 0);
+          @include transition(all, 0.2s, ease);
 
           &:hover {
             opacity: 0.8;
@@ -144,46 +140,32 @@
     margin-bottom: 2rem;
 
     .chartCard {
-      background: white;
-      border-radius: 16px;
+      background: $white;
+      @include radius(16px);
       padding: 2rem;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 
       .chartHeader {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 2rem;
+        @extend %chartCard;
 
-        h3 {
-          font-size: 1.25rem;
-          font-weight: 700;
-          color: #1a1f36;
-          margin: 0;
-        }
-
-        .periodSelector {
+        .periodSelector,
+        .chartActions {
           display: flex;
           gap: 0.5rem;
 
           button {
+            color: $white;
+            background: $primary-light;
             padding: 0.5rem 1rem;
-            border: 2px solid #e5e7eb;
-            background: white;
-            border-radius: 8px;
-            font-size: 0.875rem;
+            @include radius(8px);
+            font-size: 1.2rem;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
-
-            &:hover {
-              border-color: #667eea;
-              color: #667eea;
-            }
+            @include transition(all, 0.2s, ease);
 
             &.active {
-              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-              color: white;
+              background: linear-gradient(135deg, $primary 0%, $primary-light 100%);
+              color: $white;
               border-color: transparent;
             }
           }
@@ -192,13 +174,12 @@
 
       .chartContent {
         height: 350px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        @include flex-center;
         background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
-        border-radius: 12px;
-        color: #9ca3af;
-        font-size: 0.9rem;
+        @include radius(12px);
+        color: $dark;
+        font-size: 1.2rem;
+        font-weight: 800;
       }
     }
 
@@ -210,41 +191,13 @@
   }
 
   .dataTable {
-    background: white;
-    border-radius: 16px;
+    background: $white;
+    @include radius(16px);
     padding: 2rem;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 
     .tableHeader {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1.5rem;
-
-      h3 {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: #1a1f36;
-        margin: 0;
-      }
-
-      .exportBtn {
-        padding: 0.75rem 1.25rem;
-        border: 2px solid #e5e7eb;
-        background: white;
-        border-radius: 10px;
-        font-weight: 600;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        transition: all 0.3s ease;
-
-        &:hover {
-          border-color: #667eea;
-          color: #667eea;
-        }
-      }
+      @extend %chartCard;
     }
 
     .tableContent {
@@ -255,14 +208,14 @@
         border-collapse: collapse;
 
         thead {
-          background: #f9fafb;
+          background: $dark-white;
 
           th {
             padding: 1rem 1.5rem;
             text-align: right;
-            font-size: 0.875rem;
+            font-size: 1.5rem;
             font-weight: 600;
-            color: #4b5563;
+            color: $gray-600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
           }
@@ -270,41 +223,42 @@
 
         tbody {
           tr {
-            border-bottom: 1px solid #e5e7eb;
-            transition: all 0.3s ease;
+            border-bottom: 1px solid $dark-white;
+            @include transition(all, 0.2s, ease);
 
             &:hover {
-              background: #f9fafb;
+              background: $dark-white;
             }
 
             td {
               padding: 1.25rem 1.5rem;
-              font-size: 0.9rem;
-              color: #1a1f36;
+              font-size: 1.2rem;
+              color: $primary;
 
               .propertyName {
-                font-weight: 600;
-                color: #1a1f36;
+                color: $primary;
+                font-size: 1.5rem;
+                font-weight: bold;
               }
 
               .propertyLocation {
-                font-size: 0.8rem;
-                color: #6b7280;
+                font-size: 1.2rem;
+                color: $dark;
                 margin-top: 0.25rem;
               }
 
               .progressBar {
                 width: 100%;
                 height: 8px;
-                background: #e5e7eb;
-                border-radius: 4px;
+                background: $dark-white;
+                @include radius(4px);
                 overflow: hidden;
 
                 .progressFill {
                   height: 100%;
-                  background: linear-gradient(90deg, #667eea, #764ba2);
-                  border-radius: 4px;
-                  transition: width 0.3s ease;
+                  background: linear-gradient(90deg, $primary, $primary-light);
+                  @include radius(4px);
+                  @include transition(width, 0.2s, ease);
                 }
               }
 
@@ -312,14 +266,15 @@
                 display: flex;
                 align-items: center;
                 gap: 0.5rem;
-                font-weight: 600;
+                font-weight: 800;
+                font-size: 1.5rem;
 
                 &.positive {
-                  color: #10b981;
+                  color: $success;
                 }
 
                 &.negative {
-                  color: #ef4444;
+                  color: $danger;
                 }
               }
             }
@@ -342,44 +297,6 @@
   .analyticsPage {
     .metricsGrid {
       grid-template-columns: 1fr;
-    }
-
-    .dataTable {
-      .tableContent {
-        table {
-          thead {
-            display: none;
-          }
-
-          tbody {
-            tr {
-              display: block;
-              margin-bottom: 1rem;
-              border: 1px solid #e5e7eb;
-              border-radius: 10px;
-
-              td {
-                display: block;
-                padding: 0.75rem 1rem;
-                border-bottom: 1px solid #e5e7eb;
-
-                &:last-child {
-                  border-bottom: none;
-                }
-
-                &::before {
-                  content: attr(data-label);
-                  font-weight: 600;
-                  display: block;
-                  margin-bottom: 0.5rem;
-                  color: #6b7280;
-                  font-size: 0.8rem;
-                }
-              }
-            }
-          }
-        }
-      }
     }
   }
 }

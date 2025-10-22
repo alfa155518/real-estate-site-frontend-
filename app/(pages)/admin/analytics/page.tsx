@@ -1,6 +1,7 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
+import { useState } from "react";
 import {
   DollarSign,
   Eye,
@@ -10,7 +11,7 @@ import {
   Download,
   ArrowUp,
   ArrowDown,
-} from 'lucide-react';
+} from "lucide-react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -22,9 +23,9 @@ import {
   Tooltip,
   Legend,
   ArcElement,
-} from 'chart.js';
-import { Line, Bar, Pie } from 'react-chartjs-2';
-import styles from '@/sass/pages/adminAnalytics.module.scss';
+} from "chart.js";
+import { Line, Bar, Pie } from "react-chartjs-2";
+import styles from "@/sass/pages/adminAnalytics.module.scss";
 
 // Register Chart.js components
 ChartJS.register(
@@ -42,43 +43,43 @@ ChartJS.register(
 const metrics = [
   {
     id: 1,
-    label: 'إجمالي الإيرادات',
-    value: '2,450,000',
-    currency: 'ر.س',
-    change: '+15.3%',
+    label: "إجمالي الإيرادات",
+    value: "2,450,000",
+    currency: "ر.س",
+    change: "+15.3%",
     positive: true,
     icon: DollarSign,
-    color: 'revenue',
+    color: "revenue",
     chartData: [40, 60, 45, 70, 55, 80, 75],
   },
   {
     id: 2,
-    label: 'مشاهدات الصفحة',
-    value: '125,430',
-    change: '+8.2%',
+    label: "مشاهدات الصفحة",
+    value: "125,430",
+    change: "+8.2%",
     positive: true,
     icon: Eye,
-    color: 'views',
+    color: "views",
     chartData: [30, 50, 40, 65, 50, 70, 85],
   },
   {
     id: 3,
-    label: 'معدل التحويل',
-    value: '3.24%',
-    change: '-2.1%',
+    label: "معدل التحويل",
+    value: "3.24%",
+    change: "-2.1%",
     positive: false,
     icon: TrendingUp,
-    color: 'conversion',
+    color: "conversion",
     chartData: [60, 55, 50, 45, 40, 35, 30],
   },
   {
     id: 4,
-    label: 'معدل التفاعل',
-    value: '68.5%',
-    change: '+12.4%',
+    label: "معدل التفاعل",
+    value: "68.5%",
+    change: "+12.4%",
     positive: true,
     icon: Users,
-    color: 'engagement',
+    color: "engagement",
     chartData: [35, 45, 55, 60, 70, 75, 80],
   },
 ];
@@ -86,57 +87,57 @@ const metrics = [
 const topProperties = [
   {
     id: 1,
-    name: 'فيلا فاخرة في حي الياسمين',
-    location: 'الرياض',
+    name: "فيلا فاخرة في حي الياسمين",
+    location: "الرياض",
     views: 12543,
     inquiries: 234,
     conversionRate: 85,
-    revenue: '2,500,000',
-    change: '+12.5%',
+    revenue: "2,500,000",
+    change: "+12.5%",
     positive: true,
   },
   {
     id: 2,
-    name: 'شقة عصرية في برج الفيصلية',
-    location: 'الرياض',
+    name: "شقة عصرية في برج الفيصلية",
+    location: "الرياض",
     views: 9876,
     inquiries: 187,
     conversionRate: 72,
-    revenue: '850,000',
-    change: '+8.3%',
+    revenue: "850,000",
+    change: "+8.3%",
     positive: true,
   },
   {
     id: 3,
-    name: 'منزل واسع في الدمام',
-    location: 'الدمام',
+    name: "منزل واسع في الدمام",
+    location: "الدمام",
     views: 8432,
     inquiries: 156,
     conversionRate: 68,
-    revenue: '1,200,000',
-    change: '-3.2%',
+    revenue: "1,200,000",
+    change: "-3.2%",
     positive: false,
   },
   {
     id: 4,
-    name: 'شقة بنتهاوس في الخبر',
-    location: 'الخبر',
+    name: "شقة بنتهاوس في الخبر",
+    location: "الخبر",
     views: 7654,
     inquiries: 143,
     conversionRate: 65,
-    revenue: '950,000',
-    change: '+5.7%',
+    revenue: "950,000",
+    change: "+5.7%",
     positive: true,
   },
   {
     id: 5,
-    name: 'فيلا مع مسبح في جدة',
-    location: 'جدة',
+    name: "فيلا مع مسبح في جدة",
+    location: "جدة",
     views: 6789,
     inquiries: 128,
     conversionRate: 58,
-    revenue: '1,800,000',
-    change: '+9.1%',
+    revenue: "1,800,000",
+    change: "+9.1%",
     positive: true,
   },
 ];
@@ -157,7 +158,7 @@ const itemVariants = {
     opacity: 1,
     y: 0,
     transition: {
-      type: 'spring' as const,
+      type: "spring" as const,
       stiffness: 300,
       damping: 24,
     },
@@ -165,35 +166,80 @@ const itemVariants = {
 };
 
 // Revenue Growth Chart Data
-const revenueChartData = {
-  labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس'],
-  datasets: [
-    {
-      label: 'الإيرادات (ألف ر.س)',
-      data: [180, 220, 195, 280, 245, 310, 290, 340],
-      borderColor: '#1e3a8a',
-      backgroundColor: 'rgba(30, 58, 138, 0.1)',
-      tension: 0.4,
-      fill: true,
-      pointRadius: 4,
-      pointHoverRadius: 6,
-    },
-  ],
+const getChartData = (period: string) => {
+  switch (period) {
+    case "daily":
+      return {
+        labels: Array.from({ length: 7 }, (_, i) => {
+          const date = new Date();
+          date.setDate(date.getDate() - (6 - i));
+          return date.toLocaleDateString("ar-SA", { weekday: "short" });
+        }),
+        datasets: [
+          {
+            label: "الإيرادات اليومية",
+            data: [12000, 19000, 15000, 25000, 22000, 30000, 28000],
+            borderColor: "#667eea",
+            backgroundColor: "rgba(102, 126, 234, 0.1)",
+            tension: 0.4,
+            fill: true,
+          },
+        ],
+      };
+    case "weekly":
+      return {
+        labels: ["الأسبوع 1", "الأسبوع 2", "الأسبوع 3", "الأسبوع 4"],
+        datasets: [
+          {
+            label: "الإيرادات الأسبوعية",
+            data: [120000, 190000, 150000, 250000],
+            borderColor: "#667eea",
+            backgroundColor: "rgba(102, 126, 234, 0.1)",
+            tension: 0.4,
+            fill: true,
+          },
+        ],
+      };
+    case "monthly":
+    default:
+      return {
+        labels: [
+          "يناير",
+          "فبراير",
+          "مارس",
+          "أبريل",
+          "مايو",
+          "يونيو",
+          "يوليو",
+          "أغسطس",
+          "سبتمبر",
+          "أكتوبر",
+          "نوفمبر",
+          "ديسمبر",
+        ].slice(0, new Date().getMonth() + 1),
+        datasets: [
+          {
+            label: "الإيرادات الشهرية",
+            data: [
+              65000, 59000, 80000, 81000, 56000, 55000, 40000, 75000, 82000,
+              78000, 85000, 90000,
+            ].slice(0, new Date().getMonth() + 1),
+            borderColor: "#667eea",
+            backgroundColor: "rgba(102, 126, 234, 0.1)",
+            tension: 0.4,
+            fill: true,
+          },
+        ],
+      };
+  }
 };
-
 // Property Types Distribution
 const propertyDistributionData = {
-  labels: ['شقق', 'فلل', 'منازل', 'أراضي', 'تجاري'],
+  labels: ["شقق", "فلل", "منازل", "أراضي", "تجاري"],
   datasets: [
     {
       data: [45, 32, 28, 15, 12],
-      backgroundColor: [
-        '#1e3a8a',
-        '#3b82f6',
-        '#f59e0b',
-        '#22c55d',
-        '#ef4444',
-      ],
+      backgroundColor: ["#1e3a8a", "#3b82f6", "#f59e0b", "#22c55d", "#ef4444"],
       borderWidth: 0,
     },
   ],
@@ -201,17 +247,17 @@ const propertyDistributionData = {
 
 // Monthly Comparison Bar Chart
 const monthlyComparisonData = {
-  labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'],
+  labels: ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو"],
   datasets: [
     {
-      label: 'المبيعات',
+      label: "المبيعات",
       data: [12, 19, 15, 25, 22, 30],
-      backgroundColor: '#1e3a8a',
+      backgroundColor: "#1e3a8a",
     },
     {
-      label: 'الإيجارات',
+      label: "الإيجارات",
       data: [8, 12, 10, 15, 14, 18],
-      backgroundColor: '#3b82f6',
+      backgroundColor: "#3b82f6",
     },
   ],
 };
@@ -222,10 +268,10 @@ const lineChartOptions = {
   plugins: {
     legend: {
       display: true,
-      position: 'bottom' as const,
+      position: "bottom" as const,
       labels: {
         font: {
-          family: 'inherit',
+          family: "inherit",
           size: 12,
         },
         padding: 15,
@@ -233,7 +279,7 @@ const lineChartOptions = {
       },
     },
     tooltip: {
-      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      backgroundColor: "rgba(0, 0, 0, 0.8)",
       padding: 12,
       cornerRadius: 8,
     },
@@ -242,7 +288,7 @@ const lineChartOptions = {
     y: {
       beginAtZero: true,
       grid: {
-        color: 'rgba(0, 0, 0, 0.05)',
+        color: "rgba(0, 0, 0, 0.05)",
       },
     },
     x: {
@@ -259,10 +305,10 @@ const pieChartOptions = {
   plugins: {
     legend: {
       display: true,
-      position: 'bottom' as const,
+      position: "bottom" as const,
       labels: {
         font: {
-          family: 'inherit',
+          family: "inherit",
           size: 12,
         },
         padding: 15,
@@ -270,7 +316,7 @@ const pieChartOptions = {
       },
     },
     tooltip: {
-      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      backgroundColor: "rgba(0, 0, 0, 0.8)",
       padding: 12,
       cornerRadius: 8,
     },
@@ -283,10 +329,10 @@ const barChartOptions = {
   plugins: {
     legend: {
       display: true,
-      position: 'bottom' as const,
+      position: "bottom" as const,
       labels: {
         font: {
-          family: 'inherit',
+          family: "inherit",
           size: 12,
         },
         padding: 15,
@@ -294,7 +340,7 @@ const barChartOptions = {
       },
     },
     tooltip: {
-      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      backgroundColor: "rgba(0, 0, 0, 0.8)",
       padding: 12,
       cornerRadius: 8,
     },
@@ -303,7 +349,7 @@ const barChartOptions = {
     y: {
       beginAtZero: true,
       grid: {
-        color: 'rgba(0, 0, 0, 0.05)',
+        color: "rgba(0, 0, 0, 0.05)",
       },
     },
     x: {
@@ -315,6 +361,9 @@ const barChartOptions = {
 };
 
 export default function AnalyticsPage() {
+  const [chartFilter, setChartFilter] = useState<
+    "monthly" | "weekly" | "daily"
+  >("monthly");
   return (
     <div className={styles.analyticsPage}>
       {/* Page Header */}
@@ -323,8 +372,10 @@ export default function AnalyticsPage() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h1>التحليلات والإحصائيات</h1>
-        <p>تتبع أداء العقارات والمبيعات والمستخدمين</p>
+        <div className={styles.headerLeft}>
+          <h1>التحليلات والإحصائيات</h1>
+          <p>تتبع أداء العقارات والمبيعات والمستخدمين</p>
+        </div>
       </motion.div>
 
       {/* Metrics Grid */}
@@ -356,11 +407,11 @@ export default function AnalyticsPage() {
               className={styles.metricValue}
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
+              transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
             >
               {metric.value}
               {metric.currency && (
-                <span style={{ fontSize: '1rem', marginRight: '0.5rem' }}>
+                <span style={{ fontSize: "1rem", marginRight: "0.5rem" }}>
                   {metric.currency}
                 </span>
               )}
@@ -372,9 +423,9 @@ export default function AnalyticsPage() {
               }`}
             >
               {metric.positive ? (
-                <ArrowUp className={styles.changeIcon} />
+                <ArrowUp className={styles.changeIcon} size={25} />
               ) : (
-                <ArrowDown className={styles.changeIcon} />
+                <ArrowDown className={styles.changeIcon} size={24} />
               )}
               {metric.change} من الشهر الماضي
             </div>
@@ -405,14 +456,29 @@ export default function AnalyticsPage() {
         <div className={styles.chartCard}>
           <div className={styles.chartHeader}>
             <h3>نمو الإيرادات</h3>
-            <div className={styles.periodSelector}>
-              <button className={styles.active}>شهري</button>
-              <button>أسبوعي</button>
-              <button>يومي</button>
+            <div className={styles.chartActions}>
+              <button
+                className={chartFilter === "monthly" ? styles.active : ""}
+                onClick={() => setChartFilter("monthly")}
+              >
+                شهري
+              </button>
+              <button
+                className={chartFilter === "weekly" ? styles.active : ""}
+                onClick={() => setChartFilter("weekly")}
+              >
+                أسبوعي
+              </button>
+              <button
+                className={chartFilter === "daily" ? styles.active : ""}
+                onClick={() => setChartFilter("daily")}
+              >
+                يومي
+              </button>
             </div>
           </div>
           <div className={styles.chartContent}>
-            <Line data={revenueChartData} options={lineChartOptions} />
+            <Line data={getChartData(chartFilter)} options={lineChartOptions} />
           </div>
         </div>
 
@@ -432,7 +498,7 @@ export default function AnalyticsPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
-        style={{ gridTemplateColumns: '1fr', marginTop: '1.5rem' }}
+        style={{ gridTemplateColumns: "1fr", marginTop: "1.5rem" }}
       >
         <div className={styles.chartCard}>
           <div className={styles.chartHeader}>
@@ -453,14 +519,6 @@ export default function AnalyticsPage() {
       >
         <div className={styles.tableHeader}>
           <h3>العقارات الأكثر أداءً</h3>
-          <motion.button
-            className={styles.exportBtn}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <Download size={18} />
-            تصدير البيانات
-          </motion.button>
         </div>
 
         <div className={styles.tableContent}>
@@ -490,10 +548,14 @@ export default function AnalyticsPage() {
                     </div>
                   </td>
                   <td data-label="المشاهدات">
-                    {property.views.toLocaleString('ar-SA')}
+                    <span className={styles.metric}>
+                      {property.views.toLocaleString("ar-SA")}
+                    </span>
                   </td>
                   <td data-label="الاستفسارات">
-                    {property.inquiries.toLocaleString('ar-SA')}
+                    <span className={styles.metric}>
+                      {property.inquiries.toLocaleString("ar-SA")}
+                    </span>
                   </td>
                   <td data-label="معدل التحويل">
                     <div className={styles.progressBar}>
@@ -501,10 +563,13 @@ export default function AnalyticsPage() {
                         className={styles.progressFill}
                         initial={{ width: 0 }}
                         animate={{ width: `${property.conversionRate}%` }}
-                        transition={{ delay: 0.8 + index * 0.05, duration: 0.5 }}
+                        transition={{
+                          delay: 0.8 + index * 0.05,
+                          duration: 0.5,
+                        }}
                       />
                     </div>
-                    <div style={{ marginTop: '0.5rem', fontSize: '0.85rem' }}>
+                    <div style={{ marginTop: "0.5rem", fontSize: "1.3rem" }}>
                       {property.conversionRate}%
                     </div>
                   </td>

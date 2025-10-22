@@ -168,9 +168,6 @@ export default function AdminLayout({
         className={`${styles.sidebar} ${
           sidebarOpen ? styles.open : styles.collapsed
         }`}
-        initial={{ x: 0 }}
-        animate={{ x: sidebarOpen ? 0 : 280 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
       >
         {/* Logo */}
         <div className={styles.logo}>

@@ -18,7 +18,7 @@
     height: 100vh;
     overflow-y: auto;
     box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
-    @include transition(transform, 0.1s, ease);
+    @include transition(transform, 0.3s, ease);
     z-index: 1000;
     @include translateX(100%);
 
@@ -126,6 +126,7 @@
           margin: 0.25rem 0.75rem;
           overflow: hidden;
           @include radius(10px);
+
           a {
             display: flex;
             align-items: center;
@@ -158,11 +159,9 @@
           }
 
           &.active {
-            background: linear-gradient(
-              135deg,
-              $primary 0%,
-              $primary-light 100%
-            );
+            background: linear-gradient(135deg,
+                $primary 0%,
+                $primary-light 100%);
             box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4);
 
             a {
@@ -211,6 +210,7 @@
             font-weight: 600;
             margin: 0;
           }
+
           .name {
             color: $accent-1;
           }
@@ -463,11 +463,9 @@
               }
 
               &:hover {
-                background: linear-gradient(
-                  to left,
-                  rgba(59, 130, 246, 0.05),
-                  transparent
-                );
+                background: linear-gradient(to left,
+                    rgba(59, 130, 246, 0.05),
+                    transparent);
                 border-right: 3px solid $primary;
 
                 .resultIcon {
