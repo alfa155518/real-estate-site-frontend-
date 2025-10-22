@@ -1,15 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { format, parseISO } from "date-fns";
 import { ar } from "date-fns/locale";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Plus,
   Search,
   Filter,
   Download,
-  Eye,
   Edit,
   Trash2,
   Users as UsersIcon,
@@ -18,8 +16,7 @@ import {
   X,
 } from "lucide-react";
 import styles from "@/sass/pages/adminUsers.module.scss";
-import modalStyles from "@/sass/pages/adminProperties.module.scss";
-import UserForm from "@/components/admin/UserForm";
+import UserForm from "./UserForm";
 import { AdminUser, UserFormData } from "@/types/admin";
 
 // Mock data
@@ -29,7 +26,8 @@ const mockUsers: AdminUser[] = [
     name: "أحمد محمد",
     email: "ahmed@example.com",
     role: "admin",
-    phone: "+966501234567",
+    phone: "01012345678",
+    address: "٢٢ شارع الإسكندرية، طنطا",
     created_at: "2024-01-15",
     updated_at: "2024-01-15",
     is_active: true,
@@ -39,7 +37,6 @@ const mockUsers: AdminUser[] = [
     name: "سارة أحمد",
     email: "sara@example.com",
     role: "moderator",
-    phone: "+966507654321",
     created_at: "2024-01-14",
     updated_at: "2024-01-14",
     is_active: true,
@@ -49,7 +46,7 @@ const mockUsers: AdminUser[] = [
     name: "محمد علي",
     email: "mohammed@example.com",
     role: "user",
-    phone: "+966509876543",
+    phone: "01512345678",
     created_at: "2024-01-13",
     updated_at: "2024-01-13",
     is_active: true,
@@ -59,7 +56,7 @@ const mockUsers: AdminUser[] = [
     name: "فاطمة خالد",
     email: "fatima@example.com",
     role: "user",
-    phone: "+966502345678",
+    phone: "01112345678",
     created_at: "2024-01-12",
     updated_at: "2024-01-12",
     is_active: false,
@@ -69,7 +66,7 @@ const mockUsers: AdminUser[] = [
     name: "عبدالله حسن",
     email: "abdullah@example.com",
     role: "user",
-    phone: "+966508765432",
+    phone: "01212345678",
     created_at: "2024-01-11",
     updated_at: "2024-01-11",
     is_active: true,
@@ -85,11 +82,6 @@ export default function UsersPage() {
   const totalUsers = users.length;
   const activeUsers = users.filter((u) => u.is_active).length;
   const adminUsers = users.filter((u) => u.role === "admin").length;
-
-  const handleAddUser = () => {
-    setEditingUser(null);
-    setShowModal(true);
-  };
 
   const handleEditUser = (user: AdminUser) => {
     setEditingUser(user);
@@ -109,11 +101,11 @@ export default function UsersPage() {
     setEditingUser(null);
   };
 
-  const filteredUsers = users.filter(
-    (user) =>
-      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // const filteredUsers = users.filter(
+  //   (user) =>
+  //     user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //     user.email.toLowerCase().includes(searchQuery.toLowerCase())
+  // );
 
   const getRoleLabel = (role: string) => {
     switch (role) {
@@ -127,6 +119,68 @@ export default function UsersPage() {
         return role;
     }
   };
+
+  const [filters, setFilters] = useState({
+    sortBy: "newest", // 'newest' or 'oldest'
+    status: "all", // 'all', 'active', or 'inactive'
+    role: "all", // 'all', 'admin', 'moderator', 'user'
+  });
+
+  // Update the filteredUsers calculation
+  const filteredUsers = users
+    .filter((user) => {
+      const matchesSearch =
+        user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchQuery.toLowerCase());
+
+      const matchesStatus =
+        filters.status === "all" ||
+        (filters.status === "active" && user.is_active) ||
+        (filters.status === "inactive" && !user.is_active);
+
+      const matchesRole = filters.role === "all" || user.role === filters.role;
+
+      return matchesSearch && matchesStatus && matchesRole;
+    })
+    .sort((a, b) => {
+      if (filters.sortBy === "newest") {
+        return (
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+      } else {
+        return (
+          new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        );
+      }
+    });
+
+  // Add this function to handle filter changes
+  const handleFilterChange = (filterName: string, value: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      [filterName]: value,
+    }));
+  };
+
+  // Add this useEffect to your component
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const filterContainer = document.querySelector(
+        `.${styles.filterContainer}`
+      );
+      if (filterContainer && !filterContainer.contains(event.target as Node)) {
+        const dropdown = document.getElementById("filterDropdown");
+        if (dropdown) {
+          dropdown.classList.remove(styles.show);
+        }
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -162,17 +216,6 @@ export default function UsersPage() {
         <div className={styles.headerLeft}>
           <h1>إدارة المستخدمين</h1>
           <p>عرض وإدارة جميع المستخدمين في النظام</p>
-        </div>
-        <div className={styles.headerRight}>
-          <motion.button
-            className={styles.addBtn}
-            onClick={handleAddUser}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <Plus size={18} />
-            إضافة مستخدم جديد
-          </motion.button>
         </div>
       </motion.div>
 
@@ -232,13 +275,62 @@ export default function UsersPage() {
             <Search className={styles.searchIcon} size={20} />
           </div>
           <div className={styles.tableActions}>
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Filter size={18} />
-              تصفية
-            </motion.button>
+            <div className={styles.filterContainer}>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() =>
+                  document
+                    .getElementById("filterDropdown")
+                    ?.classList.toggle(styles.show)
+                }
+              >
+                <Filter size={18} />
+                تصفية
+              </motion.button>
+
+              <div id="filterDropdown" className={styles.filterDropdown}>
+                <div className={styles.filterGroup}>
+                  <label>ترتيب حسب:</label>
+                  <select
+                    value={filters.sortBy}
+                    onChange={(e) =>
+                      handleFilterChange("sortBy", e.target.value)
+                    }
+                  >
+                    <option value="newest">الأحدث</option>
+                    <option value="oldest">الأقدم</option>
+                  </select>
+                </div>
+
+                <div className={styles.filterGroup}>
+                  <label>حالة الحساب:</label>
+                  <select
+                    value={filters.status}
+                    onChange={(e) =>
+                      handleFilterChange("status", e.target.value)
+                    }
+                  >
+                    <option value="all">الكل</option>
+                    <option value="active">نشط</option>
+                    <option value="inactive">غير نشط</option>
+                  </select>
+                </div>
+
+                <div className={styles.filterGroup}>
+                  <label>الدور:</label>
+                  <select
+                    value={filters.role}
+                    onChange={(e) => handleFilterChange("role", e.target.value)}
+                  >
+                    <option value="all">الكل</option>
+                    <option value="admin">مدير</option>
+                    <option value="moderator">مشرف</option>
+                    <option value="user">مستخدم</option>
+                  </select>
+                </div>
+              </div>
+            </div>
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -255,6 +347,7 @@ export default function UsersPage() {
               <tr>
                 <th>المستخدم</th>
                 <th>رقم الهاتف</th>
+                <th>العنوان</th>
                 <th>الدور</th>
                 <th>الحالة</th>
                 <th>تاريخ التسجيل</th>
@@ -284,6 +377,9 @@ export default function UsersPage() {
                     </div>
                   </td>
                   <td data-label="رقم الهاتف">{user.phone || "-"}</td>
+                  <td data-label="العنوان">
+                    {user.address ? <span>{user.address}</span> : "-"}
+                  </td>
                   <td data-label="الدور">
                     <span
                       className={`${styles.roleBadge} ${styles[user.role]}`}
@@ -309,21 +405,13 @@ export default function UsersPage() {
                   <td data-label="الإجراءات">
                     <div className={styles.actions}>
                       <motion.button
-                        className={styles.viewBtn}
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        title="عرض"
-                      >
-                        <Eye size={18} />
-                      </motion.button>
-                      <motion.button
                         className={styles.editBtn}
                         onClick={() => handleEditUser(user)}
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         title="تعديل"
                       >
-                        <Edit size={18} />
+                        <Edit size={20} />
                       </motion.button>
                       <motion.button
                         className={styles.deleteBtn}
@@ -332,7 +420,7 @@ export default function UsersPage() {
                         whileTap={{ scale: 0.9 }}
                         title="حذف"
                       >
-                        <Trash2 size={18} />
+                        <Trash2 size={20} />
                       </motion.button>
                     </div>
                   </td>
@@ -342,41 +430,30 @@ export default function UsersPage() {
           </table>
         </div>
 
-        <div className={styles.tablePagination}>
-          <div className={styles.paginationInfo}>
-            عرض 1-{filteredUsers.length} من {totalUsers} مستخدم
-          </div>
-          <div className={styles.paginationButtons}>
-            <button disabled>السابق</button>
-            <button className={styles.active}>1</button>
-            <button>2</button>
-            <button>3</button>
-            <button>التالي</button>
-          </div>
-        </div>
+        {/* Add Pagination */}
       </motion.div>
 
       {/* User Form Modal */}
       <AnimatePresence>
         {showModal && (
           <motion.div
-            className={modalStyles.modal}
+            className={styles.modal}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setShowModal(false)}
           >
             <motion.div
-              className={modalStyles.modalContent}
+              className={styles.modalContent}
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className={modalStyles.modalHeader}>
-                <h2>{editingUser ? "تعديل المستخدم" : "إضافة مستخدم جديد"}</h2>
+              <div className={styles.modalHeader}>
+                <h2>تعديل المستخدم</h2>
                 <motion.button
-                  className={modalStyles.closeBtn}
+                  className={styles.closeBtn}
                   onClick={() => setShowModal(false)}
                   whileHover={{ scale: 1.1, rotate: 90 }}
                   whileTap={{ scale: 0.9 }}
@@ -384,7 +461,7 @@ export default function UsersPage() {
                   <X size={20} />
                 </motion.button>
               </div>
-              <div className={modalStyles.modalBody}>
+              <div className={styles.modalBody}>
                 <UserForm
                   initialData={editingUser || undefined}
                   onSubmit={handleSubmit}

@@ -5,6 +5,7 @@ export interface AdminUser {
   role: 'admin' | 'moderator' | 'user';
   avatar?: string;
   phone?: string;
+  address?: string;
   created_at: string;
   updated_at: string;
   is_active: boolean;
@@ -59,9 +60,9 @@ export interface PropertyFormData {
 export interface UserFormData {
   name: string;
   email: string;
-  phone?: string;
+  phone: string;
   role: 'admin' | 'moderator' | 'user';
-  password?: string;
+  address: string;
   is_active: boolean;
 }
 

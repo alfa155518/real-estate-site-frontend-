@@ -2,16 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
-import {
-  User,
-  Mail,
-  Phone,
-  Lock,
-  Shield,
-  AlertCircle,
-  Save,
-  X,
-} from "lucide-react";
+import { User, Shield, AlertCircle, Save, X } from "lucide-react";
 import styles from "@/sass/components/propertyForm.module.scss";
 import { UserFormData } from "@/types/admin";
 
@@ -31,7 +22,6 @@ export default function UserForm({
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<UserFormData>({
     defaultValues: initialData || {
@@ -163,50 +153,34 @@ export default function UserForm({
                 </motion.div>
               )}
             </div>
+            <div className={styles.formField}>
+              <label>العنوان</label>
+              <input
+                type="text"
+                placeholder="العنوان"
+                {...register("address")}
+              />
+              {errors.address && (
+                <motion.div
+                  className={styles.errorMessage}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <AlertCircle size={14} />
+                  {errors.address.message}
+                </motion.div>
+              )}
+            </div>
           </div>
         </motion.div>
 
-        {/* Security & Role */}
+        {/*  Role */}
         <motion.div className={styles.formSection} variants={itemVariants}>
           <h3 className={styles.sectionTitle}>
             <Shield className={styles.sectionIcon} size={20} />
-            الأمان والصلاحيات
+            الصلاحيات
           </h3>
           <div className={styles.fieldsGrid}>
-            {!isEditMode && (
-              <div className={`${styles.formField} ${styles.fullWidth}`}>
-                <label>
-                  <span className={styles.required}>*</span>
-                  كلمة المرور
-                </label>
-                <input
-                  type="password"
-                  placeholder="أدخل كلمة المرور"
-                  className={errors.password ? styles.error : ""}
-                  {...register("password", {
-                    required: !isEditMode ? "كلمة المرور مطلوبة" : false,
-                    minLength: {
-                      value: 8,
-                      message: "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
-                    },
-                  })}
-                />
-                {errors.password && (
-                  <motion.div
-                    className={styles.errorMessage}
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                  >
-                    <AlertCircle size={14} />
-                    {errors.password.message}
-                  </motion.div>
-                )}
-                <div className={styles.hint}>
-                  يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل
-                </div>
-              </div>
-            )}
-
             <div className={styles.formField}>
               <label>
                 <span className={styles.required}>*</span>
