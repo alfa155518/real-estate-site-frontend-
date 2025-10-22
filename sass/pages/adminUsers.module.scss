@@ -208,13 +208,13 @@
                 }
 
                 &.moderator {
-                  background: rgba($accent-1-dark, 0.1);
-                  color: $accent-1-dark;
+                  background: rgba($accent-1-dark, 0.8);
+                  color: $white;
                 }
 
                 &.user {
-                  background: rgba($primary-light, 0.1);
-                  color: $primary-light;
+                  background: rgba($primary-light, 0.8);
+                  color: $white;
                 }
               }
 
