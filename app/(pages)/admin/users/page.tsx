@@ -182,36 +182,13 @@ export default function UsersPage() {
     };
   }, []);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.05,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring" as const,
-        stiffness: 300,
-        damping: 24,
-      },
-    },
-  };
-
   return (
     <div className={styles.usersPage}>
       {/* Page Header */}
       <motion.div
         className={styles.pageHeader}
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ y: -20 }}
+        animate={{ y: 0 }}
       >
         <div className={styles.headerLeft}>
           <h1>إدارة المستخدمين</h1>
@@ -220,13 +197,8 @@ export default function UsersPage() {
       </motion.div>
 
       {/* Stats Cards */}
-      <motion.div
-        className={styles.statsCards}
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <motion.div className={styles.statCard} variants={itemVariants}>
+      <motion.div className={styles.statsCards}>
+        <motion.div className={styles.statCard}>
           <div className={`${styles.statIcon} ${styles.total}`}>
             <UsersIcon size={24} />
           </div>
@@ -236,7 +208,7 @@ export default function UsersPage() {
           </div>
         </motion.div>
 
-        <motion.div className={styles.statCard} variants={itemVariants}>
+        <motion.div className={styles.statCard}>
           <div className={`${styles.statIcon} ${styles.active}`}>
             <UserCheck size={24} />
           </div>
@@ -246,7 +218,7 @@ export default function UsersPage() {
           </div>
         </motion.div>
 
-        <motion.div className={styles.statCard} variants={itemVariants}>
+        <motion.div className={styles.statCard}>
           <div className={`${styles.statIcon} ${styles.admins}`}>
             <Shield size={24} />
           </div>
