@@ -1,0 +1,227 @@
+@use "@/sass/helpers/variables" as *;
+@use "@/sass/helpers/mixins" as *;
+
+
+%cardShadow {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+}
+
+// Main container
+.usersPage {
+  padding: 1.5rem;
+}
+
+// Header styles
+.pageHeader {
+  @include adminPageHeader;
+}
+
+// Stats cards
+.statsCards {
+  @include grid-item(250px, 1.5rem);
+  margin-bottom: 2rem;
+
+}
+
+.statCard {
+  background: $white;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  @include flex-between;
+  @extend %cardShadow;
+
+  .statIcon {
+    width: 3.5rem;
+    height: 3.5rem;
+    @include radius(12px);
+    @include flex-center;
+
+    &.total {
+      background-color: rgba(30, 58, 138, 0.1);
+      color: $primary;
+    }
+
+    &.active {
+      background-color: rgba(22, 163, 74, 0.1);
+      color: $success;
+    }
+  }
+
+  .statInfo {
+    text-align: left;
+
+    .statValue {
+      font-size: 2rem;
+      font-weight: 700;
+      color: $accent-2;
+      margin: 0 0 0.25rem;
+    }
+
+    .statLabel {
+      color: $gray-600;
+      font-size: 1.5rem;
+      margin: 0;
+    }
+  }
+}
+
+// Table container
+.usersTable {
+  background: $white;
+  @include radius(10px);
+  overflow: hidden;
+  @extend %cardShadow;
+  margin-bottom: 2rem;
+}
+
+// Table header with search
+.tableHeader {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid $dark-white;
+
+  .searchBar {
+    position: relative;
+    max-width: 300px;
+    margin-right: auto;
+
+    input {
+      width: 100%;
+      padding: 0.5rem 1rem 0.5rem 2.5rem;
+      border: 1px solid $dark-white;
+      @include radius(10px);
+      font-size: 1.5rem;
+      @include transition(all, 0.2s);
+
+      &:focus {
+        outline: none;
+        border-color: $primary-light;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+      }
+    }
+
+    .searchIcon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      @include translateY(-50%);
+      color: $gray-600;
+      pointer-events: none;
+    }
+  }
+}
+
+// Table content
+.tableContent {
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+
+    th,
+    td {
+      padding: 1rem 1.25rem;
+      text-align: right;
+      border-bottom: 1px solid $dark-white;
+
+      &:first-child {
+        padding-right: 1.5rem;
+      }
+
+      &:last-child {
+        padding-left: 1.5rem;
+      }
+    }
+
+    th {
+      background-color: $secondary;
+      color: $accent-2;
+      font-weight: 600;
+      font-size: 1.3rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    tbody tr {
+      @include transition(background-color, 0.2s);
+
+      &:hover {
+        background-color: rgba(243, 244, 246, 0.5);
+      }
+
+      &:last-child td {
+        border-bottom: none;
+      }
+    }
+
+    // User info cell
+    .userInfo {
+      display: flex;
+      gap: 0.75rem;
+
+      .userAvatar {
+        color: $white;
+        font-size: 1.3rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        @include radius(50%);
+        background-color: $primary;
+        font-weight: 600;
+        @include flex-center;
+        flex-shrink: 0;
+      }
+
+      .userDetails {
+        .userName {
+          color: $accent-2;
+          font-size: 1.5rem;
+          font-weight: 500;
+          margin: 0 0 0.25rem;
+        }
+      }
+    }
+
+    // Status indicator
+    .statusDot {
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      @include radius(50%);
+      background-color: $success;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+
+    // Action buttons
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+
+      button {
+        @include flex-center;
+        width: 3rem;
+        height: 3rem;
+        @include radius(2px);
+        border: none;
+        cursor: pointer;
+        @include transition(all, 0.1s);
+
+        &.deleteBtn {
+          background-color: rgba(239, 68, 68, 0.1);
+          color: $danger;
+
+          &:hover {
+            background-color: rgba(239, 68, 68, 0.2);
+          }
+        }
+      }
+    }
+  }
+}
