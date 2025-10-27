@@ -72,12 +72,14 @@ export default function UserForm({
           </h3>
           <div className={styles.fieldsGrid}>
             <div className={`${styles.formField} ${styles.fullWidth}`}>
-              <label>
+              <label htmlFor="name">
                 <span className={styles.required}>*</span>
                 الاسم الكامل
               </label>
               <input
                 type="text"
+                id="name"
+                autoComplete="name"
                 placeholder="أدخل الاسم الكامل"
                 className={errors.name ? styles.error : ""}
                 {...register("name", {
@@ -101,12 +103,14 @@ export default function UserForm({
             </div>
 
             <div className={styles.formField}>
-              <label>
+              <label htmlFor="email">
                 <span className={styles.required}>*</span>
                 البريد الإلكتروني
               </label>
               <input
                 type="email"
+                id="email"
+                autoComplete="email"
                 placeholder="example@domain.com"
                 className={errors.email ? styles.error : ""}
                 disabled={isEditMode}
@@ -131,9 +135,11 @@ export default function UserForm({
             </div>
 
             <div className={styles.formField}>
-              <label>رقم الهاتف</label>
+              <label htmlFor="phone">رقم الهاتف</label>
               <input
                 type="tel"
+                id="phone"
+                autoComplete="phone"
                 placeholder="+966 5XX XXX XXX"
                 {...register("phone", {
                   pattern: {
@@ -154,9 +160,11 @@ export default function UserForm({
               )}
             </div>
             <div className={styles.formField}>
-              <label>العنوان</label>
+              <label htmlFor="address">العنوان</label>
               <input
                 type="text"
+                id="address"
+                autoComplete="address"
                 placeholder="العنوان"
                 {...register("address")}
               />
@@ -182,11 +190,12 @@ export default function UserForm({
           </h3>
           <div className={styles.fieldsGrid}>
             <div className={styles.formField}>
-              <label>
+              <label htmlFor="role">
                 <span className={styles.required}>*</span>
                 الدور الوظيفي
               </label>
               <select
+                id="role"
                 className={errors.role ? styles.error : ""}
                 {...register("role", { required: "الدور الوظيفي مطلوب" })}
               >
@@ -207,12 +216,13 @@ export default function UserForm({
             </div>
 
             <div className={styles.formField}>
-              <label>حالة الحساب</label>
+              <label htmlFor="is_active">حالة الحساب</label>
               <div className={styles.checkboxGroup}>
                 <div className={styles.checkboxItem}>
                   <input
                     type="checkbox"
                     id="is_active"
+                    autoComplete="is_active"
                     {...register("is_active")}
                   />
                   <label htmlFor="is_active">حساب نشط</label>

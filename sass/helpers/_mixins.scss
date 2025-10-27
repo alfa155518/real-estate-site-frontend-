@@ -415,7 +415,7 @@
 
     &::-webkit-scrollbar-thumb {
       background: #9ca3af;
-      border-radius: 4px;
+      @include radius(4px);
 
       &:hover {
         background: #6b7280;

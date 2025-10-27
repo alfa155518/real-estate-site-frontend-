@@ -37,6 +37,12 @@ export interface Location {
   updated_at?: string;
 }
 
+export interface Video {
+  id: number;
+  property_id: number;
+  video_url: string | undefined;
+}
+
 export interface RealEstate {
   id: number;
   title: string;
@@ -71,6 +77,7 @@ export interface RealEstate {
   agency: Agency | null;
   location: Location;
   images: PropertyImage[];
+  videos?: Video[];
 }
 
 export interface RealEstateFilterParams {
@@ -93,6 +100,14 @@ export interface RealEstateListProps {
 export interface RealEstateCardProps {
   property: RealEstate;
   index: number;
+  image?: string;
+  children?: React.ReactNode;
+}
+
+export interface RealEstateActionsProps {
+  property: RealEstate;
+  handleEditProperty: (property: RealEstate) => void;
+  handleDeleteProperty: (property: RealEstate) => void;
 }
 
 export type RealEstateList = RealEstate[];

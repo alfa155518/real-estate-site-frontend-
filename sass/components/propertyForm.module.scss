@@ -1,6 +1,28 @@
 @use "@/sass/helpers/variables" as *;
 @use "@/sass/helpers/mixins" as *;
 
+
+%removeBtn {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  width: 24px;
+  height: 24px;
+  @include radius(50%);
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  @include flex-center;
+  cursor: pointer;
+  color: $danger;
+  padding: 0;
+  @include transition(all, 0.2s, ease);
+
+  &:hover {
+    background-color: $danger;
+    color: $white;
+  }
+}
+
 .propertyForm {
   .formGrid {
     display: grid;
@@ -95,6 +117,104 @@
             margin-top: 0.375rem;
           }
 
+          /* Upload Container */
+          .uploadContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+          }
+
+          .fileInput {
+            display: none;
+          }
+
+          .uploadButton {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background-color: $primary-light;
+            color: $white;
+            border: none;
+            @include radius(8px);
+            cursor: pointer;
+            font-size: 1.4rem;
+            font-weight: 500;
+            @include transition(all, 0.2s, ease);
+            text-align: center;
+            max-width: 200px;
+
+            &:hover {
+              background-color: rgba($primary-light, 0.1);
+            }
+
+            svg {
+              flex-shrink: 0;
+            }
+          }
+
+          /* Image Previews */
+          .imagePreviews {
+            @include grid-item(120px, 1rem);
+            margin-top: 1rem;
+          }
+
+          .imagePreview {
+            position: relative;
+            aspect-ratio: 1;
+            @include radius(8px);
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            @include transition(transform, 0.2s, ease);
+
+            &:hover {
+              @include translateY(-2px);
+            }
+
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+
+            .removeImage {
+              @extend %removeBtn;
+            }
+          }
+
+          /* Video Previews */
+          .videoPreviews {
+            @include grid-item(200px, 1rem);
+            margin-top: 1rem;
+          }
+
+          .videoPreview {
+            position: relative;
+            aspect-ratio: 16/9;
+            @include radius(8px);
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            @include transition(transform, 0.2s, ease);
+            background-color: #000;
+
+            &:hover {
+              @include translateY(-2px);
+            }
+
+            video {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              display: block;
+            }
+
+            .removeVideo {
+              @extend %removeBtn;
+            }
+          }
+
           .checkboxGroup,
           .radioGroup {
             display: flex;
@@ -108,9 +228,9 @@
               gap: 0.75rem;
               padding: 0.75rem;
               border: 2px solid #e5e7eb;
-              border-radius: 10px;
+              @include radius(10px);
               cursor: pointer;
-              transition: all 0.3s ease;
+              @include transition(all, 0.2s, ease);
 
               &:hover {
                 border-color: $primary-light;
@@ -161,14 +281,8 @@
       gap: 0.5rem;
 
       &.cancelBtn {
-        background: $white;
-        color: #4b5563;
-        border: 2px solid #e5e7eb;
-
-        &:hover {
-          background: #f9fafb;
-          border-color: #d1d5db;
-        }
+        background: $danger;
+        color: $white;
       }
 
       &.submitBtn {

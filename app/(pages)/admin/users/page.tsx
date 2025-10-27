@@ -241,6 +241,7 @@ export default function UsersPage() {
             <input
               type="text"
               placeholder="ابحث عن مستخدم..."
+              name="search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -263,8 +264,10 @@ export default function UsersPage() {
 
               <div id="filterDropdown" className={styles.filterDropdown}>
                 <div className={styles.filterGroup}>
-                  <label>ترتيب حسب:</label>
+                  <label htmlFor="sortBy">ترتيب حسب:</label>
                   <select
+                    name="sortBy"
+                    id="sortBy"
                     value={filters.sortBy}
                     onChange={(e) =>
                       handleFilterChange("sortBy", e.target.value)
@@ -276,8 +279,10 @@ export default function UsersPage() {
                 </div>
 
                 <div className={styles.filterGroup}>
-                  <label>حالة الحساب:</label>
+                  <label htmlFor="status">حالة الحساب:</label>
                   <select
+                    name="status"
+                    id="status"
                     value={filters.status}
                     onChange={(e) =>
                       handleFilterChange("status", e.target.value)
@@ -290,8 +295,10 @@ export default function UsersPage() {
                 </div>
 
                 <div className={styles.filterGroup}>
-                  <label>الدور:</label>
+                  <label htmlFor="role">الدور:</label>
                   <select
+                    name="role"
+                    id="role"
                     value={filters.role}
                     onChange={(e) => handleFilterChange("role", e.target.value)}
                   >

@@ -75,6 +75,13 @@ export const realEstateData: RealEstateList = [
         "updated_at": "2025-09-04T12:00:00.000000Z"
       }
     ],
+    "videos": [
+      {
+        "id": 1,
+        "property_id": 1,
+        "video_url": "https://127.0.0.1:8000/properties_videos/vedio_1.mp4",
+      }
+    ]
   },
   {
     "id": 2,
@@ -148,6 +155,13 @@ export const realEstateData: RealEstateList = [
         "is_primary": false,
         "created_at": "2025-09-04T12:10:00.000000Z",
         "updated_at": "2025-09-04T12:10:00.000000Z"
+      }
+    ],
+    "videos": [
+      {
+        "id": 2,
+        "property_id": 2,
+        "video_url": "https://127.0.0.1:8000/properties_videos/vedio_2.mp4",
       }
     ]
   },
@@ -224,6 +238,13 @@ export const realEstateData: RealEstateList = [
         "created_at": "2025-09-04T12:20:00.000000Z",
         "updated_at": "2025-09-04T12:20:00.000000Z"
       }
+    ],
+    "videos": [
+      {
+        "id": 3,
+        "property_id": 3,
+        "video_url": "https://127.0.0.1:8000/properties_videos/vedio_3.mp4",
+      }
     ]
   },
   {
@@ -299,6 +320,13 @@ export const realEstateData: RealEstateList = [
         "created_at": "2025-09-04T12:30:00.000000Z",
         "updated_at": "2025-09-04T12:30:00.000000Z"
       }
+    ],
+    "videos": [
+      {
+        "id": 4,
+        "property_id": 4,
+        "video_url": "https://127.0.0.1:8000/properties_videos/vedio_4.mp4",
+      }
     ]
   },
   {
@@ -373,6 +401,13 @@ export const realEstateData: RealEstateList = [
         "is_primary": false,
         "created_at": "2025-09-04T12:40:00.000000Z",
         "updated_at": "2025-09-04T12:40:00.000000Z"
+      }
+    ],
+    "videos": [
+      {
+        "id": 5,
+        "property_id": 6,
+        "video_url": "https://127.0.0.1:8000/properties_videos/vedio_5.mp4",
       }
     ]
   },

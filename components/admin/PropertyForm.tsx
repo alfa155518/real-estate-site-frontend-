@@ -1,7 +1,7 @@
 "use client";
 
-import { useForm, Controller } from "react-hook-form";
-import { motion } from "framer-motion";
+import { useForm, Controller, useFieldArray } from "react-hook-form";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Building2,
   MapPin,
@@ -12,9 +12,14 @@ import {
   Upload,
   AlertCircle,
   Save,
+  Video as VideoIcon,
+  Trash2,
+  Plus,
 } from "lucide-react";
+import { useState, useRef, ChangeEvent } from "react";
 import styles from "@/sass/components/propertyForm.module.scss";
 import { PropertyFormData } from "@/types/admin";
+import Image from "next/image";
 
 interface PropertyFormProps {
   initialData?: Partial<PropertyFormData>;
@@ -48,6 +53,10 @@ export default function PropertyForm({
 
   const features = watch("features") || [];
   const tags = watch("tags") || [];
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [videoPreviews, setVideoPreviews] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
 
   const addFeature = (feature: string) => {
     if (feature && !features.includes(feature)) {
@@ -73,6 +82,72 @@ export default function PropertyForm({
       "tags",
       tags.filter((t) => t !== tag)
     );
+  };
+
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    const newImagePreviews: string[] = [];
+    const fileList = Array.from(files);
+
+    fileList.forEach((file) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        newImagePreviews.push(reader.result as string);
+        if (newImagePreviews.length === fileList.length) {
+          setImagePreviews((prev) => [...prev, ...newImagePreviews]);
+          // Update form data with new files
+          const currentImages = watch("images") || [];
+          setValue("images", [...currentImages, ...fileList]);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleRemoveImage = (index: number) => {
+    const newPreviews = [...imagePreviews];
+    newPreviews.splice(index, 1);
+    setImagePreviews(newPreviews);
+
+    const currentImages = watch("images") || [];
+    const newImages = [...currentImages];
+    newImages.splice(index, 1);
+    setValue("images", newImages);
+  };
+
+  const handleVideoChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    const newVideoPreviews: string[] = [];
+    const fileList = Array.from(files);
+
+    fileList.forEach((file) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        newVideoPreviews.push(reader.result as string);
+        if (newVideoPreviews.length === fileList.length) {
+          setVideoPreviews((prev) => [...prev, ...newVideoPreviews]);
+          // Update form data with new video files
+          const currentVideos = watch("videos") || [];
+          setValue("videos", [...currentVideos, ...fileList]);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleRemoveVideo = (index: number) => {
+    const newPreviews = [...videoPreviews];
+    newPreviews.splice(index, 1);
+    setVideoPreviews(newPreviews);
+
+    const currentVideos = watch("videos") || [];
+    const newVideos = [...currentVideos];
+    newVideos.splice(index, 1);
+    setValue("videos", newVideos);
   };
 
   const containerVariants = {
@@ -107,6 +182,119 @@ export default function PropertyForm({
       animate="visible"
     >
       <div className={styles.formGrid}>
+        {/* Media Upload */}
+        <motion.div className={styles.formSection} variants={itemVariants}>
+          <h3 className={styles.sectionTitle}>
+            <ImageIcon className={styles.sectionIcon} size={20} />
+            الوسائط
+          </h3>
+          <div className={styles.fieldsGrid}>
+            {/* Image Upload */}
+            <div className={`${styles.formField} ${styles.fullWidth}`}>
+              <label>
+                <span className={styles.required}>*</span>
+                صور العقار
+              </label>
+              <div className={styles.uploadContainer}>
+                <input
+                  type="file"
+                  id="property-images"
+                  name="images"
+                  className={styles.fileInput}
+                  accept="image/*"
+                  multiple
+                  onChange={handleImageChange}
+                  ref={fileInputRef}
+                />
+                <label
+                  htmlFor="property-images"
+                  className={styles.uploadButton}
+                >
+                  <Upload size={18} />
+                  <span>اختر الصور</span>
+                </label>
+                <span className={styles.hint}>
+                  يمكنك تحميل حتى 10 صور (JPG, PNG, WEBP) بحد أقصى 5 ميجابايت
+                  لكل صورة
+                </span>
+              </div>
+              {/* Image Previews */}
+              {imagePreviews.length > 0 && (
+                <div className={styles.imagePreviews}>
+                  {imagePreviews.map((preview, index) => (
+                    <div key={index} className={styles.imagePreview}>
+                      <Image
+                        src={preview}
+                        alt={`Preview ${index + 1}`}
+                        width={100}
+                        height={100}
+                      />
+                      <button
+                        type="button"
+                        className={styles.removeImage}
+                        onClick={() => handleRemoveImage(index)}
+                        aria-label="حذف الصورة"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Video Upload */}
+            <div className={`${styles.formField} ${styles.fullWidth}`}>
+              <label>فيديو العقار (اختياري)</label>
+              <div className={styles.uploadContainer}>
+                <input
+                  type="file"
+                  id="property-videos"
+                  name="videos"
+                  className={styles.fileInput}
+                  accept="video/*"
+                  multiple
+                  onChange={handleVideoChange}
+                  ref={videoInputRef}
+                />
+                <label
+                  htmlFor="property-videos"
+                  className={styles.uploadButton}
+                >
+                  <VideoIcon size={18} />
+                  <span>اختر الفيديوهات</span>
+                </label>
+                <span className={styles.hint}>
+                  يمكنك تحميل عدة فيديوهات (MP4, WEBM) بحد أقصى 50 ميجابايت لكل
+                  فيديو
+                </span>
+              </div>
+
+              {/* Video Previews */}
+              {videoPreviews.length > 0 && (
+                <div className={styles.videoPreviews}>
+                  {videoPreviews.map((preview, index) => (
+                    <div key={index} className={styles.videoPreview}>
+                      <video controls>
+                        <source src={preview} type="video/mp4" />
+                        متصفحك لا يدعم تشغيل الفيديو
+                      </video>
+                      <button
+                        type="button"
+                        className={styles.removeVideo}
+                        onClick={() => handleRemoveVideo(index)}
+                        aria-label="حذف الفيديو"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </motion.div>
+
         {/* Basic Information */}
         <motion.div className={styles.formSection} variants={itemVariants}>
           <h3 className={styles.sectionTitle}>
@@ -115,12 +303,13 @@ export default function PropertyForm({
           </h3>
           <div className={styles.fieldsGrid}>
             <div className={`${styles.formField} ${styles.fullWidth}`}>
-              <label>
+              <label htmlFor="title">
                 <span className={styles.required}>*</span>
                 عنوان العقار
               </label>
               <input
                 type="text"
+                id="title"
                 placeholder="أدخل عنوان العقار"
                 className={errors.title ? styles.error : ""}
                 {...register("title", {
@@ -144,11 +333,12 @@ export default function PropertyForm({
             </div>
 
             <div className={`${styles.formField} ${styles.fullWidth}`}>
-              <label>
+              <label htmlFor="description">
                 <span className={styles.required}>*</span>
                 الوصف
               </label>
               <textarea
+                id="description"
                 placeholder="أدخل وصف تفصيلي للعقار"
                 className={errors.description ? styles.error : ""}
                 {...register("description", {
@@ -181,11 +371,12 @@ export default function PropertyForm({
           </h3>
           <div className={`${styles.fieldsGrid} ${styles.threeColumns}`}>
             <div className={styles.formField}>
-              <label>
+              <label htmlFor="property_type">
                 <span className={styles.required}>*</span>
                 نوع العقار
               </label>
               <select
+                id="property_type"
                 className={errors.property_type ? styles.error : ""}
                 {...register("property_type", { required: "نوع العقار مطلوب" })}
               >
@@ -210,11 +401,12 @@ export default function PropertyForm({
             </div>
 
             <div className={styles.formField}>
-              <label>
+              <label htmlFor="type">
                 <span className={styles.required}>*</span>
                 نوع العرض
               </label>
               <select
+                id="type"
                 className={errors.type ? styles.error : ""}
                 {...register("type", { required: "نوع العرض مطلوب" })}
               >
@@ -224,11 +416,12 @@ export default function PropertyForm({
             </div>
 
             <div className={styles.formField}>
-              <label>
+              <label htmlFor="purpose">
                 <span className={styles.required}>*</span>
                 الغرض
               </label>
               <select
+                id="purpose"
                 className={errors.purpose ? styles.error : ""}
                 {...register("purpose", { required: "الغرض مطلوب" })}
               >
@@ -240,11 +433,12 @@ export default function PropertyForm({
             </div>
 
             <div className={styles.formField}>
-              <label>
+              <label htmlFor="bedrooms">
                 <span className={styles.required}>*</span>
                 عدد غرف النوم
               </label>
               <input
+                id="bedrooms"
                 type="number"
                 min="0"
                 placeholder="0"
@@ -257,11 +451,12 @@ export default function PropertyForm({
             </div>
 
             <div className={styles.formField}>
-              <label>
+              <label htmlFor="bathrooms">
                 <span className={styles.required}>*</span>
                 عدد دورات المياه
               </label>
               <input
+                id="bathrooms"
                 type="number"
                 min="0"
                 placeholder="0"
@@ -274,8 +469,9 @@ export default function PropertyForm({
             </div>
 
             <div className={styles.formField}>
-              <label>عدد غرف المعيشة</label>
+              <label htmlFor="living_rooms">عدد غرف المعيشة</label>
               <input
+                id="living_rooms"
                 type="number"
                 min="0"
                 placeholder="0"
@@ -284,8 +480,9 @@ export default function PropertyForm({
             </div>
 
             <div className={styles.formField}>
-              <label>عدد المطابخ</label>
+              <label htmlFor="kitchens">عدد المطابخ</label>
               <input
+                id="kitchens"
                 type="number"
                 min="0"
                 placeholder="0"
@@ -294,8 +491,9 @@ export default function PropertyForm({
             </div>
 
             <div className={styles.formField}>
-              <label>عدد الشرفات</label>
+              <label htmlFor="balconies">عدد الشرفات</label>
               <input
+                id="balconies"
                 type="number"
                 min="0"
                 placeholder="0"
@@ -304,11 +502,12 @@ export default function PropertyForm({
             </div>
 
             <div className={styles.formField}>
-              <label>
+              <label htmlFor="area_total">
                 <span className={styles.required}>*</span>
                 المساحة الإجمالية (م²)
               </label>
               <input
+                id="area_total"
                 type="text"
                 placeholder="مثال: 250"
                 className={errors.area_total ? styles.error : ""}
@@ -317,8 +516,9 @@ export default function PropertyForm({
             </div>
 
             <div className={styles.formField}>
-              <label>الطابق</label>
+              <label htmlFor="floor">الطابق</label>
               <input
+                id="floor"
                 type="number"
                 placeholder="مثال: 2"
                 {...register("floor")}
@@ -326,8 +526,9 @@ export default function PropertyForm({
             </div>
 
             <div className={styles.formField}>
-              <label>إجمالي الطوابق</label>
+              <label htmlFor="total_floors">إجمالي الطوابق</label>
               <input
+                id="total_floors"
                 type="number"
                 placeholder="مثال: 5"
                 {...register("total_floors")}
@@ -335,11 +536,12 @@ export default function PropertyForm({
             </div>
 
             <div className={styles.formField}>
-              <label>
+              <label htmlFor="furnishing">
                 <span className={styles.required}>*</span>
                 حالة الأثاث
               </label>
               <select
+                id="furnishing"
                 className={errors.furnishing ? styles.error : ""}
                 {...register("furnishing", { required: "حالة الأثاث مطلوبة" })}
               >
@@ -360,11 +562,12 @@ export default function PropertyForm({
           </h3>
           <div className={`${styles.fieldsGrid} ${styles.threeColumns}`}>
             <div className={styles.formField}>
-              <label>
+              <label htmlFor="price">
                 <span className={styles.required}>*</span>
                 السعر
               </label>
               <input
+                id="price"
                 type="text"
                 placeholder="مثال: 500000"
                 className={errors.price ? styles.error : ""}
@@ -373,11 +576,11 @@ export default function PropertyForm({
             </div>
 
             <div className={styles.formField}>
-              <label>
+              <label htmlFor="currency">
                 <span className={styles.required}>*</span>
                 العملة
               </label>
-              <select {...register("currency")}>
+              <select id="currency" {...register("currency")}>
                 <option value="SAR">ريال سعودي (SAR)</option>
                 <option value="USD">دولار أمريكي (USD)</option>
                 <option value="EUR">يورو (EUR)</option>
@@ -385,8 +588,9 @@ export default function PropertyForm({
             </div>
 
             <div className={styles.formField}>
-              <label>نسبة الخصم (%)</label>
+              <label htmlFor="discount">نسبة الخصم (%)</label>
               <input
+                id="discount"
                 type="text"
                 placeholder="مثال: 10"
                 {...register("discount")}
@@ -403,11 +607,12 @@ export default function PropertyForm({
           </h3>
           <div className={`${styles.fieldsGrid} ${styles.twoColumns}`}>
             <div className={styles.formField}>
-              <label>
+              <label htmlFor="city">
                 <span className={styles.required}>*</span>
                 المدينة
               </label>
               <input
+                id="city"
                 type="text"
                 placeholder="مثال: الرياض"
                 {...register("location.city", { required: "المدينة مطلوبة" })}
@@ -415,11 +620,12 @@ export default function PropertyForm({
             </div>
 
             <div className={styles.formField}>
-              <label>
+              <label htmlFor="district">
                 <span className={styles.required}>*</span>
                 الحي
               </label>
               <input
+                id="district"
                 type="text"
                 placeholder="مثال: العليا"
                 {...register("location.district", { required: "الحي مطلوب" })}
@@ -427,11 +633,12 @@ export default function PropertyForm({
             </div>
 
             <div className={styles.formField}>
-              <label>
+              <label htmlFor="street">
                 <span className={styles.required}>*</span>
                 الشارع
               </label>
               <input
+                id="street"
                 type="text"
                 placeholder="مثال: شارع الملك فهد"
                 {...register("location.street", { required: "الشارع مطلوب" })}
@@ -439,8 +646,9 @@ export default function PropertyForm({
             </div>
 
             <div className={styles.formField}>
-              <label>معلم قريب</label>
+              <label htmlFor="landmark">معلم قريب</label>
               <input
+                id="landmark"
                 type="text"
                 placeholder="مثال: بالقرب من برج المملكة"
                 {...register("location.landmark")}
@@ -448,8 +656,9 @@ export default function PropertyForm({
             </div>
 
             <div className={styles.formField}>
-              <label>خط العرض</label>
+              <label htmlFor="latitude">خط العرض</label>
               <input
+                id="latitude"
                 type="text"
                 placeholder="مثال: 24.7136"
                 {...register("location.latitude")}
@@ -457,8 +666,9 @@ export default function PropertyForm({
             </div>
 
             <div className={styles.formField}>
-              <label>خط الطول</label>
+              <label htmlFor="longitude">خط الطول</label>
               <input
+                id="longitude"
                 type="text"
                 placeholder="مثال: 46.6753"
                 {...register("location.longitude")}
@@ -475,7 +685,7 @@ export default function PropertyForm({
           </h3>
           <div className={styles.fieldsGrid}>
             <div className={`${styles.formField} ${styles.fullWidth}`}>
-              <label>المميزات</label>
+              <label htmlFor="features">المميزات</label>
               <div className={styles.tagsInput}>
                 {features.map((feature) => (
                   <motion.span
@@ -496,6 +706,7 @@ export default function PropertyForm({
                 ))}
                 <input
                   type="text"
+                  id="features"
                   placeholder="أضف ميزة واضغط Enter"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
@@ -515,7 +726,7 @@ export default function PropertyForm({
             </div>
 
             <div className={`${styles.formField} ${styles.fullWidth}`}>
-              <label>الوسوم</label>
+              <label htmlFor="tags">الوسوم</label>
               <div className={styles.tagsInput}>
                 {tags.map((tag) => (
                   <motion.span
@@ -533,6 +744,7 @@ export default function PropertyForm({
                 ))}
                 <input
                   type="text"
+                  id="tags"
                   placeholder="أضف وسم واضغط Enter"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
@@ -549,8 +761,8 @@ export default function PropertyForm({
             </div>
 
             <div className={styles.formField}>
-              <label>الحالة</label>
-              <select {...register("status")}>
+              <label htmlFor="status">الحالة</label>
+              <select id="status" {...register("status")}>
                 <option value="available">متاح</option>
                 <option value="sold">مباع</option>
                 <option value="rented">مؤجر</option>

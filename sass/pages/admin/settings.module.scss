@@ -1,0 +1,173 @@
+@use "@/sass/helpers/variables" as *;
+@use "@/sass/helpers/mixins" as *;
+
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.header {
+  @include adminPageHeader;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: 250px 1fr;
+  }
+}
+
+.sidebar {
+  background: $white;
+  @include radius(16px);
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  height: fit-content;
+}
+
+.tabButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: none;
+  background: transparent;
+  color: $gray-600;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 1.2rem;
+  @include transition(all, 0.2s, ease);
+  background: $secondary;
+  color: $accent-2;
+
+
+  &.active {
+    background: linear-gradient(135deg, $primary 0%, $primary-light 100%);
+    color: $white;
+  }
+}
+
+.formContainer {
+  background: $white;
+  @include radius(16px);
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 1rem;
+  color: $primary-light;
+  border-bottom: 2px solid $secondary;
+  padding-bottom: 1rem;
+  @include flex-between;
+  flex-direction: row-reverse;
+  gap: 1rem;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+
+  label {
+    color: $accent-2;
+    font-size: 1.3rem;
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+
+    .required {
+      color: $danger;
+      margin-left: 0.25rem;
+    }
+
+  }
+
+
+  input,
+  textarea,
+  select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid $dark-white;
+    @include radius(8px);
+    font-size: 1.3rem;
+    @include transition(border-color, 0.2s);
+
+    &:focus {
+      outline: none;
+      border-color: $primary-light;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+  }
+
+  textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  .error {
+    @include form-error;
+  }
+}
+
+
+.logoUpload {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  @include radius(8px);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  .logoPreview {
+    width: 120px;
+    height: 120px;
+    @include radius(8px);
+    object-fit: cover;
+    border: 2px dashed $dark-white;
+  }
+
+  .logoPreview {
+    @include flex-center;
+  }
+
+  .uploadButton {
+    background: $primary;
+    color: $white;
+    border: none;
+    padding: 0.5rem 1rem;
+    @include radius(6px);
+    cursor: pointer;
+    font-weight: 500;
+    @include transition(background-color, 0.2s, ease);
+
+    &:hover {
+      background: $primary-light;
+    }
+  }
+}
+
+.submitButton {
+  @include primaryButton;
+  width: fit-content;
+}

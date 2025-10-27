@@ -2,132 +2,29 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import {
-  Plus,
-  Filter,
-  Edit,
-  Trash2,
-  Eye,
-  MapPin,
-  Bed,
-  Bath,
-  Maximize,
-  X,
-} from "lucide-react";
+import { Plus, Filter, X, Video, Play, Home } from "lucide-react";
 import styles from "@/sass/pages/adminProperties.module.scss";
 import PropertyForm from "@/components/admin/PropertyForm";
 import { PropertyFormData } from "@/types/admin";
 import { RealEstate } from "@/types/real-estate";
+import RealEstateCard from "@/components/common/RealEstateCard";
 
-// Mock data
-const mockProperties: RealEstate[] = [
-  {
-    id: 1,
-    title: "فيلا فاخرة في حي الياسمين",
-    slug: "luxury-villa-yasmin",
-    description: "فيلا رائعة مع حديقة واسعة ومسبح خاص",
-    price: "2500000",
-    currency: "SAR",
-    discount: "0",
-    discounted_price: null,
-    discount_percentage: null,
-    type: "sale",
-    purpose: "residential",
-    property_type: "villa",
-    bedrooms: 5,
-    bathrooms: 4,
-    living_rooms: 2,
-    kitchens: 1,
-    balconies: 3,
-    area_total: "450",
-    features: ["مسبح", "حديقة", "موقف سيارات"],
-    tags: ["فاخر", "عائلي"],
-    floor: null,
-    total_floors: 2,
-    furnishing: "furnished",
-    status: "available",
-    views: 1234,
-    likes: 89,
-    is_featured: true,
-    created_at: "2024-01-15",
-    updated_at: "2024-01-15",
-    owner: {
-      id: 1,
-      name: "أحمد محمد",
-      phone: "+966501234567",
-      email: "ahmed@example.com",
-      type: "individual",
-    },
-    agency: null,
-    location: {
-      id: 1,
-      city: "الرياض",
-      district: "الياسمين",
-      street: "شارع الملك فهد",
-      latitude: "24.7136",
-      longitude: "46.6753",
-      landmark: "بالقرب من برج المملكة",
-    },
-    images: [],
-  },
-  {
-    id: 2,
-    title: "شقة عصرية في برج الفيصلية",
-    slug: "modern-apartment-faisaliah",
-    description: "شقة بإطلالة رائعة على المدينة",
-    price: "850000",
-    currency: "SAR",
-    discount: "50000",
-    discounted_price: "800000",
-    discount_percentage: "5.88",
-    type: "sale",
-    purpose: "residential",
-    property_type: "apartment",
-    bedrooms: 3,
-    bathrooms: 2,
-    living_rooms: 1,
-    kitchens: 1,
-    balconies: 1,
-    area_total: "180",
-    features: ["إطلالة بانورامية", "أمن 24 ساعة", "نادي رياضي"],
-    tags: ["عصري", "مركزي"],
-    floor: 15,
-    total_floors: 30,
-    furnishing: "semi-furnished",
-    status: "available",
-    views: 987,
-    likes: 67,
-    is_featured: false,
-    created_at: "2024-01-14",
-    updated_at: "2024-01-14",
-    owner: {
-      id: 2,
-      name: "سارة أحمد",
-      phone: "+966507654321",
-      email: "sara@example.com",
-      type: "individual",
-    },
-    agency: null,
-    location: {
-      id: 2,
-      city: "الرياض",
-      district: "العليا",
-      street: "شارع العليا العام",
-      latitude: "24.6877",
-      longitude: "46.6857",
-      landmark: "برج الفيصلية",
-    },
-    images: [],
-  },
-];
+// Updated mock data
+import { realEstateData } from "@/data/real-estate";
 
 export default function PropertiesPage() {
-  const [properties, setProperties] = useState<RealEstate[]>(mockProperties);
+  const [properties, setProperties] = useState<RealEstate[]>(realEstateData);
   const [showModal, setShowModal] = useState(false);
   const [editingProperty, setEditingProperty] = useState<RealEstate | null>(
     null
   );
   const [showFilters, setShowFilters] = useState(false);
+  const [filters, setFilters] = useState({
+    property_type: "",
+    type: "",
+    status: "",
+    city: "",
+  });
 
   const handleAddProperty = () => {
     setEditingProperty(null);
@@ -147,12 +44,46 @@ export default function PropertiesPage() {
 
   const handleSubmit = (data: PropertyFormData) => {
     console.log("Form data:", data);
-    // Here you would typically send the data to your API
     setShowModal(false);
     setEditingProperty(null);
   };
 
-  // Convert RealEstate to PropertyFormData format
+  // Handle filter changes
+  const handleFilterChange = (
+    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Apply filters to properties
+  const filteredProperties = properties.filter((property) => {
+    return (
+      (filters.property_type === "" ||
+        property.property_type === filters.property_type) &&
+      (filters.type === "" || property.type === filters.type) &&
+      (filters.status === "" || property.status === filters.status) &&
+      (filters.city === "" ||
+        property.location.city
+          .toLowerCase()
+          .includes(filters.city.toLowerCase()))
+    );
+  });
+
+  // Reset all filters
+  const resetFilters = () => {
+    setFilters({
+      property_type: "",
+      type: "",
+      status: "",
+      city: "",
+    });
+  };
+
+  // Convert RealEstate to PropertyFormData format (updated for new fields if needed)
   const convertToFormData = (
     property: RealEstate
   ): Partial<PropertyFormData> => {
@@ -186,30 +117,19 @@ export default function PropertiesPage() {
         street: property.location.street,
         latitude: property.location.latitude,
         longitude: property.location.longitude,
-        landmark: property.location.landmark ?? undefined, // Convert null to undefined
+        landmark: property.location.landmark ?? undefined,
       },
+      // Add video if form supports it
+      video_url: property.videos?.[0]?.video_url,
     };
   };
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 20,
       },
     },
   };
@@ -221,6 +141,7 @@ export default function PropertiesPage() {
         className={styles.pageHeader}
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
       >
         <div className={styles.headerLeft}>
           <h1>إدارة العقارات</h1>
@@ -256,29 +177,46 @@ export default function PropertiesPage() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
           >
             <div className={styles.filtersGrid}>
               <div className={styles.filterGroup}>
-                <label>نوع العقار</label>
-                <select>
+                <label htmlFor="property_type">نوع العقار</label>
+                <select
+                  id="property_type"
+                  name="property_type"
+                  value={filters.property_type}
+                  onChange={handleFilterChange}
+                >
                   <option value="">الكل</option>
                   <option value="apartment">شقة</option>
                   <option value="villa">فيلا</option>
-                  <option value="house">منزل</option>
-                  <option value="land">أرض</option>
+                  <option value="chalet">شاليه</option>
+                  <option value="office">مكتب</option>
+                  <option value="studio">استوديو</option>
                 </select>
               </div>
               <div className={styles.filterGroup}>
-                <label>نوع العرض</label>
-                <select>
+                <label htmlFor="type">نوع العرض</label>
+                <select
+                  id="type"
+                  name="type"
+                  value={filters.type}
+                  onChange={handleFilterChange}
+                >
                   <option value="">الكل</option>
                   <option value="sale">للبيع</option>
                   <option value="rent">للإيجار</option>
                 </select>
               </div>
               <div className={styles.filterGroup}>
-                <label>الحالة</label>
-                <select>
+                <label htmlFor="status">الحالة</label>
+                <select
+                  id="status"
+                  name="status"
+                  value={filters.status}
+                  onChange={handleFilterChange}
+                >
                   <option value="">الكل</option>
                   <option value="available">متاح</option>
                   <option value="sold">مباع</option>
@@ -286,8 +224,20 @@ export default function PropertiesPage() {
                 </select>
               </div>
               <div className={styles.filterGroup}>
-                <label>المدينة</label>
-                <input type="text" placeholder="ابحث عن مدينة..." />
+                <label htmlFor="city">المدينة</label>
+                <input
+                  type="text"
+                  id="city"
+                  name="city"
+                  value={filters.city}
+                  onChange={handleFilterChange}
+                  placeholder="ابحث عن مدينة..."
+                />
+              </div>
+              <div className={styles.filterActions}>
+                <button className={styles.resetBtn} onClick={resetFilters}>
+                  إعادة تعيين
+                </button>
               </div>
             </div>
           </motion.div>
@@ -295,86 +245,26 @@ export default function PropertiesPage() {
       </AnimatePresence>
 
       {/* Properties Grid */}
-      {properties.length > 0 ? (
+      {filteredProperties.length > 0 ? (
         <motion.div
           className={styles.propertiesGrid}
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          {properties.map((property) => (
-            <motion.div
+          {filteredProperties.slice(0, 3).map((property, index) => (
+            <RealEstateCard
+              property={property}
+              image={property.images[0].image_url}
               key={property.id}
-              className={styles.propertyCard}
-              variants={itemVariants}
-              whileHover={{ y: -5 }}
+              index={index}
             >
-              <div className={styles.propertyImage}>
-                <span
-                  className={`${styles.badge} ${
-                    property.is_featured
-                      ? styles.featured
-                      : styles[property.type]
-                  }`}
-                >
-                  {property.is_featured
-                    ? "⭐ مميز"
-                    : property.type === "sale"
-                    ? "للبيع"
-                    : "للإيجار"}
-                </span>
-              </div>
-
-              <div className={styles.propertyContent}>
-                <div className={styles.propertyHeader}>
-                  <h3 className={styles.propertyTitle}>{property.title}</h3>
-                  <div className={styles.propertyLocation}>
-                    <MapPin size={14} />
-                    {property.location.city}, {property.location.district}
-                  </div>
-                </div>
-
-                <div className={styles.propertyFeatures}>
-                  <div className={styles.feature}>
-                    <Bed size={16} />
-                    {property.bedrooms}
-                  </div>
-                  <div className={styles.feature}>
-                    <Bath size={16} />
-                    {property.bathrooms}
-                  </div>
-                  <div className={styles.feature}>
-                    <Maximize size={16} />
-                    {property.area_total} م²
-                  </div>
-                </div>
-
-                <div className={styles.propertyFooter}>
-                  <div className={styles.propertyPrice}>
-                    {property.discounted_price || property.price}{" "}
-                    {property.currency === "SAR" ? "ر.س" : property.currency}
-                  </div>
-                  <div className={styles.propertyActions}>
-                    <motion.button
-                      className={styles.editBtn}
-                      onClick={() => handleEditProperty(property)}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                    >
-                      <Edit size={18} />
-                    </motion.button>
-                    <motion.button
-                      className={styles.deleteBtn}
-                      onClick={() => handleDeleteProperty(property)}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                    >
-                      <Trash2 size={18} />
-                    </motion.button>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+              <RealEstateCard.actions
+                property={property}
+                handleEditProperty={handleEditProperty}
+                handleDeleteProperty={handleDeleteProperty}
+              />
+            </RealEstateCard>
           ))}
         </motion.div>
       ) : (
@@ -382,8 +272,11 @@ export default function PropertiesPage() {
           className={styles.emptyState}
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
         >
-          <div className={styles.emptyIcon}>🏠</div>
+          <div className={styles.emptyIcon}>
+            <Home size={80} />
+          </div>
           <h3>لا توجد عقارات</h3>
           <p>ابدأ بإضافة عقار جديد للنظام</p>
           <motion.button
@@ -413,6 +306,7 @@ export default function PropertiesPage() {
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
               onClick={(e) => e.stopPropagation()}
             >
               <div className={styles.modalHeader}>

@@ -54,7 +54,9 @@ export interface PropertyFormData {
     longitude: string;
     landmark?: string;
   };
-  videos?: string[];
+  video_url?: string;
+  videos?: File[];
+  images?: File[];
 }
 
 export interface UserFormData {

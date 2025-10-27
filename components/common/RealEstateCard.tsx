@@ -12,17 +12,24 @@ import {
   Warehouse,
   ChefHat,
   HdmiPort,
+  Edit,
+  Trash2,
 } from "lucide-react";
-import { RealEstateCardProps } from "@/types/real-estate";
+import {
+  RealEstate,
+  RealEstateActionsProps,
+  RealEstateCardProps,
+} from "@/types/real-estate";
 import styles from "@/sass/components/common/RealEstateCard.module.scss";
 import Link from "next/link";
 import useFavoritePropertiesStore from "@/store/FavoritePropertiesStore";
 
-const RealEstateCard = ({ property, index }: RealEstateCardProps) => {
-  // user favorite properties store
-  const { handleToggleFavorite, loadingIds } = useFavoritePropertiesStore();
-  const isLoading = loadingIds.includes(property.id);
-
+const RealEstateCard = ({
+  property,
+  index,
+  children,
+  image,
+}: RealEstateCardProps) => {
   const primaryImage =
     property.images.find((img) => img.is_primary) || property.images[0];
 
@@ -35,56 +42,37 @@ const RealEstateCard = ({ property, index }: RealEstateCardProps) => {
       whileHover={{ y: -5, boxShadow: "0 10px 30px rgba(0,0,0,0.1)" }}
     >
       <div className={styles.imageContainer}>
-        <Link
-          href={`/realstate/${property.id}/${property.slug}`}
-          className={styles.imageLink}
-        >
-          {primaryImage && (
-            <Image
-              src={primaryImage.image_url}
-              alt={property.title}
-              fill
-              className={styles.image}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              priority={index < 3} // Only preload first 3 images
-            />
-          )}
-        </Link>
+        {image ? (
+          <Image
+            src={image}
+            alt={property.title}
+            fill
+            className={styles.image}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            priority={index < 3}
+          />
+        ) : (
+          <Link
+            href={`/realstate/${property.id}/${property.slug}`}
+            className={styles.imageLink}
+          >
+            {primaryImage && (
+              <Image
+                src={primaryImage.image_url}
+                alt={property.title}
+                fill
+                className={styles.image}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                priority={index < 3}
+              />
+            )}
+          </Link>
+        )}
         <div className={styles.badge}>
           {property.type === "sale" ? "بيع" : "إيجار"}
         </div>
-        <button
-          className={styles.favoriteButton}
-          aria-label="إضافة للمفضلة"
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            "..."
-          ) : (
-            <Heart
-              className={styles.heartIcon}
-              onClick={() => handleToggleFavorite(property.id)}
-            />
-          )}
-        </button>
-        <Link
-          href={`https://wa.me/201555187474?text=مرحباً، أنا مهتم بالعقار: ${encodeURIComponent(
-            property.title
-          )}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.whatsappButton}
-          aria-label="تواصل عبر واتساب"
-        >
-          <MessageSquareText className={styles.whatsappIcon} />
-        </Link>
+        {/* {children} */}
 
-        <Link
-          href={`/realstate/${property.id}/${property.slug}`}
-          className={styles.detailsButton}
-        >
-          عرض التفاصيل
-        </Link>
         {property.discounted_price && (
           <div className={styles.discountBadge}>
             خصم {property.discount_percentage}
@@ -145,8 +133,86 @@ const RealEstateCard = ({ property, index }: RealEstateCardProps) => {
             ))}
           </div>
         )}
+        {children}
       </div>
     </motion.div>
+  );
+};
+
+RealEstateCard.contact = ({ property }: { property: RealEstate }) => {
+  return (
+    <Link
+      href={`https://wa.me/201555187474?text=مرحباً، أنا مهتم بالعقار: ${encodeURIComponent(
+        property.title
+      )}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={styles.whatsappButton}
+      aria-label="تواصل عبر واتساب"
+    >
+      <MessageSquareText className={styles.whatsappIcon} />
+    </Link>
+  );
+};
+
+RealEstateCard.favorite = ({ property }: { property: RealEstate }) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { handleToggleFavorite, loadingIds } = useFavoritePropertiesStore();
+  const isLoading = loadingIds.includes(property.id);
+
+  return (
+    <button
+      className={styles.favoriteButton}
+      aria-label="إضافة للمفضلة"
+      disabled={isLoading}
+    >
+      {isLoading ? (
+        "..."
+      ) : (
+        <Heart
+          className={styles.heartIcon}
+          onClick={() => handleToggleFavorite(property.id)}
+        />
+      )}
+    </button>
+  );
+};
+
+RealEstateCard.details = ({ property }: { property: RealEstate }) => {
+  return (
+    <Link
+      href={`/realstate/${property.id}/${property.slug}`}
+      className={styles.detailsButton}
+    >
+      عرض التفاصيل
+    </Link>
+  );
+};
+
+RealEstateCard.actions = ({
+  property,
+  handleEditProperty,
+  handleDeleteProperty,
+}: RealEstateActionsProps) => {
+  return (
+    <div className={styles.propertyActions}>
+      <motion.button
+        className={styles.editBtn}
+        onClick={() => handleEditProperty(property)}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        <Edit size={20} /> تعديل
+      </motion.button>
+      <motion.button
+        className={styles.deleteBtn}
+        onClick={() => handleDeleteProperty(property)}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        <Trash2 size={20} /> حذف
+      </motion.button>
+    </div>
   );
 };
 

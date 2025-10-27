@@ -73,6 +73,7 @@
     background: $white;
     @include scale(1.1);
   }
+
   &:disabled {
     @include disabled;
   }
@@ -117,7 +118,7 @@
 
 .detailsButton {
   position: absolute;
-  bottom: 12px;
+  top: 15rem;
   left: 12px;
   background: $primary;
   color: $white;
@@ -136,6 +137,8 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 }
+
+
 
 .discountBadge {
   position: absolute;
@@ -234,12 +237,45 @@
 }
 
 .feature {
-  background-color: $primary-light;
   color: $white;
-  font-size: 12px;
+  background-color: $primary-light;
+  font-size: 1.2rem;
   padding: 4px 10px;
-  border-radius: 12px;
+  @include radius(12px);
   white-space: nowrap;
+}
+
+.propertyActions {
+  border-top: 1px solid rgba($dark, 0.3);
+  margin-top: 1rem;
+  padding-top: 1rem;
+  @include flex-between;
+  gap: 0.5rem;
+
+  button {
+    color: $white;
+    font-size: 1.3rem;
+    font-weight: bold;
+    padding: 0.5rem;
+    border: none;
+    @include radius(8px);
+    cursor: pointer;
+    @include transition(all, 0.2s, ease);
+    @include flex-center;
+    gap: 0.5rem;
+
+    &:hover {
+      @include scale(1.05);
+    }
+  }
+
+  .editBtn {
+    background-color: $accent-1-dark;
+  }
+
+  .deleteBtn {
+    background-color: $danger;
+  }
 }
 
 // RTL Support
