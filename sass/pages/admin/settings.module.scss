@@ -170,4 +170,8 @@
 .submitButton {
   @include primaryButton;
   width: fit-content;
+
+  &:disabled {
+    background-color: rgba($primary, 0.5) !important;
+  }
 }

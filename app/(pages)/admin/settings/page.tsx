@@ -1,68 +1,27 @@
 "use client";
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
 import Image from "next/image";
-import {
-  Settings as SettingsIcon,
-  Save,
-  MapPin,
-  Image as ImageIcon,
-  QrCode,
-  Twitter,
-} from "lucide-react";
+import { Settings as SettingsIcon, Save, QrCode } from "lucide-react";
 import styles from "@/sass/pages/admin/settings.module.scss";
-
-interface ContactInfoFormData {
-  location: string;
-  phone: string;
-  email: string;
-  openingTime: string;
-  logo: FileList | null;
-  facebook: string;
-  twitter: string;
-  instagram: string;
-  linkedin: string;
-}
+import { SpinnerOne } from "@/components/ui/loader";
+import useAdminSettings from "@/hooks/useAdminSettings";
 
 export default function SettingsPage() {
-  const [logoPreview, setLogoPreview] = useState<string | null>(null);
-
+  // use admin settings custom hook
   const {
+    logoPreview,
+    handleLogoChange,
+    onSubmit,
     register,
     handleSubmit,
-    formState: { errors },
-    setValue,
-  } = useForm<ContactInfoFormData>({
-    defaultValues: {
-      location: "الرياض، المملكة العربية السعودية",
-      phone: "+966 50 123 4567",
-      email: "info@realestate.com",
-      openingTime: "الأحد - الخميس: 9 ص - 5 م",
-      facebook: "",
-      twitter: "",
-      instagram: "",
-      linkedin: "",
-    },
-  });
+    errors,
+    isSubmitting,
+    isDirty,
+    settings,
+    isLoading,
+  } = useAdminSettings();
 
-  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setLogoPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-      setValue("logo", e.target.files);
-    }
-  };
-
-  const onSubmit = (data: ContactInfoFormData) => {
-    console.log("Contact info submitted:", data);
-    // Here you would typically send this data to your API
-    alert("تم حفظ معلومات التواصل بنجاح!");
-  };
+  if (isLoading) return <SpinnerOne text="جاري التحميل..." />;
 
   return (
     <div className={styles.container}>
@@ -80,7 +39,7 @@ export default function SettingsPage() {
             معلومات التواصل
           </button>
         </div>
-
+        {/* <SettingForm /> */}
         <form
           onSubmit={handleSubmit(onSubmit)}
           className={styles.formContainer}
@@ -150,23 +109,23 @@ export default function SettingsPage() {
             </div>
 
             <div className={styles.formGroup}>
-              <label htmlFor="openingTime">
+              <label htmlFor="opening_hours">
                 أوقات العمل <span className={styles.required}>*</span>
               </label>
               <div>
                 <input
                   type="text"
-                  autoComplete="openingTime"
-                  id="openingTime"
+                  autoComplete="opening_hours"
+                  id="opening_hours"
                   placeholder="مثال: الأحد - الخميس: 9 ص - 5 م"
-                  {...register("openingTime", {
+                  {...register("opening_hours", {
                     required: "حقل أوقات العمل مطلوب",
                   })}
                 />
               </div>
-              {errors.openingTime && (
+              {errors.opening_hours && (
                 <span className={styles.error}>
-                  {errors.openingTime.message}
+                  {errors.opening_hours.message}
                 </span>
               )}
             </div>
@@ -185,7 +144,19 @@ export default function SettingsPage() {
                 />
               ) : (
                 <div className={styles.logoPreview}>
-                  <ImageIcon size={32} />
+                  <Image
+                    src={
+                      logoPreview ||
+                      (typeof settings.logo === "string"
+                        ? settings.logo
+                        : "/images/default-realestate-logo.webp")
+                    }
+                    alt="Logo"
+                    width={120}
+                    height={120}
+                    priority
+                    className={styles.logoPreview}
+                  />
                 </div>
               )}
               <label htmlFor="logo" className={styles.uploadButton}>
@@ -290,9 +261,18 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          <button type="submit" className={styles.submitButton}>
-            <Save size={18} />
-            حفظ التغييرات
+          <button
+            type="submit"
+            className={styles.submitButton}
+            disabled={isSubmitting || !isDirty}
+          >
+            {isSubmitting ? (
+              "جاري الحفظ..."
+            ) : (
+              <>
+                <Save size={18} /> حفظ التغييرات
+              </>
+            )}
           </button>
         </form>
       </div>
