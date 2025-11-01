@@ -1,6 +1,6 @@
 "use server";
 
-import { SettingsData } from "@/types/admin/settingsStore";
+import { SettingsData } from "@/types/admin/adminSettingsStore";
 import { revalidateTag } from "next/cache";
 import { getCookie } from "@/utils/getCookie";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;

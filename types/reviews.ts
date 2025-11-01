@@ -9,6 +9,7 @@ export interface Like {
 export interface Review {
   id: number;
   user_name: string;
+  property_title: string;
   rating: number;
   comment: string;
   created_at: string;
@@ -29,6 +30,7 @@ export interface GetReviewsResponse extends ReviewLikeResponse {
   reviews: Review[];
   has_more: boolean;
   total_reviews: number;
+  total_likes_count?: number;
 }
 
 export interface PropertyIdProps {

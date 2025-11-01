@@ -48,28 +48,6 @@
   }
 }
 
-.cta {
-  text-align: center;
-  margin-top: 2rem;
-}
-
-.ctaButton {
-  background-color: $primary;
-  color: $white;
-  border: none;
-  padding: 0.75rem 2rem;
-  @include radius(50px);
-  font-size: 1.5rem;
-  font-weight: 600;
-  cursor: pointer;
-  @include transition(all, 0.3s, ease);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  &:hover {
-    background-color: $primary-light;
-    @include translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
+.loadMoreContainer {
+  @include loadMore;
 }

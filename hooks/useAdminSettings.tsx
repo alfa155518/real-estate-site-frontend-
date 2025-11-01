@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import useSettingsStore from "@/store/admin/SettingsStore";
-import { ContactInfoFormData } from "@/types/admin/settingsStore";
+import useSettingsStore from "@/store/admin/AdminSettingsStore";
+import { ContactInfoFormData } from "@/types/admin/adminSettingsStore";
 
 export default function useAdminSettings() {
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
@@ -38,10 +38,6 @@ export default function useAdminSettings() {
 
   const onSubmit = async (data: ContactInfoFormData) => {
     await handleUpdateSettings(data);
-    reset();
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
   };
 
   return {

@@ -1,9 +1,11 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
-import getSettingsData, { updateSettingsData } from "@/action/admin/settings";
-import { SettingsData, SettingStore } from "@/types/admin/settingsStore";
+import getSettingsData, {
+  updateSettingsData,
+} from "@/action/admin/AdminSettings";
+import { SettingsData, SettingStore } from "@/types/admin/adminSettingsStore";
 
-const useSettingsStore = create<SettingStore>((set, get) => ({
+const useAdminSettingsStore = create<SettingStore>((set) => ({
   settings: {
     logo: null,
     location: "",
@@ -45,4 +47,4 @@ const useSettingsStore = create<SettingStore>((set, get) => ({
   },
 }));
 
-export default useSettingsStore;
+export default useAdminSettingsStore;

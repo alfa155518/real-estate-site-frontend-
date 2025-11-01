@@ -60,7 +60,7 @@ const Reviews = () => {
 
         {hasMore && !isLoading && (
           <motion.div
-            className={styles.cta}
+            className={styles.loadMoreContainer}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -68,7 +68,7 @@ const Reviews = () => {
           >
             <button
               onClick={loadMoreReviews}
-              className={styles.ctaButton}
+              className={styles.loadMoreButton}
               disabled={isLoading}
               aria-label="تحميل المزيد من الآراء"
             >

@@ -96,6 +96,28 @@
   -o-transform: rotateY($value);
 }
 
+@mixin animation($animation) {
+  -webkit-animation: $animation;
+  -moz-animation: $animation;
+  -ms-animation: $animation;
+  -o-animation: $animation;
+  animation: $animation;
+}
+
+@keyframes smallSpin {
+  from {
+    @include rotate(0deg);
+  }
+
+  to {
+    @include rotate(360deg);
+  }
+}
+
+@mixin smallSpinner {
+  @include animation(smallSpin 1s linear infinite);
+}
+
 @mixin grid-item($value, $gap: 1rem) {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax($value, 1fr));
@@ -453,4 +475,37 @@
       padding: 2rem;
     }
   }
+}
+
+@mixin loadMore {
+
+  text-align: center;
+  margin-top: 2rem;
+
+  .loadMoreButton {
+    background-color: $primary;
+    color: $white;
+    border: none;
+    padding: 0.75rem 2rem;
+    @include radius(50px);
+    font-size: 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    @include transition(all, 0.3s, ease);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &:hover {
+      background-color: $primary-light;
+      @include translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    &:disabled {
+      @include disabled;
+    }
+  }
+
+  @content;
 }

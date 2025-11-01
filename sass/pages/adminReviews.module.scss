@@ -11,6 +11,7 @@
   }
 }
 
+
 // Main container
 .usersPage {
   padding: 1.5rem;
@@ -213,15 +214,28 @@
         cursor: pointer;
         @include transition(all, 0.1s);
 
+        .smallSpinner {
+          @include smallSpinner;
+        }
+
         &.deleteBtn {
           background-color: rgba(239, 68, 68, 0.1);
           color: $danger;
 
-          &:hover {
-            background-color: rgba(239, 68, 68, 0.2);
-          }
+          // &:hover {
+          //   background-color: rgba(239, 68, 68, 0.2);
+          // }
+        }
+
+        &:disabled {
+          @include disabled;
         }
       }
     }
+
   }
+}
+
+.loadMoreContainer {
+  @include loadMore;
 }
