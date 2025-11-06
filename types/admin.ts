@@ -1,16 +1,3 @@
-export interface AdminUser {
-  id: number;
-  name: string;
-  email: string;
-  role: 'admin' | 'moderator' | 'user';
-  avatar?: string;
-  phone?: string;
-  address?: string;
-  created_at: string;
-  updated_at: string;
-  is_active: boolean;
-}
-
 export interface DashboardStats {
   totalProperties: number;
   totalUsers: number;
@@ -59,14 +46,7 @@ export interface PropertyFormData {
   images?: File[];
 }
 
-export interface UserFormData {
-  name: string;
-  email: string;
-  phone: string;
-  role: 'admin' | 'moderator' | 'user';
-  address: string;
-  is_active: boolean;
-}
+
 
 export interface AdminTableColumn<T> {
   key: keyof T | string;

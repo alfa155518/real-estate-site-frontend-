@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Star, ThumbsUp, Trash2, Search, Loader2 } from "lucide-react";
 import { ReviewRowSkeleton } from "@/components/common/ReviewRowSkeleton";
 import { PresentationalReviewsProps } from "@/types/admin/adminReviews";
-import styles from "@/sass/pages/adminReviews.module.scss";
+import styles from "@/sass/pages/admin/reviews.module.scss";
 
 export default function PresentationalReviews({
   totalReviews,

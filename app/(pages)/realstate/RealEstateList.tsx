@@ -30,7 +30,11 @@ const RealEstateList = ({ properties, loading }: RealEstateListProps) => {
     >
       {properties.map((property, index) => (
         <motion.div key={property.id} variants={item}>
-          <RealEstateCard property={property} index={index} />
+          <RealEstateCard property={property} index={index}>
+            <RealEstateCard.contact property={property} />
+            <RealEstateCard.favorite property={property} />
+            <RealEstateCard.details property={property} />
+          </RealEstateCard>
         </motion.div>
       ))}
     </motion.div>

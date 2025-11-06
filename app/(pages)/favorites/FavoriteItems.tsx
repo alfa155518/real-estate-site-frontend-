@@ -19,7 +19,11 @@ export default function FavoriteItems() {
             transition={{ delay: index * 0.05 }}
             layout
           >
-            <RealEstateCard property={property} index={index} />
+            <RealEstateCard property={property} index={index}>
+              <RealEstateCard.contact property={property} />
+              <RealEstateCard.favorite property={property} />
+              <RealEstateCard.details property={property} />
+            </RealEstateCard>
             <motion.button
               className={styles.removeButton}
               onClick={() => handleToggleFavorite(property.id)}

@@ -17,7 +17,7 @@ import {
   Plus,
 } from "lucide-react";
 import { useState, useRef, ChangeEvent } from "react";
-import styles from "@/sass/components/propertyForm.module.scss";
+import styles from "@/sass/components/common/userAndPropertyForm.module.scss";
 import { PropertyFormData } from "@/types/admin";
 import Image from "next/image";
 

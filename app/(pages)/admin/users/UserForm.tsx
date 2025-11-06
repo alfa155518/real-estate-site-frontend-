@@ -1,71 +1,28 @@
-"use client";
-
 import { useForm } from "react-hook-form";
-import { motion } from "framer-motion";
-import { User, Shield, AlertCircle, Save, X } from "lucide-react";
-import styles from "@/sass/components/propertyForm.module.scss";
-import { UserFormData } from "@/types/admin";
-
-interface UserFormProps {
-  initialData?: Partial<UserFormData>;
-  onSubmit: (data: UserFormData) => void;
-  onCancel: () => void;
-  isLoading?: boolean;
-}
+import { User, Shield, AlertCircle, Save, X, Loader2 } from "lucide-react";
+import { UserFormData, UserFormProps } from "@/types/admin/adminManageUsers";
+import styles from "@/sass/components/common/userAndPropertyForm.module.scss";
 
 export default function UserForm({
   initialData,
   onSubmit,
   onCancel,
-  isLoading = false,
 }: UserFormProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty, isSubmitting },
   } = useForm<UserFormData>({
-    defaultValues: initialData || {
-      role: "user",
-      is_active: true,
-    },
+    defaultValues: initialData,
   });
 
   const isEditMode = !!initialData?.email;
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring" as const,
-        stiffness: 300,
-        damping: 24,
-      },
-    },
-  };
-
   return (
-    <motion.form
-      className={styles.propertyForm}
-      onSubmit={handleSubmit(onSubmit)}
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
+    <form className={styles.propertyForm} onSubmit={handleSubmit(onSubmit)}>
       <div className={styles.formGrid}>
         {/* Personal Information */}
-        <motion.div className={styles.formSection} variants={itemVariants}>
+        <div className={styles.formSection}>
           <h3 className={styles.sectionTitle}>
             <User className={styles.sectionIcon} size={20} />
             المعلومات الشخصية
@@ -79,6 +36,7 @@ export default function UserForm({
               <input
                 type="text"
                 id="name"
+                disabled={isEditMode}
                 autoComplete="name"
                 placeholder="أدخل الاسم الكامل"
                 className={errors.name ? styles.error : ""}
@@ -91,14 +49,10 @@ export default function UserForm({
                 })}
               />
               {errors.name && (
-                <motion.div
-                  className={styles.errorMessage}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                >
+                <div className={styles.errorMessage}>
                   <AlertCircle size={14} />
                   {errors.name.message}
-                </motion.div>
+                </div>
               )}
             </div>
 
@@ -123,14 +77,10 @@ export default function UserForm({
                 })}
               />
               {errors.email && (
-                <motion.div
-                  className={styles.errorMessage}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                >
+                <div className={styles.errorMessage}>
                   <AlertCircle size={14} />
                   {errors.email.message}
-                </motion.div>
+                </div>
               )}
             </div>
 
@@ -141,6 +91,7 @@ export default function UserForm({
                 id="phone"
                 autoComplete="phone"
                 placeholder="+966 5XX XXX XXX"
+                disabled={isEditMode}
                 {...register("phone", {
                   pattern: {
                     value: /^[\d\s+()-]+$/,
@@ -149,41 +100,34 @@ export default function UserForm({
                 })}
               />
               {errors.phone && (
-                <motion.div
-                  className={styles.errorMessage}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                >
+                <div className={styles.errorMessage}>
                   <AlertCircle size={14} />
                   {errors.phone.message}
-                </motion.div>
+                </div>
               )}
             </div>
             <div className={styles.formField}>
               <label htmlFor="address">العنوان</label>
               <input
                 type="text"
+                disabled={isEditMode}
                 id="address"
                 autoComplete="address"
                 placeholder="العنوان"
                 {...register("address")}
               />
               {errors.address && (
-                <motion.div
-                  className={styles.errorMessage}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                >
+                <div className={styles.errorMessage}>
                   <AlertCircle size={14} />
                   {errors.address.message}
-                </motion.div>
+                </div>
               )}
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/*  Role */}
-        <motion.div className={styles.formSection} variants={itemVariants}>
+        <div className={styles.formSection}>
           <h3 className={styles.sectionTitle}>
             <Shield className={styles.sectionIcon} size={20} />
             الصلاحيات
@@ -200,65 +144,43 @@ export default function UserForm({
                 {...register("role", { required: "الدور الوظيفي مطلوب" })}
               >
                 <option value="user">مستخدم عادي</option>
-                <option value="moderator">مشرف</option>
                 <option value="admin">مدير</option>
               </select>
               {errors.role && (
-                <motion.div
-                  className={styles.errorMessage}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                >
+                <div className={styles.errorMessage}>
                   <AlertCircle size={14} />
                   {errors.role.message}
-                </motion.div>
+                </div>
               )}
             </div>
-
-            <div className={styles.formField}>
-              <label htmlFor="is_active">حالة الحساب</label>
-              <div className={styles.checkboxGroup}>
-                <div className={styles.checkboxItem}>
-                  <input
-                    type="checkbox"
-                    id="is_active"
-                    autoComplete="is_active"
-                    {...register("is_active")}
-                  />
-                  <label htmlFor="is_active">حساب نشط</label>
-                </div>
-              </div>
-              <div className={styles.hint}>
-                إذا تم إلغاء التفعيل، لن يتمكن المستخدم من تسجيل الدخول
-              </div>
-            </div>
           </div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Form Actions */}
-      <motion.div className={styles.formActions} variants={itemVariants}>
-        <motion.button
+      <div className={styles.formActions}>
+        <button
           type="button"
           className={styles.cancelBtn}
+          disabled={isSubmitting}
           onClick={onCancel}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
         >
           <X size={18} />
           إلغاء
-        </motion.button>
-        <motion.button
+        </button>
+        <button
           type="submit"
           className={styles.submitBtn}
-          disabled={isLoading}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          disabled={isSubmitting || !isDirty}
         >
           <Save size={18} />
-          {isLoading ? "جاري الحفظ..." : "حفظ المستخدم"}
-        </motion.button>
-      </motion.div>
-    </motion.form>
+          {isSubmitting ? (
+            <Loader2 size={18} className={styles.smallSpinner} />
+          ) : (
+            "حفظ المستخدم"
+          )}
+        </button>
+      </div>
+    </form>
   );
 }

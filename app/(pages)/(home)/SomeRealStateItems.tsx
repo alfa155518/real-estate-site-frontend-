@@ -70,7 +70,11 @@ const SomeRealStateItems = () => {
                     type: property.type as "sale" | "rent",
                   }}
                   index={index % 4}
-                />
+                >
+                  <RealEstateCard.contact property={property} />
+                  <RealEstateCard.favorite property={property} />
+                  <RealEstateCard.details property={property} />
+                </RealEstateCard>
               ))}
             </div>
 

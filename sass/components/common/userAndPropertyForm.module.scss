@@ -95,6 +95,10 @@
             }
           }
 
+          select {
+            cursor: pointer;
+          }
+
           textarea {
             min-height: 120px;
             resize: vertical;
@@ -296,11 +300,15 @@
           box-shadow: 0 6px 20px rgba($primary, 0.5);
         }
 
-        &:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
-          transform: none;
+        .smallSpinner {
+          @include smallSpinner;
         }
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
       }
     }
   }
