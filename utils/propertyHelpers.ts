@@ -1,6 +1,6 @@
 export type PropertyType = 'apartment' | 'duplex' | 'studio' | 'villa';
 export type PurposeType = 'residential' | 'commercial' | 'other';
-export type FurnishingType = 'furnished' | 'semi_furnished' | 'unfurnished' | 'not_specified';
+export type FurnishingType = 'furnished' | 'semi-furnished' | 'unfurnished' | 'not_specified';
 
 export const getPropertyTypeLabel = (type: PropertyType): string => {
   const typeMap: Record<PropertyType, string> = {
@@ -26,7 +26,7 @@ export const getPurposeLabel = (purpose: PurposeType): string => {
 export const getFurnishingLabel = (furnishing: FurnishingType): string => {
   const furnishingMap: Record<FurnishingType, string> = {
     furnished: 'مفروش',
-    semi_furnished: 'نصف مفروش',
+    'semi-furnished': 'نصف مفروش',
     unfurnished: 'غير مفروش',
     not_specified: 'غير محدد'
   };

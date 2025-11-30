@@ -1,13 +1,32 @@
-$primary: #1e3a8a;
-$primary-light: #3b82f6;
-$secondary: #f3f4f6;
-$accent-1: #f59e0b;
-$accent-1-dark: #b45309;
-$accent-2: #1f2937;
-$danger: #ef4444;
-$success: #22c55d;
-$white: #fff;
-$dark-white: #e5e7eb;
-$dark: #333;
-$gray-600: #4b5563;
-$gold: #fbd91b;
+// Primary Colors - Deep Navy & Vibrant Blue
+$primary: #0f172a; // Deep navy for professional look
+$primary-light: #2563eb; // Vibrant blue for interactive elements
+
+// Secondary & Background Colors
+$secondary: #f8fafc; // Soft off-white background
+$secondary-dark: #e2e8f0; // Subtle borders and dividers
+
+// Accent Colors
+$accent-1: #f97316; // Warm orange for highlights
+$accent-1-dark: #c2410c; // Deep orange for hover states
+$accent-2: #0ea5e9; // Sky blue for secondary actions
+$accent-3: #8b5cf6; // Purple for special features
+
+// Status Colors
+$danger: #dc2626; // Strong red for errors/delete
+$success: #16a34a; // Fresh green for success states
+$warning: #eab308; // Amber for warnings
+$info: #0284c7; // Blue for informational messages
+
+// Neutral Colors
+$white: #ffffff;
+$dark-white: #f1f5f9; // Very light gray
+$light-gray: #cbd5e1; // Light gray for borders
+$gray-600: #475569; // Medium gray for secondary text
+$dark: #1e293b; // Dark slate for primary text
+$black: #020617; // Near black for emphasis
+
+// Special Colors
+$gold: #fbbf24; // Refined gold for premium features
+$gradient-primary: linear-gradient(135deg, #0f172a 0%, #2563eb 100%);
+$gradient-accent: linear-gradient(135deg, #f97316 0%, #fb923c 100%);

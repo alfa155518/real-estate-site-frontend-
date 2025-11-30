@@ -7,8 +7,6 @@ export default function useProperty(property: Property) {
     "details"
   );
 
-  const discount = +property?.discount;
-
   //  Control gallery image
   const nextImage = () => {
     setCurrentImageIndex((prevIndex) =>
@@ -63,7 +61,6 @@ export default function useProperty(property: Property) {
     activeTab,
     setActiveTab,
     handleShareProperty,
-    discount,
     formattedAddress,
   };
 }

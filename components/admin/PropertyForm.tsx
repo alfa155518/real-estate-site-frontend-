@@ -1,7 +1,5 @@
-"use client";
-
-import { useForm, Controller, useFieldArray } from "react-hook-form";
-import { motion, AnimatePresence } from "framer-motion";
+import { useForm } from "react-hook-form";
+import { motion } from "framer-motion";
 import {
   Building2,
   MapPin,
@@ -13,142 +11,63 @@ import {
   AlertCircle,
   Save,
   Video as VideoIcon,
-  Trash2,
-  Plus,
 } from "lucide-react";
-import { useState, useRef, ChangeEvent } from "react";
-import styles from "@/sass/components/common/userAndPropertyForm.module.scss";
-import { PropertyFormData } from "@/types/admin";
 import Image from "next/image";
+import { PropertyData, PropertyFormProps } from "@/types/admin/adminPropertiesStore";
+import useAdminPropertiesForm from "@/hooks/useAdminPropertiesForm";
+import styles from "@/sass/components/common/userAndPropertyForm.module.scss";
 
-interface PropertyFormProps {
-  initialData?: Partial<PropertyFormData>;
-  onSubmit: (data: PropertyFormData) => void;
-  onCancel: () => void;
-  isLoading?: boolean;
-}
+
+
 
 export default function PropertyForm({
   initialData,
   onSubmit,
   onCancel,
-  isLoading = false,
 }: PropertyFormProps) {
   const {
     register,
     handleSubmit,
-    control,
     watch,
     setValue,
-    formState: { errors },
-  } = useForm<PropertyFormData>({
+    formState: { errors, isSubmitting, isDirty },
+  } = useForm<PropertyData>({
     defaultValues: initialData || {
       type: "sale",
-      currency: "SAR",
       features: [],
       tags: [],
       is_featured: false,
     },
   });
 
-  const features = watch("features") || [];
-  const tags = watch("tags") || [];
-  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-  const [videoPreviews, setVideoPreviews] = useState<string[]>([]);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const videoInputRef = useRef<HTMLInputElement>(null);
+  // Register images field with validation
+  register("images", {
+    validate: (value) => {
+      // Only require images when creating a new property (no initialData)
+      if (!initialData && (!value || value.length === 0)) {
+        return "يجب تحميل صورة واحدة على الأقل للعقار";
+      }
+      return true;
+    },
+  });
 
-  const addFeature = (feature: string) => {
-    if (feature && !features.includes(feature)) {
-      setValue("features", [...features, feature]);
-    }
-  };
+  // Use useAdminPropertiesForm custom hook with form methods
+  const {
+    handleImageChange,
+    handleRemoveImage,
+    handleVideoChange,
+    handleRemoveVideo,
+    videoInputRef,
+    fileInputRef,
+    imagePreviews,
+    videoPreviews,
+    features,
+    tags,
+    addFeature,
+    removeFeature,
+    addTag,
+    removeTag } = useAdminPropertiesForm({ initialData, setValue, watch });
 
-  const removeFeature = (feature: string) => {
-    setValue(
-      "features",
-      features.filter((f) => f !== feature)
-    );
-  };
-
-  const addTag = (tag: string) => {
-    if (tag && !tags.includes(tag)) {
-      setValue("tags", [...tags, tag]);
-    }
-  };
-
-  const removeTag = (tag: string) => {
-    setValue(
-      "tags",
-      tags.filter((t) => t !== tag)
-    );
-  };
-
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files) return;
-
-    const newImagePreviews: string[] = [];
-    const fileList = Array.from(files);
-
-    fileList.forEach((file) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        newImagePreviews.push(reader.result as string);
-        if (newImagePreviews.length === fileList.length) {
-          setImagePreviews((prev) => [...prev, ...newImagePreviews]);
-          // Update form data with new files
-          const currentImages = watch("images") || [];
-          setValue("images", [...currentImages, ...fileList]);
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-  };
-
-  const handleRemoveImage = (index: number) => {
-    const newPreviews = [...imagePreviews];
-    newPreviews.splice(index, 1);
-    setImagePreviews(newPreviews);
-
-    const currentImages = watch("images") || [];
-    const newImages = [...currentImages];
-    newImages.splice(index, 1);
-    setValue("images", newImages);
-  };
-
-  const handleVideoChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files) return;
-
-    const newVideoPreviews: string[] = [];
-    const fileList = Array.from(files);
-
-    fileList.forEach((file) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        newVideoPreviews.push(reader.result as string);
-        if (newVideoPreviews.length === fileList.length) {
-          setVideoPreviews((prev) => [...prev, ...newVideoPreviews]);
-          // Update form data with new video files
-          const currentVideos = watch("videos") || [];
-          setValue("videos", [...currentVideos, ...fileList]);
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-  };
-
-  const handleRemoveVideo = (index: number) => {
-    const newPreviews = [...videoPreviews];
-    newPreviews.splice(index, 1);
-    setVideoPreviews(newPreviews);
-
-    const currentVideos = watch("videos") || [];
-    const newVideos = [...currentVideos];
-    newVideos.splice(index, 1);
-    setValue("videos", newVideos);
-  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -156,19 +75,6 @@ export default function PropertyForm({
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring" as const,
-        stiffness: 300,
-        damping: 24,
       },
     },
   };
@@ -183,7 +89,7 @@ export default function PropertyForm({
     >
       <div className={styles.formGrid}>
         {/* Media Upload */}
-        <motion.div className={styles.formSection} variants={itemVariants}>
+        <motion.div className={styles.formSection}>
           <h3 className={styles.sectionTitle}>
             <ImageIcon className={styles.sectionIcon} size={20} />
             الوسائط
@@ -192,18 +98,21 @@ export default function PropertyForm({
             {/* Image Upload */}
             <div className={`${styles.formField} ${styles.fullWidth}`}>
               <label>
-                <span className={styles.required}>*</span>
+                {!initialData && <span className={styles.required}>*</span>}
                 صور العقار
               </label>
               <div className={styles.uploadContainer}>
                 <input
                   type="file"
                   id="property-images"
-                  name="images"
                   className={styles.fileInput}
                   accept="image/*"
                   multiple
-                  onChange={handleImageChange}
+                  onChange={(e) => {
+                    handleImageChange(e);
+                    // Manually trigger validation
+                    setValue("images", watch("images") || [], { shouldValidate: true });
+                  }}
                   ref={fileInputRef}
                 />
                 <label
@@ -214,10 +123,21 @@ export default function PropertyForm({
                   <span>اختر الصور</span>
                 </label>
                 <span className={styles.hint}>
-                  يمكنك تحميل حتى 10 صور (JPG, PNG, WEBP) بحد أقصى 5 ميجابايت
-                  لكل صورة
+                  {!initialData
+                    ? "يمكنك تحميل حتى 10 صور (JPG, PNG, WEBP) بحد أقصى 5 ميجابايت لكل صورة"
+                    : "اختياري - يمكنك تحميل صور جديدة أو الاحتفاظ بالصور الحالية"}
                 </span>
               </div>
+              {errors.images && (
+                <motion.div
+                  className={styles.errorMessage}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <AlertCircle size={14} />
+                  {errors.images.message as string}
+                </motion.div>
+              )}
               {/* Image Previews */}
               {imagePreviews.length > 0 && (
                 <div className={styles.imagePreviews}>
@@ -296,7 +216,7 @@ export default function PropertyForm({
         </motion.div>
 
         {/* Basic Information */}
-        <motion.div className={styles.formSection} variants={itemVariants}>
+        <motion.div className={styles.formSection} >
           <h3 className={styles.sectionTitle}>
             <FileText className={styles.sectionIcon} size={20} />
             المعلومات الأساسية
@@ -313,10 +233,10 @@ export default function PropertyForm({
                 placeholder="أدخل عنوان العقار"
                 className={errors.title ? styles.error : ""}
                 {...register("title", {
-                  required: "عنوان العقار مطلوب",
-                  minLength: {
-                    value: 10,
-                    message: "العنوان يجب أن يكون 10 أحرف على الأقل",
+                  required: "العنوان مطلوب.",
+                  maxLength: {
+                    value: 255,
+                    message: "العنوان يجب ألا يتجاوز 255 حرفًا.",
                   },
                 })}
               />
@@ -333,6 +253,34 @@ export default function PropertyForm({
             </div>
 
             <div className={`${styles.formField} ${styles.fullWidth}`}>
+              <label htmlFor="owner_id">
+                <span className={styles.required}>*</span>
+                معرف المالك
+              </label>
+              <input
+                type="number"
+                id="owner_id"
+                placeholder="أدخل معرف المالك"
+                className={errors.owner_id ? styles.error : ""}
+                {...register("owner_id", {
+                  required: "معرف المالك مطلوب.",
+                  valueAsNumber: true,
+                  min: { value: 1, message: "معرف المالك يجب أن يكون رقم صحيح." },
+                })}
+              />
+              {errors.owner_id && (
+                <motion.div
+                  className={styles.errorMessage}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <AlertCircle size={14} />
+                  {errors.owner_id.message}
+                </motion.div>
+              )}
+            </div>
+
+            <div className={`${styles.formField} ${styles.fullWidth}`}>
               <label htmlFor="description">
                 <span className={styles.required}>*</span>
                 الوصف
@@ -342,11 +290,7 @@ export default function PropertyForm({
                 placeholder="أدخل وصف تفصيلي للعقار"
                 className={errors.description ? styles.error : ""}
                 {...register("description", {
-                  required: "الوصف مطلوب",
-                  minLength: {
-                    value: 50,
-                    message: "الوصف يجب أن يكون 50 حرف على الأقل",
-                  },
+                  required: "الوصف مطلوب.",
                 })}
               />
               {errors.description && (
@@ -364,7 +308,7 @@ export default function PropertyForm({
         </motion.div>
 
         {/* Property Details */}
-        <motion.div className={styles.formSection} variants={itemVariants}>
+        <motion.div className={styles.formSection} >
           <h3 className={styles.sectionTitle}>
             <Building2 className={styles.sectionIcon} size={20} />
             تفاصيل العقار
@@ -378,7 +322,7 @@ export default function PropertyForm({
               <select
                 id="property_type"
                 className={errors.property_type ? styles.error : ""}
-                {...register("property_type", { required: "نوع العقار مطلوب" })}
+                {...register("property_type", { required: "نوع العقار مطلوب." })}
               >
                 <option value="">اختر نوع العقار</option>
                 <option value="apartment">شقة</option>
@@ -408,7 +352,7 @@ export default function PropertyForm({
               <select
                 id="type"
                 className={errors.type ? styles.error : ""}
-                {...register("type", { required: "نوع العرض مطلوب" })}
+                {...register("type", { required: "نوع العملية مطلوب." })}
               >
                 <option value="sale">للبيع</option>
                 <option value="rent">للإيجار</option>
@@ -423,13 +367,23 @@ export default function PropertyForm({
               <select
                 id="purpose"
                 className={errors.purpose ? styles.error : ""}
-                {...register("purpose", { required: "الغرض مطلوب" })}
+                {...register("purpose", { required: "الغرض مطلوب." })}
               >
                 <option value="">اختر الغرض</option>
                 <option value="residential">سكني</option>
                 <option value="commercial">تجاري</option>
                 <option value="industrial">صناعي</option>
               </select>
+              {errors.purpose && (
+                <motion.div
+                  className={styles.errorMessage}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <AlertCircle size={14} />
+                  {errors.purpose.message}
+                </motion.div>
+              )}
             </div>
 
             <div className={styles.formField}>
@@ -440,14 +394,25 @@ export default function PropertyForm({
               <input
                 id="bedrooms"
                 type="number"
-                min="0"
-                placeholder="0"
+                min="1"
+                placeholder="1"
                 className={errors.bedrooms ? styles.error : ""}
                 {...register("bedrooms", {
-                  required: "عدد غرف النوم مطلوب",
-                  min: { value: 0, message: "القيمة يجب أن تكون 0 أو أكثر" },
+                  required: "عدد الغرف مطلوب.",
+                  valueAsNumber: true,
+                  min: { value: 1, message: "عدد الغرف لا يمكن أن يكون أقل من 1." },
                 })}
               />
+              {errors.bedrooms && (
+                <motion.div
+                  className={styles.errorMessage}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <AlertCircle size={14} />
+                  {errors.bedrooms.message}
+                </motion.div>
+              )}
             </div>
 
             <div className={styles.formField}>
@@ -458,47 +423,112 @@ export default function PropertyForm({
               <input
                 id="bathrooms"
                 type="number"
-                min="0"
-                placeholder="0"
+                min="1"
+                placeholder="1"
                 className={errors.bathrooms ? styles.error : ""}
                 {...register("bathrooms", {
-                  required: "عدد دورات المياه مطلوب",
-                  min: { value: 0, message: "القيمة يجب أن تكون 0 أو أكثر" },
+                  required: "عدد الحمامات مطلوب.",
+                  valueAsNumber: true,
+                  min: { value: 1, message: "عدد الحمامات لا يمكن أن يكون أقل من 1." },
                 })}
               />
+              {errors.bathrooms && (
+                <motion.div
+                  className={styles.errorMessage}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <AlertCircle size={14} />
+                  {errors.bathrooms.message}
+                </motion.div>
+              )}
             </div>
 
             <div className={styles.formField}>
-              <label htmlFor="living_rooms">عدد غرف المعيشة</label>
+              <label htmlFor="living_rooms">
+                <span className={styles.required}>*</span>
+                عدد غرف المعيشة
+              </label>
               <input
                 id="living_rooms"
                 type="number"
-                min="0"
-                placeholder="0"
-                {...register("living_rooms")}
+                min="1"
+                placeholder="1"
+                className={errors.living_rooms ? styles.error : ""}
+                {...register("living_rooms", {
+                  required: "عدد غرف المعيشة مطلوب.",
+                  valueAsNumber: true,
+                  min: { value: 1, message: "عدد غرف المعيشة لا يمكن أن يكون أقل من 1." },
+                })}
               />
+              {errors.living_rooms && (
+                <motion.div
+                  className={styles.errorMessage}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <AlertCircle size={14} />
+                  {errors.living_rooms.message}
+                </motion.div>
+              )}
             </div>
 
             <div className={styles.formField}>
-              <label htmlFor="kitchens">عدد المطابخ</label>
+              <label htmlFor="kitchens">
+                <span className={styles.required}>*</span>
+                عدد المطابخ
+              </label>
               <input
                 id="kitchens"
                 type="number"
-                min="0"
-                placeholder="0"
-                {...register("kitchens")}
+                min="1"
+                placeholder="1"
+                className={errors.kitchens ? styles.error : ""}
+                {...register("kitchens", {
+                  required: "عدد المطابخ مطلوب.",
+                  valueAsNumber: true,
+                  min: { value: 1, message: "عدد المطابخ لا يمكن أن يكون أقل من 1." },
+                })}
               />
+              {errors.kitchens && (
+                <motion.div
+                  className={styles.errorMessage}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <AlertCircle size={14} />
+                  {errors.kitchens.message}
+                </motion.div>
+              )}
             </div>
 
             <div className={styles.formField}>
-              <label htmlFor="balconies">عدد الشرفات</label>
+              <label htmlFor="balconies">
+                <span className={styles.required}>*</span>
+                عدد الشرفات
+              </label>
               <input
                 id="balconies"
                 type="number"
                 min="0"
                 placeholder="0"
-                {...register("balconies")}
+                className={errors.balconies ? styles.error : ""}
+                {...register("balconies", {
+                  required: "عدد الشرفات مطلوب.",
+                  valueAsNumber: true,
+                  min: { value: 0, message: "عدد الشرفات لا يمكن أن يكون أقل من 0." },
+                })}
               />
+              {errors.balconies && (
+                <motion.div
+                  className={styles.errorMessage}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <AlertCircle size={14} />
+                  {errors.balconies.message}
+                </motion.div>
+              )}
             </div>
 
             <div className={styles.formField}>
@@ -508,11 +538,25 @@ export default function PropertyForm({
               </label>
               <input
                 id="area_total"
-                type="text"
+                type="number"
                 placeholder="مثال: 250"
                 className={errors.area_total ? styles.error : ""}
-                {...register("area_total", { required: "المساحة مطلوبة" })}
+                {...register("area_total", {
+                  required: "المساحة الإجمالية مطلوبة.",
+                  valueAsNumber: true,
+                  min: { value: 30, message: "المساحة يجب أن تكون 30 متر مربع على الأقل." },
+                })}
               />
+              {errors.area_total && (
+                <motion.div
+                  className={styles.errorMessage}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <AlertCircle size={14} />
+                  {errors.area_total.message}
+                </motion.div>
+              )}
             </div>
 
             <div className={styles.formField}>
@@ -521,8 +565,22 @@ export default function PropertyForm({
                 id="floor"
                 type="number"
                 placeholder="مثال: 2"
-                {...register("floor")}
+                className={errors.floor ? styles.error : ""}
+                {...register("floor", {
+                  valueAsNumber: true,
+                  min: { value: 0, message: "رقم الدور لا يمكن أن يكون سالب." },
+                })}
               />
+              {errors.floor && (
+                <motion.div
+                  className={styles.errorMessage}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <AlertCircle size={14} />
+                  {errors.floor.message}
+                </motion.div>
+              )}
             </div>
 
             <div className={styles.formField}>
@@ -531,8 +589,22 @@ export default function PropertyForm({
                 id="total_floors"
                 type="number"
                 placeholder="مثال: 5"
-                {...register("total_floors")}
+                className={errors.total_floors ? styles.error : ""}
+                {...register("total_floors", {
+                  valueAsNumber: true,
+                  min: { value: 1, message: "إجمالي الأدوار يجب أن يكون 1 أو أكثر." },
+                })}
               />
+              {errors.total_floors && (
+                <motion.div
+                  className={styles.errorMessage}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <AlertCircle size={14} />
+                  {errors.total_floors.message}
+                </motion.div>
+              )}
             </div>
 
             <div className={styles.formField}>
@@ -543,7 +615,7 @@ export default function PropertyForm({
               <select
                 id="furnishing"
                 className={errors.furnishing ? styles.error : ""}
-                {...register("furnishing", { required: "حالة الأثاث مطلوبة" })}
+                {...register("furnishing", { required: "حالة الأثاث مطلوبة." })}
               >
                 <option value="">اختر حالة الأثاث</option>
                 <option value="furnished">مفروش</option>
@@ -555,7 +627,7 @@ export default function PropertyForm({
         </motion.div>
 
         {/* Price Information */}
-        <motion.div className={styles.formSection} variants={itemVariants}>
+        <motion.div className={styles.formSection} >
           <h3 className={styles.sectionTitle}>
             <DollarSign className={styles.sectionIcon} size={20} />
             معلومات السعر
@@ -568,39 +640,40 @@ export default function PropertyForm({
               </label>
               <input
                 id="price"
-                type="text"
+                type="number"
                 placeholder="مثال: 500000"
                 className={errors.price ? styles.error : ""}
-                {...register("price", { required: "السعر مطلوب" })}
+                {...register("price", {
+                  required: "السعر مطلوب.",
+                  valueAsNumber: true,
+                  min: { value: 100000, message: "السعر يجب أن يكون 100000 على الأقل." },
+                })}
               />
+              {errors.price && (
+                <motion.div
+                  className={styles.errorMessage}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <AlertCircle size={14} />
+                  {errors.price.message}
+                </motion.div>
+              )}
             </div>
-
             <div className={styles.formField}>
-              <label htmlFor="currency">
-                <span className={styles.required}>*</span>
-                العملة
-              </label>
-              <select id="currency" {...register("currency")}>
-                <option value="SAR">ريال سعودي (SAR)</option>
-                <option value="USD">دولار أمريكي (USD)</option>
-                <option value="EUR">يورو (EUR)</option>
-              </select>
-            </div>
-
-            <div className={styles.formField}>
-              <label htmlFor="discount">نسبة الخصم (%)</label>
+              <label htmlFor="discounted_price">السعر قبل الخصم</label>
               <input
-                id="discount"
+                id="discounted_price"
                 type="text"
-                placeholder="مثال: 10"
-                {...register("discount")}
+                placeholder="مثال: 1000000"
+                {...register("discounted_price")}
               />
             </div>
           </div>
         </motion.div>
 
         {/* Location */}
-        <motion.div className={styles.formSection} variants={itemVariants}>
+        <motion.div className={styles.formSection}>
           <h3 className={styles.sectionTitle}>
             <MapPin className={styles.sectionIcon} size={20} />
             الموقع
@@ -615,8 +688,18 @@ export default function PropertyForm({
                 id="city"
                 type="text"
                 placeholder="مثال: الرياض"
-                {...register("location.city", { required: "المدينة مطلوبة" })}
+                {...register("location.city", { required: "المدينة مطلوبة." })}
               />
+              {errors.location?.city && (
+                <motion.div
+                  className={styles.errorMessage}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <AlertCircle size={14} />
+                  {errors.location.city.message}
+                </motion.div>
+              )}
             </div>
 
             <div className={styles.formField}>
@@ -628,8 +711,20 @@ export default function PropertyForm({
                 id="district"
                 type="text"
                 placeholder="مثال: العليا"
-                {...register("location.district", { required: "الحي مطلوب" })}
+                {...register("location.district", { required: "الحي مطلوب." })}
               />
+              {
+                errors.location?.district && (
+                  <motion.div
+                    className={styles.errorMessage}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    <AlertCircle size={14} />
+                    {errors.location.district.message}
+                  </motion.div>
+                )
+              }
             </div>
 
             <div className={styles.formField}>
@@ -641,8 +736,20 @@ export default function PropertyForm({
                 id="street"
                 type="text"
                 placeholder="مثال: شارع الملك فهد"
-                {...register("location.street", { required: "الشارع مطلوب" })}
+                {...register("location.street", { required: "الشارع مطلوب." })}
               />
+              {
+                errors.location?.street && (
+                  <motion.div
+                    className={styles.errorMessage}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    <AlertCircle size={14} />
+                    {errors.location.street.message}
+                  </motion.div>
+                )
+              }
             </div>
 
             <div className={styles.formField}>
@@ -653,6 +760,18 @@ export default function PropertyForm({
                 placeholder="مثال: بالقرب من برج المملكة"
                 {...register("location.landmark")}
               />
+              {
+                errors.location?.landmark && (
+                  <motion.div
+                    className={styles.errorMessage}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    <AlertCircle size={14} />
+                    {errors.location.landmark.message}
+                  </motion.div>
+                )
+              }
             </div>
 
             <div className={styles.formField}>
@@ -663,6 +782,18 @@ export default function PropertyForm({
                 placeholder="مثال: 24.7136"
                 {...register("location.latitude")}
               />
+              {
+                errors.location?.latitude && (
+                  <motion.div
+                    className={styles.errorMessage}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    <AlertCircle size={14} />
+                    {errors.location.latitude.message}
+                  </motion.div>
+                )
+              }
             </div>
 
             <div className={styles.formField}>
@@ -673,12 +804,24 @@ export default function PropertyForm({
                 placeholder="مثال: 46.6753"
                 {...register("location.longitude")}
               />
+              {
+                errors.location?.longitude && (
+                  <motion.div
+                    className={styles.errorMessage}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    <AlertCircle size={14} />
+                    {errors.location.longitude.message}
+                  </motion.div>
+                )
+              }
             </div>
           </div>
         </motion.div>
 
         {/* Features & Tags */}
-        <motion.div className={styles.formSection} variants={itemVariants}>
+        <motion.div className={styles.formSection} >
           <h3 className={styles.sectionTitle}>
             <Building2 className={styles.sectionIcon} size={20} />
             المميزات والوسوم
@@ -762,7 +905,7 @@ export default function PropertyForm({
 
             <div className={styles.formField}>
               <label htmlFor="status">الحالة</label>
-              <select id="status" {...register("status")}>
+              <select id="status" {...register("status", { required: "حالة العقار مطلوبة." })}>
                 <option value="available">متاح</option>
                 <option value="sold">مباع</option>
                 <option value="rented">مؤجر</option>
@@ -787,10 +930,11 @@ export default function PropertyForm({
       </div>
 
       {/* Form Actions */}
-      <motion.div className={styles.formActions} variants={itemVariants}>
+      <motion.div className={styles.formActions} >
         <motion.button
           type="button"
           className={styles.cancelBtn}
+          disabled={isSubmitting}
           onClick={onCancel}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
@@ -801,12 +945,12 @@ export default function PropertyForm({
         <motion.button
           type="submit"
           className={styles.submitBtn}
-          disabled={isLoading}
+          disabled={isSubmitting || !isDirty}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
           <Save size={18} />
-          {isLoading ? "جاري الحفظ..." : "حفظ العقار"}
+          {isSubmitting ? "جاري الحفظ..." : "حفظ العقار"}
         </motion.button>
       </motion.div>
     </motion.form>

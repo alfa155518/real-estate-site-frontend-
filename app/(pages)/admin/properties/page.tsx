@@ -1,23 +1,42 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence, Variants } from "framer-motion";
-import { Plus, Filter, X, Video, Play, Home } from "lucide-react";
-import styles from "@/sass/pages/adminProperties.module.scss";
-import PropertyForm from "@/components/admin/PropertyForm";
-import { PropertyFormData } from "@/types/admin";
+import { useState, useEffect } from "react";
 import { RealEstate } from "@/types/real-estate";
-import RealEstateCard from "@/components/common/RealEstateCard";
+import useAdminManagePropertiesStore from "@/store/admin/AdminManagePropertiesStore";
+import { PropertyData } from "@/types/admin/adminPropertiesStore";
+import { parseArabicNumber } from "@/utils/numberUtils";
+import PresentationalProperties from "./PresentationalProperties";
 
-// Updated mock data
-import { realEstateData } from "@/data/real-estate";
+export default function ContainerPropertiesPage() {
 
-export default function PropertiesPage() {
-  const [properties, setProperties] = useState<RealEstate[]>(realEstateData);
+  // admin manage properties store
+  const {
+    properties,
+    handleInitProperties,
+    meta,
+    handlePageChange,
+    handleUpdateProperty,
+    handleCreateProperty,
+    handleDeleteProperty,
+    isLoading,
+  } = useAdminManagePropertiesStore();
+
+  useEffect(() => {
+    async function initProperties() {
+      await handleInitProperties();
+    }
+    initProperties();
+  }, [handleInitProperties]);
+
   const [showModal, setShowModal] = useState(false);
   const [editingProperty, setEditingProperty] = useState<RealEstate | null>(
     null
   );
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [propertyToDelete, setPropertyToDelete] = useState<RealEstate | null>(
+    null
+  );
+  const [isDeleting, setIsDeleting] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
     property_type: "",
@@ -36,16 +55,40 @@ export default function PropertiesPage() {
     setShowModal(true);
   };
 
-  const handleDeleteProperty = (property: RealEstate) => {
-    if (confirm(`هل أنت متأكد من حذف العقار "${property.title}"؟`)) {
-      setProperties(properties.filter((p) => p.id !== property.id));
+  const handleSubmit = async (data: PropertyData) => {
+    // Check if we're creating or updating
+    if (editingProperty && data.id !== undefined) {
+      // Update existing property
+      await handleUpdateProperty(meta.current_page, data.id, data);
+    } else {
+      // Create new property
+      await handleCreateProperty(meta.current_page, data);
+    }
+
+    setShowModal(false);
+    setEditingProperty(null);
+  };
+
+  // show delete modal
+  const handleDeleteClick = (property: RealEstate) => {
+    setPropertyToDelete(property);
+    setShowDeleteModal(true);
+  };
+
+  // handle confirm delete
+  const handleConfirmDelete = async () => {
+    if (propertyToDelete) {
+      setIsDeleting(true);
+      await handleDeleteProperty(propertyToDelete.id, meta.current_page);
+      setIsDeleting(false);
+      setShowDeleteModal(false);
+      setPropertyToDelete(null);
     }
   };
 
-  const handleSubmit = (data: PropertyFormData) => {
-    console.log("Form data:", data);
-    setShowModal(false);
-    setEditingProperty(null);
+  const handleCancelDelete = () => {
+    setShowDeleteModal(false);
+    setPropertyToDelete(null);
   };
 
   // Handle filter changes
@@ -84,15 +127,15 @@ export default function PropertiesPage() {
   };
 
   // Convert RealEstate to PropertyFormData format (updated for new fields if needed)
-  const convertToFormData = (
-    property: RealEstate
-  ): Partial<PropertyFormData> => {
+  const convertToFormData = (property: RealEstate): Partial<PropertyData> => {
     return {
+      id: property.id,
+      slug: property.slug,
       title: property.title,
       description: property.description,
-      price: property.price,
-      currency: property.currency,
-      discount: property.discount,
+      price: parseArabicNumber(property.price),
+      discount: parseArabicNumber(property.discount),
+      discounted_price: parseArabicNumber(property.discounted_price),
       type: property.type,
       purpose: property.purpose,
       property_type: property.property_type,
@@ -101,16 +144,15 @@ export default function PropertiesPage() {
       living_rooms: property.living_rooms,
       kitchens: property.kitchens,
       balconies: property.balconies,
-      area_total: property.area_total,
+      area_total: parseArabicNumber(property.area_total),
       features: property.features,
       tags: property.tags,
-      floor: property.floor,
-      total_floors: property.total_floors,
+      floor: property.floor ?? 0,
+      total_floors: property.total_floors ?? 0,
       furnishing: property.furnishing,
       status: property.status,
       is_featured: property.is_featured,
-      owner_id: property.owner.id,
-      agency_id: property.agency?.id,
+      owner_id: property.owner_id,
       location: {
         city: property.location.city,
         district: property.location.district,
@@ -119,222 +161,39 @@ export default function PropertiesPage() {
         longitude: property.location.longitude,
         landmark: property.location.landmark ?? undefined,
       },
+      // Add images as URLs (existing images)
+      images: property.images?.map((img) => img.image_url) || [],
       // Add video if form supports it
-      video_url: property.videos?.[0]?.video_url,
+      videos: property.videos?.[0]?.video_url
+        ? [property.videos[0].video_url]
+        : [],
     };
   };
 
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
   return (
-    <div className={styles.propertiesPage}>
-      {/* Page Header */}
-      <motion.div
-        className={styles.pageHeader}
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <div className={styles.headerLeft}>
-          <h1>إدارة العقارات</h1>
-          <p>عرض وإدارة جميع العقارات في النظام</p>
-        </div>
-        <div className={styles.headerRight}>
-          <motion.button
-            className={styles.filterBtn}
-            onClick={() => setShowFilters(!showFilters)}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <Filter size={18} />
-            تصفية
-          </motion.button>
-          <motion.button
-            className={styles.addBtn}
-            onClick={handleAddProperty}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <Plus size={18} />
-            إضافة عقار جديد
-          </motion.button>
-        </div>
-      </motion.div>
-
-      {/* Filters Bar */}
-      <AnimatePresence>
-        {showFilters && (
-          <motion.div
-            className={styles.filtersBar}
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className={styles.filtersGrid}>
-              <div className={styles.filterGroup}>
-                <label htmlFor="property_type">نوع العقار</label>
-                <select
-                  id="property_type"
-                  name="property_type"
-                  value={filters.property_type}
-                  onChange={handleFilterChange}
-                >
-                  <option value="">الكل</option>
-                  <option value="apartment">شقة</option>
-                  <option value="villa">فيلا</option>
-                  <option value="chalet">شاليه</option>
-                  <option value="office">مكتب</option>
-                  <option value="studio">استوديو</option>
-                </select>
-              </div>
-              <div className={styles.filterGroup}>
-                <label htmlFor="type">نوع العرض</label>
-                <select
-                  id="type"
-                  name="type"
-                  value={filters.type}
-                  onChange={handleFilterChange}
-                >
-                  <option value="">الكل</option>
-                  <option value="sale">للبيع</option>
-                  <option value="rent">للإيجار</option>
-                </select>
-              </div>
-              <div className={styles.filterGroup}>
-                <label htmlFor="status">الحالة</label>
-                <select
-                  id="status"
-                  name="status"
-                  value={filters.status}
-                  onChange={handleFilterChange}
-                >
-                  <option value="">الكل</option>
-                  <option value="available">متاح</option>
-                  <option value="sold">مباع</option>
-                  <option value="rented">مؤجر</option>
-                </select>
-              </div>
-              <div className={styles.filterGroup}>
-                <label htmlFor="city">المدينة</label>
-                <input
-                  type="text"
-                  id="city"
-                  name="city"
-                  value={filters.city}
-                  onChange={handleFilterChange}
-                  placeholder="ابحث عن مدينة..."
-                />
-              </div>
-              <div className={styles.filterActions}>
-                <button className={styles.resetBtn} onClick={resetFilters}>
-                  إعادة تعيين
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Properties Grid */}
-      {filteredProperties.length > 0 ? (
-        <motion.div
-          className={styles.propertiesGrid}
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {filteredProperties.slice(0, 3).map((property, index) => (
-            <RealEstateCard
-              property={property}
-              image={property.images[0].image_url}
-              key={property.id}
-              index={index}
-            >
-              <RealEstateCard.actions
-                property={property}
-                handleEditProperty={handleEditProperty}
-                handleDeleteProperty={handleDeleteProperty}
-              />
-            </RealEstateCard>
-          ))}
-        </motion.div>
-      ) : (
-        <motion.div
-          className={styles.emptyState}
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className={styles.emptyIcon}>
-            <Home size={80} />
-          </div>
-          <h3>لا توجد عقارات</h3>
-          <p>ابدأ بإضافة عقار جديد للنظام</p>
-          <motion.button
-            className={styles.addBtn}
-            onClick={handleAddProperty}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Plus size={18} />
-            إضافة عقار جديد
-          </motion.button>
-        </motion.div>
-      )}
-
-      {/* Property Form Modal */}
-      <AnimatePresence>
-        {showModal && (
-          <motion.div
-            className={styles.modal}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setShowModal(false)}
-          >
-            <motion.div
-              className={styles.modalContent}
-              initial={{ scale: 0.9, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 20 }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className={styles.modalHeader}>
-                <h2>{editingProperty ? "تعديل العقار" : "إضافة عقار جديد"}</h2>
-                <motion.button
-                  className={styles.closeBtn}
-                  onClick={() => setShowModal(false)}
-                  whileHover={{ scale: 1.1, rotate: 90 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <X size={20} />
-                </motion.button>
-              </div>
-              <div className={styles.modalBody}>
-                <PropertyForm
-                  initialData={
-                    editingProperty
-                      ? convertToFormData(editingProperty)
-                      : undefined
-                  }
-                  onSubmit={handleSubmit}
-                  onCancel={() => setShowModal(false)}
-                />
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+    <PresentationalProperties
+      filteredProperties={filteredProperties}
+      meta={meta}
+      isLoading={isLoading}
+      showModal={showModal}
+      showDeleteModal={showDeleteModal}
+      editingProperty={editingProperty}
+      propertyToDelete={propertyToDelete}
+      isDeleting={isDeleting}
+      showFilters={showFilters}
+      filters={filters}
+      handleAddProperty={handleAddProperty}
+      handleEditProperty={handleEditProperty}
+      handleDeleteClick={handleDeleteClick}
+      handleConfirmDelete={handleConfirmDelete}
+      handleCancelDelete={handleCancelDelete}
+      handleSubmit={handleSubmit}
+      handlePageChange={handlePageChange}
+      handleFilterChange={handleFilterChange}
+      resetFilters={resetFilters}
+      setShowFilters={setShowFilters}
+      setShowModal={setShowModal}
+      convertToFormData={convertToFormData}
+    />
   );
 }

@@ -4,9 +4,18 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { motion } from "framer-motion";
 import styles from "@/sass/pages/home/SomeRealStateItems.module.scss";
-const SkeletonRealEstateCard = ({ count = 1 }: { count?: number }) => {
+
+interface SkeletonRealEstateCardProps {
+  count?: number;
+  gridClassName?: string;
+}
+
+const SkeletonRealEstateCard = ({ 
+  count = 1, 
+  gridClassName 
+}: SkeletonRealEstateCardProps) => {
   return (
-    <div className={styles.grid}>
+    <div className={gridClassName || styles.grid}>
       {Array(count)
         .fill(0)
         .map((_, index) => (

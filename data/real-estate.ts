@@ -1,6 +1,6 @@
-import { RealEstateList } from "@/types/real-estate";
 
-export const realEstateData: RealEstateList = [
+
+export const realEstateData = [
   {
     "id": 1,
     "title": "شقة فاخرة في مدينة نصر",

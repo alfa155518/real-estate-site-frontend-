@@ -1,23 +1,40 @@
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import {
   PropertyType,
   SearchResultsFilterParams,
   SortOption,
 } from "@/types/searchResults";
+import { useDebounce } from "@/hooks/useDebounce";
 
 import styles from "@/sass/pages/search/index.module.scss";
+
 export default function Filters({
   searchTerm,
   filterParams,
   setFilterParams,
 }: SearchResultsFilterParams) {
   const router = useRouter();
+  const [searchInput, setSearchInput] = useState(searchTerm);
+  
+  // Debounce search input with 500ms delay
+  const debouncedSearchInput = useDebounce(searchInput, 800);
+
+  // Effect to navigate when debounced value changes
+  useEffect(() => {
+    if (debouncedSearchInput !== searchTerm && debouncedSearchInput.trim()) {
+      router.push(`/search?q=${encodeURIComponent(debouncedSearchInput)}`);
+    }
+  }, [debouncedSearchInput, router, searchTerm]);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
     const searchQuery = formData.get("search") as string;
-    router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+    }
   };
 
   return (
@@ -28,7 +45,8 @@ export default function Filters({
             type="text"
             name="search"
             placeholder="ابحث عن عقار..."
-            defaultValue={searchTerm}
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
             className={styles.searchInput}
             aria-label="بحث"
           />

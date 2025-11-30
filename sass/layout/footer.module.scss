@@ -2,7 +2,7 @@
 @use "@/sass/helpers/mixins" as *;
 
 .footer {
-  background: linear-gradient(135deg, $primary 0%, $primary-light 100%);
+  background: $gradient-primary;
   color: $white;
   padding: 4rem 2rem;
   overflow: hidden;
@@ -118,6 +118,7 @@
 
   .contactInfo {
     font-size: 2rem;
+
     p {
       color: $secondary;
       font-size: 1.5rem;
@@ -152,7 +153,7 @@
         right: 0;
         width: 50px;
         height: 3px;
-        background-color: #f59e0b;
+        background-color: $accent-1;
         border-radius: 3px;
       }
     }
@@ -272,9 +273,11 @@
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }
@@ -284,6 +287,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

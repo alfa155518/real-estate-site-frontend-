@@ -6,9 +6,9 @@ import { ar } from 'date-fns/locale';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Plus, Edit, Trash2, X, Save, AlertCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import styles from '@/sass/pages/adminUsers.module.scss';
+import styles from '@/sass/pages/admin/users.module.scss';
 import modalStyles from '@/sass/pages/adminProperties.module.scss';
-import formStyles from '@/sass/components/propertyForm.module.scss';
+import formStyles from '@/sass/components/common/userAndPropertyForm.module.scss';
 
 interface Location {
   id: number;

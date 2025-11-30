@@ -6,7 +6,7 @@ import useProperty from "@/hooks/useProperty";
 import styles from "@/sass/pages/single-realestate/singleRealEstate.module.scss";
 export default function PropertyGallery({ property }: PropertyProps) {
   // Custom hook of property
-  const { currentImageIndex, nextImage, prevImage, goToImage, discount } =
+  const { currentImageIndex, nextImage, prevImage, goToImage } =
     useProperty(property);
 
   return (
@@ -50,9 +50,9 @@ export default function PropertyGallery({ property }: PropertyProps) {
             </div>
           )}
 
-          {property.discount && discount > 0 && (
+          {property.discount_percentage && (
             <div className={styles.discountBadge}>
-              خصم {discount.toLocaleString("ar-EG")}%
+              خصم {property.discount_percentage}
             </div>
           )}
         </div>

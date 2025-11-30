@@ -46,23 +46,23 @@
       }
 
       &.blue {
-        --gradient-start: #667eea;
-        --gradient-end: #764ba2;
+        --gradient-start: #{$primary};
+        --gradient-end: #{$primary-light};
       }
 
       &.green {
-        --gradient-start: #10b981;
+        --gradient-start: #{$success};
         --gradient-end: #059669;
       }
 
       &.orange {
-        --gradient-start: #f59e0b;
-        --gradient-end: #d97706;
+        --gradient-start: #{$accent-1};
+        --gradient-end: #{$accent-1-dark};
       }
 
       &.red {
-        --gradient-start: #ef4444;
-        --gradient-end: #dc2626;
+        --gradient-start: #{$danger};
+        --gradient-end: #b91c1c;
       }
 
       .statHeader {
@@ -95,7 +95,7 @@
           }
 
           &.negative {
-            background: rgba(239, 68, 68, 0.1);
+            background: rgba(220, 38, 38, 0.1);
             color: $danger;
           }
         }
@@ -147,12 +147,12 @@
             @include transition(all, 0.3s, ease);
 
             &:hover {
-              border-color: #667eea;
-              color: #667eea;
+              background: $gradient-primary;
+              color: $white;
             }
 
             &.active {
-              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+              background: $gradient-primary;
               color: $white;
               border-color: transparent;
             }
@@ -209,7 +209,7 @@
           @include transition(all, 0.2s, ease);
 
           &:hover {
-            background: $dark-white;
+            background: $secondary;
           }
 
           .propertyImage {

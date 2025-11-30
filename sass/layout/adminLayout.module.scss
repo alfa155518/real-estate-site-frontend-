@@ -4,20 +4,20 @@
 .adminLayout {
   display: flex;
   min-height: 100vh;
-  background: linear-gradient(135deg, $secondary 0%, $dark-white 100%);
+  background: linear-gradient(135deg, $secondary 0%, $secondary-dark 100%);
   direction: rtl;
   position: relative;
 
   .sidebar {
     width: 280px;
-    background: linear-gradient(180deg, $accent-2 0%, $dark 100%);
+    background: $gradient-primary;
     color: white;
     position: fixed;
     right: 0;
     top: 0;
     height: 100vh;
     overflow-y: auto;
-    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+    box-shadow: -4px 0 30px rgba(15, 23, 42, 0.25);
     @include transition(transform, 0.3s, ease);
     z-index: 1000;
     @include translateX(100%);
@@ -93,11 +93,11 @@
           font-size: 2rem;
           font-weight: bold;
           margin: 0;
-          color: $accent-1;
+          color: $white;
         }
 
         p {
-          color: $primary-light;
+          color: $accent-2;
           font-size: 1.8rem;
           font-weight: 800;
           margin: 0;
@@ -116,7 +116,7 @@
           padding: 0 1.5rem;
           font-weight: 600;
           text-transform: uppercase;
-          color: $accent-1;
+          color: $gold;
           letter-spacing: 1px;
           margin-bottom: 0.75rem;
         }
@@ -133,7 +133,7 @@
             font-size: 1.6rem;
             gap: 1rem;
             padding: 0.875rem 1rem;
-            color: $dark-white;
+            color: rgba(255, 255, 255, 0.85);
             text-decoration: none;
             @include transition(all, 0.2s, ease);
             position: relative;
@@ -153,8 +153,8 @@
             }
 
             &:hover {
-              border-color: $primary-light;
-              color: $primary-light;
+              color: $white;
+              background: rgba(255, 255, 255, 0.08);
             }
           }
 
@@ -162,7 +162,7 @@
             background: linear-gradient(135deg,
                 $primary 0%,
                 $primary-light 100%);
-            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4);
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.5);
 
             a {
               color: $white;
@@ -198,7 +198,7 @@
           @include flex-center;
           font-weight: 800;
           font-size: 1.5rem;
-          box-shadow: 0 4px 10px rgba(30, 58, 138, 0.3);
+          box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
         }
 
         .profileInfo {
@@ -212,11 +212,11 @@
           }
 
           .name {
-            color: $accent-1;
+            color: $white;
           }
 
           .role {
-            color: $primary-light;
+            color: $accent-2;
           }
         }
 
@@ -263,7 +263,7 @@
           border: none;
           font-size: 1.5rem;
           cursor: pointer;
-          color: $accent-2;
+          color: $primary;
           padding: 0.5rem;
           border-radius: 8px;
           @include transition(all, 0.2s, ease);
@@ -281,7 +281,7 @@
           h1 {
             font-size: 2rem;
             font-weight: 700;
-            color: $accent-2;
+            color: $primary;
             margin: 0;
           }
 
@@ -303,7 +303,7 @@
           background: linear-gradient(135deg, $primary 0%, $primary-light 100%);
           padding: 0.75rem 1.25rem;
           @include radius(12px);
-          box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2);
+          box-shadow: 0 4px 15px rgba(37, 99, 235, 0.25);
 
           .dateTime {
             display: flex;
@@ -345,13 +345,13 @@
 
           input {
             padding: 0.875rem 1.25rem 0.875rem 3.5rem;
-            border: 2px solid #e5e7eb;
+            border: 2px solid $light-gray;
             @include radius(14px);
             width: 350px;
             font-size: 1.4rem;
             @include transition(all, 0.3s, ease);
             background: $white;
-            color: $accent-2;
+            color: $primary;
             font-weight: 500;
 
             &::placeholder {
@@ -361,8 +361,8 @@
             &:focus {
               outline: none;
               border-color: $primary-light;
-              box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15),
-                0 4px 12px rgba(59, 130, 246, 0.2);
+              box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15),
+                0 4px 15px rgba(37, 99, 235, 0.25);
               @include scale(1.02);
             }
           }
@@ -388,7 +388,7 @@
             max-height: 450px;
             overflow-y: auto;
             z-index: 1000;
-            border: 1px solid #e5e7eb;
+            border: 1px solid $light-gray;
 
             &::-webkit-scrollbar {
               width: 6px;
@@ -412,8 +412,8 @@
               padding: 1rem 1.25rem;
               font-size: 1.3rem;
               font-weight: 700;
-              color: $accent-2;
-              border-bottom: 2px solid #f3f4f6;
+              color: $primary;
+              border-bottom: 2px solid $secondary-dark;
               background: linear-gradient(to bottom, #fafafa, $white);
               position: sticky;
               top: 0;
@@ -427,7 +427,7 @@
               padding: 1rem 1.25rem;
               cursor: pointer;
               @include transition(all, 0.2s, ease);
-              border-bottom: 1px solid #f3f4f6;
+              border-bottom: 1px solid $secondary-dark;
 
               &:last-child {
                 border-bottom: none;
@@ -448,7 +448,7 @@
                 .resultLabel {
                   font-size: 1.4rem;
                   font-weight: 600;
-                  color: $accent-2;
+                  color: $primary;
                 }
 
                 .resultPath {
@@ -464,7 +464,7 @@
 
               &:hover {
                 background: linear-gradient(to left,
-                    rgba(59, 130, 246, 0.05),
+                    rgba(37, 99, 235, 0.08),
                     transparent);
                 border-right: 3px solid $primary;
 

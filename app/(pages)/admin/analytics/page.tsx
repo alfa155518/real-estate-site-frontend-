@@ -8,7 +8,6 @@ import {
   TrendingUp,
   TrendingDown,
   Users,
-  Download,
   ArrowUp,
   ArrowDown,
 } from "lucide-react";
@@ -418,9 +417,8 @@ export default function AnalyticsPage() {
             </motion.div>
 
             <div
-              className={`${styles.metricChange} ${
-                metric.positive ? styles.positive : styles.negative
-              }`}
+              className={`${styles.metricChange} ${metric.positive ? styles.positive : styles.negative
+                }`}
             >
               {metric.positive ? (
                 <ArrowUp className={styles.changeIcon} size={25} />
@@ -578,9 +576,8 @@ export default function AnalyticsPage() {
                   </td>
                   <td data-label="التغيير">
                     <div
-                      className={`${styles.metric} ${
-                        property.positive ? styles.positive : styles.negative
-                      }`}
+                      className={`${styles.metric} ${property.positive ? styles.positive : styles.negative
+                        }`}
                     >
                       {property.positive ? (
                         <TrendingUp size={16} />

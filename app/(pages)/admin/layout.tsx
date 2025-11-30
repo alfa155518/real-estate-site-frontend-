@@ -25,9 +25,9 @@ import {
   Calendar,
 } from "lucide-react";
 import styles from "@/sass/layout/adminLayout.module.scss";
-import { SidebarItem } from "@/types/admin";
 
-const sidebarItems: SidebarItem[] = [
+
+const sidebarItems = [
   {
     id: "dashboard",
     label: "لوحة التحكم",
@@ -165,9 +165,8 @@ export default function AdminLayout({
     <div className={styles.adminLayout}>
       {/* Sidebar */}
       <motion.aside
-        className={`${styles.sidebar} ${
-          sidebarOpen ? styles.open : styles.collapsed
-        }`}
+        className={`${styles.sidebar} ${sidebarOpen ? styles.open : styles.collapsed
+          }`}
       >
         {/* Logo */}
         <div className={styles.logo}>
@@ -200,9 +199,8 @@ export default function AdminLayout({
             {sidebarItems.map((item, index) => (
               <motion.div
                 key={item.id}
-                className={`${styles.navItem} ${
-                  isActive(item.href) ? styles.active : ""
-                }`}
+                className={`${styles.navItem} ${isActive(item.href) ? styles.active : ""
+                  }`}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.05 }}

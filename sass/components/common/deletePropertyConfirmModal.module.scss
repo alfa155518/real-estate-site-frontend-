@@ -1,0 +1,272 @@
+@use "@/sass/helpers/mixins" as *;
+@use "@/sass/helpers/variables" as *;
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba($black, 0.6);
+    backdrop-filter: blur(4px);
+    @include flex-center;
+    z-index: 9999;
+    padding: 1rem;
+}
+
+.modalContent {
+    background: $white;
+    @include radius(16px);
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba($black, 0.2);
+    overflow: hidden;
+    border: 1px solid $secondary-dark;
+}
+
+.modalHeader {
+    background: linear-gradient(135deg, $danger 0%, rgba($danger, 0.8) 100%);
+    color: $white;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+
+    .iconWrapper {
+        @include flex-center;
+        width: 48px;
+        height: 48px;
+        background: rgba($white, 0.15);
+        @include radius(50%);
+        flex-shrink: 0;
+        backdrop-filter: blur(4px);
+
+        svg {
+            animation: pulse 2s ease-in-out infinite;
+        }
+    }
+
+    h2 {
+        flex: 1;
+        margin: 0;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: $white;
+    }
+
+    .closeBtn {
+        background: rgba($white, 0.1);
+        border: none;
+        @include radius(50%);
+        width: 32px;
+        height: 32px;
+        @include flex-center;
+        cursor: pointer;
+        color: $white;
+        @include transition(all, 0.2s, ease);
+
+        &:hover {
+            background: rgba($white, 0.25);
+            transform: rotate(90deg);
+        }
+    }
+}
+
+.modalBody {
+    padding: 2rem;
+
+    .warningText {
+        font-size: 1.4rem;
+        color: $dark;
+        margin-bottom: 1rem;
+        font-weight: 500;
+    }
+
+    .propertyName {
+        background: rgba($danger, 0.05);
+        border-right: 4px solid $danger;
+        padding: 1.25rem;
+        @include radius(8px);
+        margin-bottom: 1.5rem;
+
+        strong {
+            color: $danger;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: block;
+            margin-top: 0.25rem;
+        }
+    }
+
+    .cautionText {
+        background: rgba($warning, 0.1);
+        border: 1px solid rgba($warning, 0.2);
+        padding: 1rem;
+        @include radius(8px);
+        font-size: 1.3rem;
+        color: rgba($warning, 1);
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+}
+
+.confirmForm {
+    .formField {
+        margin-bottom: 1.5rem;
+
+        label {
+            display: block;
+            font-size: 1.3rem;
+            color: $gray-600;
+            margin-bottom: 0.75rem;
+            font-weight: 500;
+
+            strong {
+                color: $danger;
+                font-weight: 700;
+            }
+        }
+
+        input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid $secondary-dark;
+            @include radius(8px);
+            font-size: 1.4rem;
+            font-family: inherit;
+            @include transition(all, 0.2s, ease);
+            color: $dark;
+
+            &:focus {
+                outline: none;
+                border-color: $danger;
+                box-shadow: 0 0 0 4px rgba($danger, 0.1);
+            }
+
+            &.error {
+                border-color: $danger;
+            }
+
+            &:disabled {
+                background: $secondary;
+                cursor: not-allowed;
+                opacity: 0.7;
+            }
+        }
+
+        .errorMessage {
+            display: block;
+            color: $danger;
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+    }
+}
+
+.modalActions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    padding-top: 1.5rem;
+    border-top: 1px solid $secondary-dark;
+    margin-top: 1rem;
+
+    button {
+        padding: 0.875rem 1.75rem;
+        @include radius(8px);
+        font-size: 1.4rem;
+        font-weight: 600;
+        cursor: pointer;
+        @include transition(all, 0.2s, ease);
+        border: none;
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+    }
+
+    .cancelBtn {
+        background: $white;
+        color: $gray-600;
+        border: 1px solid $secondary-dark;
+
+        &:hover:not(:disabled) {
+            background: $secondary;
+            color: $dark;
+            border-color: $light-gray;
+            @include translateY(-2px);
+        }
+    }
+
+    .deleteBtn {
+        background: $danger;
+        color: $white;
+        box-shadow: 0 4px 12px rgba($danger, 0.25);
+
+        &:hover:not(:disabled) {
+            background: rgba($danger, 0.9);
+            @include translateY(-2px);
+            box-shadow: 0 6px 16px rgba($danger, 0.35);
+        }
+
+        &:active:not(:disabled) {
+            @include translateY(0);
+        }
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+@media (max-width: 768px) {
+    .modalContent {
+        max-width: 100%;
+        margin: 1rem;
+        border-radius: 12px;
+    }
+
+    .modalHeader {
+        padding: 1.25rem;
+
+        h2 {
+            font-size: 1.6rem;
+        }
+
+        .iconWrapper {
+            width: 40px;
+            height: 40px;
+        }
+    }
+
+    .modalBody {
+        padding: 1.5rem;
+    }
+
+    .modalActions {
+        flex-direction: column-reverse;
+        gap: 0.75rem;
+
+        button {
+            width: 100%;
+            padding: 1rem;
+        }
+    }
+}

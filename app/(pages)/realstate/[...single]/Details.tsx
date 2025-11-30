@@ -35,13 +35,8 @@ import styles from "@/sass/pages/single-realestate/singleRealEstate.module.scss"
 
 export default function Details({ property }: { property: Property }) {
   // Use property custom hook
-  const {
-    activeTab,
-    setActiveTab,
-    handleShareProperty,
-    discount,
-    formattedAddress,
-  } = useProperty(property);
+  const { activeTab, setActiveTab, handleShareProperty, formattedAddress } =
+    useProperty(property);
 
   return (
     <section className={styles.details}>
@@ -82,15 +77,19 @@ export default function Details({ property }: { property: Property }) {
         >
           {Number(property.discount) > 0 ? (
             <div className={styles.priceWithDiscount}>
-              <span className={styles.originalPrice}>
-                {" "}
-                {property.price} ج.م
-              </span>
-              <span className={styles.discountBadgeInline}>
-                خصم {discount.toLocaleString("ar-EG")}%
-              </span>
+              {Number(property?.discounted_price) > 0 && (
+                <>
+                  <span className={styles.originalPrice}>
+                    {property.discounted_price} ج.م
+                  </span>
+                  <span className={styles.discountBadgeInline}>
+                    خصم {property.discount_percentage}
+                  </span>
+                </>
+              )}
+
               <span className={styles.discountedPrice}>
-                {property.discounted_price} ج.م
+                {property.price} ج.م
               </span>
             </div>
           ) : (

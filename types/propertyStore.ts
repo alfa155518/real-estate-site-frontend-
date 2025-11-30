@@ -53,6 +53,7 @@ export interface Property {
     currency: string;
     discount: string | number;
     discounted_price: string | null;
+    discount_percentage?: string | number;
     type: "sale" | "rent";
     purpose: string;
     property_type: string;

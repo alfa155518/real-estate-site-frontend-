@@ -7,12 +7,14 @@ import { RealEstate } from "@/types/real-estate";
 import useProfileStore from "@/store/ProfileStore";
 import { UserHeaderFormData, NavLink } from "@/types/userHeader";
 import useRealEstateStore from "@/store/RealestateStore";
+import { useDebounce } from "@/hooks/useDebounce";
 
 export default function useUserHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchResults, setSearchResults] = useState<RealEstate[]>([]);
   const [showResults, setShowResults] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const searchRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const router = useRouter();
@@ -23,6 +25,9 @@ export default function useUserHeader() {
 
   // user profile store
   const { token, handleLogout, isLoading } = useProfileStore();
+
+  // Debounce search query with 500ms delay
+  const debouncedSearchQuery = useDebounce(searchQuery, 800);
 
   const navLinks: NavLink[] = [
     { name: "الرئيسية", href: "/", icon: <Home size={20} /> },
@@ -42,35 +47,43 @@ export default function useUserHeader() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  //   handle search
-  const handleSearch = async (query: string) => {
-    if (!query.trim()) {
-      setSearchResults([]);
-      setShowResults(false);
-      return;
-    }
+  // Effect to perform search when debounced value changes
+  useEffect(() => {
+    const performSearch = async () => {
+      if (!debouncedSearchQuery.trim()) {
+        setSearchResults([]);
+        setShowResults(false);
+        return;
+      }
 
-    //   handle search results
-    const searchTerm = query.toLowerCase();
+      const searchTerm = debouncedSearchQuery.toLowerCase();
 
-    // Call handleFilters to update the store with filtered results
-    const response = await handleFilters({
-      search: searchTerm,
-    });
+      // Call handleFilters to update the store with filtered results
+      const response = await handleFilters({
+        search: searchTerm,
+      });
 
-    // Get the filtered properties from the response
-    const filteredProperties = response?.data?.properties || [];
+      // Get the filtered properties from the response
+      const filteredProperties = response?.data?.properties || [];
 
-    // Filter the properties based on the search term
-    const results = filteredProperties.filter(
-      (property) =>
-        property.title.toLowerCase().includes(searchTerm) ||
-        property.description.toLowerCase().includes(searchTerm) ||
-        property.location.city.toLowerCase().includes(searchTerm)
-    );
+      // Filter the properties based on the search term
+      const results = filteredProperties.filter(
+        (property) =>
+          property.title.toLowerCase().includes(searchTerm) ||
+          property.description.toLowerCase().includes(searchTerm) ||
+          property.location.city.toLowerCase().includes(searchTerm)
+      );
 
-    setSearchResults(results);
-    setShowResults(true);
+      setSearchResults(results);
+      setShowResults(true);
+    };
+
+    performSearch();
+  }, [debouncedSearchQuery, handleFilters]);
+
+  //   handle search - now just updates the search query state
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
   };
 
   //   handle search submit

@@ -33,6 +33,12 @@ const RealEstateCard = ({
   const primaryImage =
     property.images.find((img) => img.is_primary) || property.images[0];
 
+  const status =
+    property.status === "sold"
+      ? "مباع"
+      : property.status === "available"
+      ? "متاح"
+      : "مؤجر";
   return (
     <motion.div
       className={styles.card}
@@ -68,9 +74,7 @@ const RealEstateCard = ({
             )}
           </Link>
         )}
-        <div className={styles.badge}>
-          {property.type === "sale" ? "بيع" : "إيجار"}
-        </div>
+        <div className={styles.badge}>{status}</div>
         {/* {children} */}
 
         {property.discounted_price && (
@@ -126,7 +130,7 @@ const RealEstateCard = ({
 
         {property.features.length > 0 && (
           <div className={styles.features}>
-            {property.features.slice(0, 3).map((feature, idx) => (
+            {property.features.slice(0, 5).map((feature, idx) => (
               <span key={idx} className={styles.feature}>
                 {feature}
               </span>

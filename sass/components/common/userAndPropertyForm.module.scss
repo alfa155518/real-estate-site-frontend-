@@ -35,7 +35,7 @@
         color: $primary;
         margin: 0 0 1rem 0;
         padding-bottom: 0.75rem;
-        border-bottom: 2px solid $dark-white;
+        border-bottom: 2px solid $secondary-dark;
         display: flex;
         align-items: center;
         gap: 0.5rem;
@@ -79,19 +79,27 @@
           textarea {
             width: 100%;
             padding: 0.875rem 1rem;
-            border: 2px solid $dark-white;
+            border: 2px solid $light-gray;
             @include radius(10px);
             font-size: 1.3rem;
             font-family: inherit;
             background: $white;
+            @include transition(all, 0.2s, ease);
 
             &::placeholder {
               color: $gray-600;
             }
 
+            &:focus {
+              outline: none;
+              border-color: $primary-light;
+              box-shadow: 0 0 0 3px rgba($primary-light, 0.1);
+            }
+
             &:disabled {
-              background: $dark-white;
+              background: $secondary;
               cursor: not-allowed;
+              opacity: 0.7;
             }
           }
 
@@ -106,6 +114,7 @@
 
           .error {
             border-color: $danger;
+            box-shadow: 0 0 0 3px rgba($danger, 0.1);
           }
 
           .errorMessage {
@@ -151,7 +160,9 @@
             max-width: 200px;
 
             &:hover {
-              background-color: rgba($primary-light, 0.1);
+              background: $gradient-primary;
+              transform: translateY(-2px);
+              box-shadow: 0 4px 12px rgba($primary-light, 0.3);
             }
 
             svg {
@@ -168,13 +179,16 @@
           .imagePreview {
             position: relative;
             aspect-ratio: 1;
-            @include radius(8px);
+            @include radius(12px);
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            @include transition(transform, 0.2s, ease);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            @include transition(all, 0.3s, ease);
+            border: 2px solid $light-gray;
 
             &:hover {
-              @include translateY(-2px);
+              @include translateY(-4px);
+              box-shadow: 0 8px 24px rgba($primary-light, 0.15);
+              border-color: $primary-light;
             }
 
             img {
@@ -231,7 +245,7 @@
               align-items: center;
               gap: 0.75rem;
               padding: 0.75rem;
-              border: 2px solid #e5e7eb;
+              border: 2px solid $light-gray;
               @include radius(10px);
               cursor: pointer;
               @include transition(all, 0.2s, ease);
@@ -260,6 +274,80 @@
               }
             }
           }
+
+          /* Tags Input Styling */
+          .tagsInput {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            padding: 1rem;
+            border: 2px solid $light-gray;
+            @include radius(10px);
+            background: $white;
+            min-height: 60px;
+            align-items: center;
+
+            &:focus-within {
+              border-color: $primary-light;
+              box-shadow: 0 0 0 3px rgba($primary-light, 0.1);
+            }
+
+            .tag {
+              display: inline-flex;
+              align-items: center;
+              gap: 0.5rem;
+              padding: 0.5rem 0.75rem;
+              background: linear-gradient(135deg, $primary 0%, $primary-light 100%);
+              color: $white;
+              @include radius(20px);
+              font-size: 1.2rem;
+              font-weight: 500;
+              @include transition(all, 0.2s, ease);
+              box-shadow: 0 2px 4px rgba($primary, 0.2);
+
+              &:hover {
+                @include translateY(-2px);
+                box-shadow: 0 4px 8px rgba($primary, 0.3);
+              }
+
+              button {
+                @include flex-center;
+                background: rgba($white, 0.2);
+                border: none;
+                @include radius(50%);
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+                color: $white;
+                padding: 0;
+                @include transition(all, 0.2s, ease);
+
+                &:hover {
+                  background: rgba($white, 0.3);
+                  transform: rotate(90deg);
+                }
+
+                svg {
+                  width: 14px;
+                  height: 14px;
+                }
+              }
+            }
+
+            input[type="text"] {
+              flex: 1;
+              min-width: 150px;
+              border: none;
+              outline: none;
+              padding: 0.5rem;
+              font-size: 1.3rem;
+              background: transparent;
+
+              &::placeholder {
+                color: $gray-600;
+              }
+            }
+          }
         }
       }
     }
@@ -270,7 +358,7 @@
     gap: 1rem;
     justify-content: flex-end;
     padding-top: 2rem;
-    border-top: 1px solid #e5e7eb;
+    border-top: 2px solid $secondary-dark;
     margin-top: 2rem;
 
     button {
@@ -285,8 +373,16 @@
       gap: 0.5rem;
 
       &.cancelBtn {
-        background: $danger;
-        color: $white;
+        background: $white;
+        color: $danger;
+        border: 2px solid $danger;
+
+        &:hover {
+          background: $danger;
+          color: $white;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba($danger, 0.3);
+        }
       }
 
       &.submitBtn {

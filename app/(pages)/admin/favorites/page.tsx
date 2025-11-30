@@ -5,7 +5,7 @@ import { format, parseISO } from 'date-fns';
 import { ar } from 'date-fns/locale';
 import { motion } from 'framer-motion';
 import { Heart, Trash2, Eye, Search, TrendingUp } from 'lucide-react';
-import styles from '@/sass/pages/adminUsers.module.scss';
+import styles from '@/sass/pages/admin/users.module.scss';
 
 interface Favorite {
   id: number;
