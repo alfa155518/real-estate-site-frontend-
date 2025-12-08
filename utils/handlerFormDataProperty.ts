@@ -14,6 +14,10 @@ export function buildPropertyFormData(clientData: PropertyData): FormData {
         serverData.append('owner_id', String(clientData.owner_id));
     }
 
+    if (clientData.agency_id) {
+        serverData.append('agency_id', String(clientData.agency_id));
+    }
+
     // Basic Information
     serverData.append('title', clientData.title);
     serverData.append('description', clientData.description);

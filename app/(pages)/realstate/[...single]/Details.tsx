@@ -32,6 +32,7 @@ import {
 } from "@/utils/propertyHelpers";
 import useProperty from "@/hooks/useProperty";
 import styles from "@/sass/pages/single-realestate/singleRealEstate.module.scss";
+import { parseArabicNumber } from "@/utils/numberUtils";
 
 export default function Details({ property }: { property: Property }) {
   // Use property custom hook
@@ -51,9 +52,8 @@ export default function Details({ property }: { property: Property }) {
             {property.title}
           </motion.h1>
           <span
-            className={`${styles.status} ${
-              property.status === "available" ? styles.available : ""
-            }`}
+            className={`${styles.status} ${property.status === "available" ? styles.available : ""
+              }`}
           >
             {property.status === "available" ? "متاح" : "غير متاح"}
           </span>
@@ -75,9 +75,9 @@ export default function Details({ property }: { property: Property }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          {Number(property.discount) > 0 ? (
+          {Number(parseArabicNumber(property.discount)) || Number(parseArabicNumber(property?.discounted_price)) > 0 ? (
             <div className={styles.priceWithDiscount}>
-              {Number(property?.discounted_price) > 0 && (
+              {Number(parseArabicNumber(property?.discounted_price)) > 0 && (
                 <>
                   <span className={styles.originalPrice}>
                     {property.discounted_price} ج.م
@@ -218,26 +218,23 @@ export default function Details({ property }: { property: Property }) {
         {/* Tabs Navigation */}
         <div className={styles.tabs}>
           <button
-            className={`${styles.tab} ${
-              activeTab === "details" ? styles.active : ""
-            }`}
+            className={`${styles.tab} ${activeTab === "details" ? styles.active : ""
+              }`}
             onClick={() => setActiveTab("details")}
           >
             تفاصيل العقار
           </button>
           <button
-            className={`${styles.tab} ${
-              activeTab === "features" ? styles.active : ""
-            }`}
+            className={`${styles.tab} ${activeTab === "features" ? styles.active : ""
+              }`}
             onClick={() => setActiveTab("features")}
           >
             المميزات
           </button>
           {property.videos?.length && (
             <button
-              className={`${styles.tab} ${
-                activeTab === "video" ? styles.active : ""
-              }`}
+              className={`${styles.tab} ${activeTab === "video" ? styles.active : ""
+                }`}
               onClick={() => setActiveTab("video")}
             >
               فيديو
@@ -391,11 +388,10 @@ export default function Details({ property }: { property: Property }) {
             </p>
 
             <a
-              href={`https://wa.me/${
-                property.owner.phone
-              }?text=مرحباً، أنا مهتم بالعقار: ${encodeURIComponent(
-                property.title
-              )}`}
+              href={`https://wa.me/${property.owner.phone
+                }?text=مرحباً، أنا مهتم بالعقار: ${encodeURIComponent(
+                  property.title
+                )}`}
               target="_blank"
               rel="noopener noreferrer"
               className={`${styles.contactButton} ${styles.whatsappButton}`}
@@ -405,11 +401,10 @@ export default function Details({ property }: { property: Property }) {
             </a>
 
             <a
-              href={`mailto:${
-                property.owner.email
-              }?subject=استفسار عن العقار: ${encodeURIComponent(
-                property.title
-              )}`}
+              href={`mailto:${property.owner.email
+                }?subject=استفسار عن العقار: ${encodeURIComponent(
+                  property.title
+                )}`}
               className={styles.contactButton}
             >
               <Mail size={18} />

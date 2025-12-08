@@ -1,0 +1,22 @@
+@use "@/sass/helpers/variables" as *;
+@use "@/sass/helpers/mixins" as *;
+
+
+.modal {
+    .modalContent {
+        padding: 2rem;
+    }
+
+    @include adminModalOne;
+}
+
+
+
+@media (max-width: 768px) {
+    .modal {
+        .modalContent {
+            width: 95%;
+            padding: 1.5rem;
+        }
+    }
+}

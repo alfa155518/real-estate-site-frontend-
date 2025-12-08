@@ -42,6 +42,7 @@ export interface PropertyData {
     id?: number;
     slug?: string;
     owner_id?: number;
+    agency_id?: number | null;
     title: string;
     description: string;
     property_type: 'house' | 'villa' | 'apartment' | 'land' | 'commercial' | 'office' | string;

@@ -153,6 +153,7 @@ export default function ContainerPropertiesPage() {
       status: property.status,
       is_featured: property.is_featured,
       owner_id: property.owner_id,
+      agency_id: property.agency_id,
       location: {
         city: property.location.city,
         district: property.location.district,

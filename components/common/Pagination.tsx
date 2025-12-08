@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
+import { useMemo, useCallback, memo } from "react";
 import styles from "@/sass/components/common/Pagination.module.scss";
 import { PaginationMeta } from "@/types/pagination";
 
@@ -9,14 +10,14 @@ const Pagination = ({
   meta: PaginationMeta;
   onPageChange?: (page: number) => void;
 }) => {
-  const handlePageClick = (page: number) => {
+  const handlePageClick = useCallback((page: number) => {
     if (page < 1 || page > meta.last_page) return;
-    if (onPageChange) onPageChange(page);
-  };
+    onPageChange?.(page);
+  }, [meta.last_page, onPageChange]);
 
-  const renderPageNumbers = () => {
+  const pageNumbers = useMemo(() => {
     const pages = [];
-    const maxVisiblePages = 3; // Reduced from 5 to 3 for better mobile view
+    const maxVisiblePages = 3;
     let startPage = Math.max(
       1,
       meta.current_page - Math.floor(maxVisiblePages / 2)
@@ -39,9 +40,16 @@ const Pagination = ({
       );
       if (startPage > 2) {
         pages.push(
-          <span key="start-ellipsis" className={styles.ellipsis}>
+          <motion.span
+            key="start-ellipsis"
+            className={styles.ellipsis}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+          >
             ...
-          </span>
+          </motion.span>
         );
       }
     }
@@ -62,9 +70,16 @@ const Pagination = ({
     if (endPage < meta.last_page) {
       if (endPage < meta.last_page - 1) {
         pages.push(
-          <span key="end-ellipsis" className={styles.ellipsis}>
+          <motion.span
+            key="end-ellipsis"
+            className={styles.ellipsis}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+          >
             ...
-          </span>
+          </motion.span>
         );
       }
       pages.push(
@@ -78,7 +93,7 @@ const Pagination = ({
     }
 
     return pages;
-  };
+  }, [meta.current_page, meta.last_page, handlePageClick]);
 
   if (meta.last_page <= 1) return null;
 
@@ -91,26 +106,28 @@ const Pagination = ({
       <div className={styles.pagination}>
         <motion.button
           whileTap={{ scale: 0.95 }}
-          className={`${styles.navButton} ${
-            meta.current_page === 1 ? styles.disabled : ""
-          }`}
+          className={`${styles.navButton} ${meta.current_page === 1 ? styles.disabled : ""
+            }`}
           onClick={() => handlePageClick(meta.current_page - 1)}
           disabled={meta.current_page === 1}
+          aria-label="الصفحة السابقة"
         >
           السابق
         </motion.button>
 
         <div className={styles.pages}>
-          <AnimatePresence>{renderPageNumbers()}</AnimatePresence>
+          <AnimatePresence mode="popLayout">
+            {pageNumbers}
+          </AnimatePresence>
         </div>
 
         <motion.button
           whileTap={{ scale: 0.95 }}
-          className={`${styles.navButton} ${
-            meta.current_page === meta.last_page ? styles.disabled : ""
-          }`}
+          className={`${styles.navButton} ${meta.current_page === meta.last_page ? styles.disabled : ""
+            }`}
           onClick={() => handlePageClick(meta.current_page + 1)}
           disabled={meta.current_page === meta.last_page}
+          aria-label="الصفحة التالية"
         >
           التالي
         </motion.button>
@@ -119,7 +136,7 @@ const Pagination = ({
   );
 };
 
-const PageNumber = ({
+const PageNumber = memo(({
   number,
   isActive,
   onClick,
@@ -129,7 +146,6 @@ const PageNumber = ({
   onClick: () => void;
 }) => (
   <motion.button
-    key={number}
     className={`${styles.pageNumber} ${isActive ? styles.active : ""}`}
     onClick={onClick}
     whileHover={!isActive ? { scale: 1.1, backgroundColor: "#f3f4f6" } : {}}
@@ -143,6 +159,8 @@ const PageNumber = ({
   >
     {number}
   </motion.button>
-);
+));
+
+PageNumber.displayName = "PageNumber";
 
 export default Pagination;

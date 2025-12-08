@@ -45,6 +45,7 @@ export interface Video {
 
 export interface RealEstate {
   owner_id: number | undefined;
+  agency_id: number | null;
   id: number;
   title: string;
   slug: string;

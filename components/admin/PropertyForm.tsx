@@ -281,6 +281,32 @@ export default function PropertyForm({
             </div>
 
             <div className={`${styles.formField} ${styles.fullWidth}`}>
+              <label htmlFor="agency_id">
+                معرف الوكالة (اختياري)
+              </label>
+              <input
+                type="number"
+                id="agency_id"
+                placeholder="أدخل معرف الوكالة (اختياري)"
+                className={errors.agency_id ? styles.error : ""}
+                {...register("agency_id", {
+                  setValueAs: (value) => value === "" || value === null ? null : Number(value),
+                  min: { value: 1, message: "معرف الوكالة يجب أن يكون رقم صحيح." },
+                })}
+              />
+              {errors.agency_id && (
+                <motion.div
+                  className={styles.errorMessage}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <AlertCircle size={14} />
+                  {errors.agency_id.message}
+                </motion.div>
+              )}
+            </div>
+
+            <div className={`${styles.formField} ${styles.fullWidth}`}>
               <label htmlFor="description">
                 <span className={styles.required}>*</span>
                 الوصف

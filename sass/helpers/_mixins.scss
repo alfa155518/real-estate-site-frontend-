@@ -509,3 +509,77 @@
 
   @content;
 }
+
+.deleteModal {
+  .modalContent {
+    max-width: 500px;
+    text-align: center;
+
+    .deleteIcon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.5rem;
+      @include flex-center;
+      border-radius: 50%;
+      background: rgba($danger, 0.1);
+      color: $danger;
+    }
+
+    h2 {
+      color: $danger;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      color: $gray-600;
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+
+      strong {
+        color: $dark;
+      }
+    }
+
+    .deleteActions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+
+      button {
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        font-size: 1.3rem;
+        font-weight: 600;
+        cursor: pointer;
+        @include transition(all, 0.2s, ease);
+        border: none;
+
+        &.cancelBtn {
+          background: $white;
+          color: $dark;
+          border: 2px solid $light-gray;
+
+          &:hover {
+            background: $secondary;
+          }
+        }
+
+        &.confirmBtn {
+          background: $danger;
+          color: $white;
+
+          &:hover {
+            @include translateY(-2px);
+            box-shadow: 0 4px 12px rgba($danger, 0.3);
+          }
+
+          &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+  }
+}
